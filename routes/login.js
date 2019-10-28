@@ -1,9 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport')
+const User = require('../models/User');
 
+
+//  const users = [];
+const PassportCheck = require('../loginConfig')
+PassportCheck(
+	passport,
+	email => User.find(user => user.email === email),
+	id => User.find(user => user.id === id)
+)
 
 router.get('/', function (req, res) {
-	res.send("login page");
+	res.render("login.ejs");
 });
+
+router.post('/', passport.authenticate('local', {
+	successRedirect: '/',
+	failureRedirect: '/login',
+	failureFlash: true
+}))
 
 module.exports = router;
