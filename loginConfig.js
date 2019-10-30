@@ -5,23 +5,21 @@ function PassportCheck(passport, getUserByEmail, getUserById) {
 	const userAuth = async (email, password, done) => {
 		const user = getUserByEmail(email)
 		if (user == null) {
-			return done(null, false, {
+			return done( null, false, {
 				message: 'No user with that email'
 			})
+		
 		}
-		const check = await bcrypt.compare(password, user.password);
-		try {
-
-			if (check) {
-				return done(null, user)
-			} else {
-				return done(null, false, {
-					message: 'Password incorrect'
-				})
-			}
-		} catch (e) {
-			return done(e)
-		}
+		const check = await bcrypt.compare(password, user.password, function (err, res) {
+	 if (err) {
+		 return done(null, false, {
+		 	message: 'Password incorrect'
+		 })
+	}
+		return done(null, user);
+		});
+		
+	
 	}
 
 	passport.use(new LocalStrategy({
@@ -32,10 +30,5 @@ function PassportCheck(passport, getUserByEmail, getUserById) {
 		return done(null, getUserById(id))
 	})
 }
-
-
-
-
-
 
 module.exports = PassportCheck
