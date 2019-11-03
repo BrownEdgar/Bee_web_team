@@ -1,14 +1,22 @@
 const mongoose = require("mongoose");
 
-const userSchema = mongoose.Schema({
-	id: {
+const condidatSchema = mongoose.Schema({
+	openPosId: {
 		type: mongoose.Schema.Types.ObjectId,
+		ref: 'OpenPosition',
+		required: true
 	},
 	name:{
 		type: String,
 		required:true,
 		max:255,
-		min:6
+		min:2
+    },
+    surname:{
+		type: String,
+		required:true,
+		max:255,
+		min:2
 	},
 	email: {
 		type: String,
@@ -27,11 +35,11 @@ const userSchema = mongoose.Schema({
         required:true,
         default:"man"
 	},
-	dob: {
-		type: Date,
+	age: {
+		type: Number,
 		required:true
 	}
 });
 
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Condidat", condidatSchema);

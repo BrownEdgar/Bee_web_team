@@ -8,8 +8,8 @@ const User = require('../models/User');
 const PassportCheck = require('../loginConfig')
 PassportCheck(
 	passport,
-	email => User.find(user => user.email === email),
-	id => User.find(user => user.id === id)
+email => User.find({email:email},{_id:0}),
+	_id => User.find({_id:_id})
 )
 
 router.get('/', function (req, res) {

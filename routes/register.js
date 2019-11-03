@@ -25,9 +25,7 @@ router.post('/', async function (req, res) {
 	} catch (error) {
 		console.log(error);
 		res.redirect("/register")
-	}
-	
-	
+	}	
 });
 
 module.exports = router;
