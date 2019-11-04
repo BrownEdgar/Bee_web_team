@@ -118,7 +118,7 @@ router.patch('/:historyId', function (req, res, next) {
 //BenefitHistorys Deleted
 router.delete('/:historyId', function (req, res, next) {
 	const id = req.params.historyId;
-	BenefitHistory.remove({_id: id})
+	BenefitHistory.deleteOne({_id: id})
 		.exec()
 		.then(result => {
 			res.status(201).json({

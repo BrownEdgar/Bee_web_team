@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const ticketSchema = mongoose.Schema({
 	userid: {
         type: mongoose.Schema.Types.ObjectId,
@@ -6,11 +8,12 @@ const ticketSchema = mongoose.Schema({
     },
     dateStart: {
         type: Date,
-        default:Date.now,
-		required:true
+        default: new Date().toDateString(),
+        required: true
     },
     dateEnd: {
         type: Date,
+        default: new Date().toDateString(),
 		required:true
 	}
 });

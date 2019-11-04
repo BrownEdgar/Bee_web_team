@@ -60,6 +60,7 @@ const BenefitHistoryRouter = require('./routes/BenefitHistory');
 const allUsersRouter = require('./routes/allUsers');
 const OpenPositionRouter = require('./routes/OpenPosition');
 const candidatRouter = require('./routes/Candidats');
+const TicketListRouter = require('./routes/TicketList');
 
 app.use('/', homeRouter);
 app.use('/register', registerRouter);
@@ -69,6 +70,7 @@ app.use('/allbenefitshistory', BenefitHistoryRouter);
 app.use('/allusers', allUsersRouter);
 app.use('/allopenpositions', OpenPositionRouter);
 app.use('/allcandidats', candidatRouter);
+app.use('/ticketlists', TicketListRouter);
 
 
 app.use((req, res, next) => {
