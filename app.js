@@ -7,8 +7,14 @@ const app = express();
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+
+
 const mongoose = require("mongoose");
 
+app.use(express.json());
+app.use(express.urlencoded({
+	extended: false
+}))
 mongoose.connect("mongodb://localhost:27017/Users", {
 		useUnifiedTopology: true,
 		useNewUrlParser: true
@@ -42,7 +48,7 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(methodOverride('_method'))
+
 
 
 

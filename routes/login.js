@@ -3,12 +3,10 @@ const router = express.Router();
 const passport = require('passport')
 const User = require('../models/User');
 
-
-//  const users = [];
 const PassportCheck = require('../loginConfig')
 PassportCheck(
 	passport,
-email => User.find({email:email},{_id:0}),
+	email => User.find({email:email},{_id:0}),
 	_id => User.find({_id:_id})
 )
 
@@ -21,5 +19,7 @@ router.post('/', passport.authenticate('local', {
 	failureRedirect: '/login',
 	failureFlash: true
 }))
+
+
 
 module.exports = router;
