@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 		"Origin, X-Requested-With, Content-Type, Accept Authorization"
 	);
 	if (req.method === 'OPTIONS') {
-		res.header('Access-Control-Allow-Methods', 'PUT', 'GET', 'PATCH', 'DELETE', 'POST')
+		res.header('Access-Control-Allow-Methods', 'PUT', 'GET', 'PATCH', 'DELETE', 'POST', 'UPDATE')
 		res.status(200).json({});
 	}
 	next(); //partadir
@@ -67,7 +67,8 @@ app.use('/login', loginRouter);
 app.use('/allbenefits', BenefitRouter);
 app.use('/allbenefitshistory', BenefitHistoryRouter);
 app.use('/allusers', allUsersRouter);
-app.use('/allCandidats', candidatRouter);
+app.use('/allopenpositions', OpenPositionRouter);
+app.use('/allcandidats', candidatRouter);
 
 
 app.use((req, res, next) => {

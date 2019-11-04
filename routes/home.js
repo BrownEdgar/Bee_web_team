@@ -3,9 +3,7 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-	res.render('index.ejs', {
-		name: req.user.name
-	})
+	res.send("home page");
 })
 
 module.exports = router;

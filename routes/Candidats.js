@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 const Candidat = require('../models/Candidats');
+const OpenPosition = require('../models/OpenPosition');
 
 //get all Candidats
 router.get('/', function (req, res) {
 	Candidat.find()
+		.populate('openPosId', '_id')
 		.exec()
 		.then(docs => {
 			const allCandidats = {
@@ -13,7 +15,12 @@ router.get('/', function (req, res) {
 				Candidats: docs.map(doc => {
 					return {
 						_id: doc._id,
-						title: doc.title,
+						openPosId: doc.openPosId,
+						name: doc.name,
+						surname: doc.surname,
+						email: doc.email,
+						age: doc.age,
+						gender: doc.gender,
 						request: {
 							type: "GET",
 							url: "http://localhost:4040/allCandidats/" + doc._id
@@ -33,41 +40,66 @@ router.get('/', function (req, res) {
 });
 
 //add Candidats
-router.post('/', function (req, res, next) {
-	console.log(req.body.title);
+router.post('/', async function (req, res, next) {
+const id = req.body.openPosId;
+console.log(id);
 
-	const Candidat = new Candidat({
-		_id: new mongoose.Types.ObjectId(),
-		title: req.body.title
-	})
-	Candidat.save()
-		.then(result => {
-			console.log(result);
-			res.status(201).json({
-				createdCandidat: {
-					_id: result._id,
-					title: result.title
-				},
-				request: {
-					message: 'Candidat is sorted',
-					type: "GET",
-					url: "http://localhost:4040/allCandidats/" + result._id
-				}
-			});
+await OpenPosition.findById(id)
+.then(result =>{
+	if (result) {
+		const candidat = new Candidat({
+			_id: new mongoose.Types.ObjectId(),
+			openPosId: req.body.openPosId,
+			name: req.body.name,
+			surname: req.body.surname,
+			email: req.body.email,
+			age: req.body.age,
+			gender: req.body.gender
 		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
-			})
-		});
+			candidat.save()
+				.then(result => {
+					console.log(result);
+					res.status(201).json({
+						createdCandidat: {
+							_id: result._id,
+							openPosId: {_id:result.openPosId },
+							name: result.name,
+							surname: result.surname,
+							email: result.email,
+							age: result.age,
+							gender: result.gender
+						},
+						request: {
+							message: 'Candidat is sorted',
+							type: "GET",
+							url: "http://localhost:4040/allCandidats/" + result._id
+						}
+					});
+				})
+				
+	}else{
+		return res.status(409).json({
+			message: 'Open Position invalid ID, please check it',
+			url: "http://localhost:4040/allopenpositions"
+		})
+		
+	}
+})
+.catch(err => {
+	console.log(err);
+	res.status(500).json({
+		error: err
+	})
+});
+	
+
 });
 
 //get Candidats by ID
 router.get('/:CandidatId', function (req, res, next) {
 	const id = req.params.CandidatId;
 	Candidat.findById(id)
-		.select('title _id')
+		.select('name surname email age _id')
 		.exec()
 		.then(Candidat => {
 			if (!Candidat) {
@@ -78,6 +110,7 @@ router.get('/:CandidatId', function (req, res, next) {
 			res.status(200).json({
 				Candidat: Candidat,
 				request: {
+					message:"all candidats list",
 					type: "GET",
 					url: "http://localhost:4040/allCandidats"
 				}
@@ -92,33 +125,57 @@ router.get('/:CandidatId', function (req, res, next) {
 });
 
 //update Candidats
-router.patch('/:CandidatId', function (req, res, next) {
-	const id = req.params.CandidatId;
-	Candidat.updateOne({
-			_id: id
-		}, {
-			$set: {
-				title: req.body.title
-			}
-		})
-		.exec()
-		.then(result => {
-			console.log(result);
-			res.status(200).json(result);
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
+router.patch('/:CandidatId', async function (req, res, next) {
+		const id = req.params.CandidatId;
+		const updateOps = {};
+		for (const ops of req.body) {
+			console.log("ops.propName", ops.propName);
+
+			await Candidat.findOne({
+					[ops.propName]: {
+						$exists: true
+					}
+				})
+				.exec()
+				.then(user => {
+					if (user) {
+						updateOps[ops.propName] = ops.value;
+					} else {
+						res.json({
+							error: "invalid propName Value",
+							value: ops.propName
+						});
+					}
+				})
+		}
+		Candidat.updateOne({
+				_id: id
+			}, {
+				$set: updateOps
 			})
-		});
+			.exec()
+			.then(result => {
+				res.status(200).json({
+					message: 'Candidat updated',
+					request: {
+						type: 'GET',
+						url: 'http://localhost:4040/allcandidats/' + id
+					}
+				});
+			})
+			.catch(err => {
+				console.log(err);
+				res.status(500).json({
+					error: err
+				});
+			});
 });
 
 
 //Candidats Deleted
 router.delete('/:CandidatId', function (req, res, next) {
 	const id = req.params.CandidatId;
-	Candidat.remove({
+	Candidat.deleteOne({
 			_id: id
 		})
 		.exec()
@@ -129,8 +186,12 @@ router.delete('/:CandidatId', function (req, res, next) {
 					type: "POST",
 					url: "http://localhost:4040/allCandidats/",
 					body: {
-						_id: "ID",
-						title: "String"
+						"openPosId": "ID",
+						"name": "String",
+						"surname": "String",
+						"email": "String@mial.com",
+						"gender": "Array",
+						"age": "Number"
 					}
 				}
 			});
