@@ -24,20 +24,15 @@ const condidatSchema = mongoose.Schema({
 		max:255,
 		min:6,
 	},
-	password:{
+	gender: {
 		type: String,
-		required: true,
-		max:1024,
-		min:6
-	},
-	male: {
-        type: String,
-        required:true,
-        default:"man"
+		enum: ["male", "female"]
 	},
 	age: {
 		type: Number,
-		required:true
+		required:true,
+		min:18,
+		max:63
 	}
 });
 

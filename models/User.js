@@ -4,32 +4,33 @@ const userSchema = mongoose.Schema({
 	id: {
 		type: mongoose.Schema.Types.ObjectId,
 	},
-	name:{
+	name: {
 		type: String,
-		required:true,
-		max:255,
-		min:6
+		required: true,
+		maxlength: 1024,
+		minlength: 2
 	},
 	email: {
 		type: String,
 		required: true,
-		max:255,
-		min:6,
+		maxlength: 1024,
+		minlength: 6
 	},
-	password:{
+	password: {
 		type: String,
 		required: true,
-		max:1024,
-		min:6
+		maxlength: 1024,
+		minlength: 6
 	},
-	male: {
-        type: String,
-        required:true,
-        default:"man"
+	gender: {
+		type: String,
+		enum: ["male", "female"]
 	},
 	dob: {
 		type: Date,
-		required:true
+		required: true,
+		min: '1957-09-28',
+		max: '2000-01-01'
 	}
 });
 

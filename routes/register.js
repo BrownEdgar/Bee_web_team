@@ -3,9 +3,6 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
-router.get('/', function (req, res) {
-	res.render("register.ejs");
-});
 
 router.post('/', async function (req, res) {
 
@@ -19,8 +16,8 @@ router.post('/', async function (req, res) {
 			email: req.body.email,
 			password: passStugum,
 		});
-		const savedUSer = await user.save();
-		console.log(savedUSer);
+		const savedUser = await user.save();
+		console.log(savedUser);
 		res.redirect("/login")
 	} catch (error) {
 		console.log(error);

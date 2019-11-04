@@ -13,7 +13,7 @@ const benefitHistorySchema = mongoose.Schema({
 	},
 	date: {
 		type: Date,
-		default: Date.now
+		default: new Date().toDateString()
 	}
 });
 
