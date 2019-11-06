@@ -35,7 +35,7 @@ router.get('/', function (req, res) {
 });
 
 //add TicketLists
-router.post('/', async function (req, res, next) {
+router.post('/', async (req, res, next) => {
 	const id = req.body.userid;
 	await User.findById(id)
 		.then(result => {
@@ -83,8 +83,8 @@ router.post('/', async function (req, res, next) {
 
 
 //get TicketLists by ID
-router.get('/:historyId', function (req, res, next) {
-	const id = req.params.historyId;
+router.get('/:ticketId', (req, res, next) => {
+	const id = req.params.ticketId;
 	TicketList.findById(id)
 		.exec()
 		.then(ticketOps => {
@@ -110,7 +110,7 @@ router.get('/:historyId', function (req, res, next) {
 });
 
 //update TicketLists
-router.patch('/:ticketId', function (req, res, next) {
+router.patch('/:ticketId', (req, res, next) => {
 	const id = req.params.ticketId;
 	TicketList.updateOne({
 			_id: id
@@ -135,8 +135,8 @@ router.patch('/:ticketId', function (req, res, next) {
 
 
 //TicketLists Deleted
-router.delete('/:historyId', function (req, res, next) {
-	const id = req.params.historyId;
+router.delete('/:ticketId', (req, res, next) => {
+	const id = req.params.ticketId;
 	TicketList.deleteOne({
 			_id: id
 		})

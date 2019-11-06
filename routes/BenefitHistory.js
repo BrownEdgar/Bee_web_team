@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
 						givesDate: doc.date,
 						request: {
 							type: "GET",
-							url: "http://localhost:4040/allBenefitHistorys/" + doc._id,
+							url: "http://localhost:4040/allbenefitshistory/" + doc._id,
 							userUrl: "http://localhost:4040/register/" + doc.userId
 						}
 					}
@@ -35,14 +35,12 @@ router.get('/', function (req, res) {
 });
 
 //add BenefitHistorys
-router.post('/', function (req, res, next) {
-    console.log(req.body.title);
-    
+router.post('/', (req, res, next) => {    
 	const newBenHistory = new BenefitHistory({
 		_id: new mongoose.Types.ObjectId(),
-		title: req.body.title,
 		benefitId: req.body.benefitId,
-		userId: req.body.userId
+		userId: req.body.userId,
+		date: req.body.date,
 	})
 	newBenHistory.save()
 		.then(result => {
@@ -50,9 +48,9 @@ router.post('/', function (req, res, next) {
 			res.status(201).json({
 				createdBenefitHistory: {
 					_id: result._id,
-					title: result.title,
 					benefitId: result.benefitId,
-					userId: result.userId
+					userId: result.userId,
+					givesDate: result.date,
 				},
 				request: {
 					message: 'BenefitHistory is sorted',
@@ -70,10 +68,9 @@ router.post('/', function (req, res, next) {
 });
 
 //get BenefitHistorys by ID
-router.get('/:historyId', function (req, res, next) {
+router.get('/:historyId', (req, res, next) => {
 	const id = req.params.historyId;
     BenefitHistory.findById(id)
-    .select('title _id')
 		.exec()
 		.then(historyRresults => {
 			if (!historyRresults) {
@@ -97,26 +94,10 @@ router.get('/:historyId', function (req, res, next) {
 		});
 });
 
-//update BenefitHistorys
-router.patch('/:historyId', function (req, res, next) {
-	const id = req.params.historyId;
-	BenefitHistory.updateOne( {_id:id}, { $set:{title:req.body.title} } )
-	.exec()
-	.then(result =>{
-		console.log(result);
-		res.status(200).json(result);
-	})
-	.catch(err => {
-		console.log(err);
-		res.status(500).json({
-			error: err
-		})
-	});
-});
 
 
 //BenefitHistorys Deleted
-router.delete('/:historyId', function (req, res, next) {
+router.delete('/:historyId', (req, res, next) => {
 	const id = req.params.historyId;
 	BenefitHistory.deleteOne({_id: id})
 		.exec()

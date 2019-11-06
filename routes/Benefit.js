@@ -33,9 +33,7 @@ router.get('/', function (req, res) {
 });
 
 //add Benefits
-router.post('/', function (req, res, next) {
-    console.log(req.body.title);
-    
+router.post('/', (req, res, next) => {
 	const benefit = new Benefit({
 		_id: new mongoose.Types.ObjectId(),
 		title: req.body.title
@@ -64,7 +62,7 @@ router.post('/', function (req, res, next) {
 });
 
 //get benefits by ID
-router.get('/:benefitId', function (req, res, next) {
+router.get('/:benefitId', (req, res, next) => {
 	const id = req.params.benefitId;
     Benefit.findById(id)
     .select('title _id')
@@ -92,7 +90,7 @@ router.get('/:benefitId', function (req, res, next) {
 });
 
 //update benefits
-router.patch('/:benefitId', function (req, res, next) {
+router.patch('/:benefitId', (req, res, next) => {
 	const id = req.params.benefitId;
 	Benefit.updateOne( {_id:id}, { $set:{title:req.body.title} } )
 	.exec()
@@ -110,7 +108,7 @@ router.patch('/:benefitId', function (req, res, next) {
 
 
 //benefits Deleted
-router.delete('/:benefitId', function (req, res, next) {
+router.delete('/:benefitId', (req, res, next) => {
 	const id = req.params.benefitId;
 	Benefit.remove({_id: id})
 		.exec()

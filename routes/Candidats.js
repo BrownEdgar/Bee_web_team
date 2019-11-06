@@ -40,7 +40,7 @@ router.get('/', function (req, res) {
 });
 
 //add Candidats
-router.post('/', async function (req, res, next) {
+router.post('/', async (req, res, next) => {
 const id = req.body.openPosId;
 console.log(id);
 
@@ -96,7 +96,7 @@ await OpenPosition.findById(id)
 });
 
 //get Candidats by ID
-router.get('/:CandidatId', function (req, res, next) {
+router.get('/:CandidatId', (req, res, next) => {
 	const id = req.params.CandidatId;
 	Candidat.findById(id)
 		.select('name surname email age _id')
@@ -125,7 +125,7 @@ router.get('/:CandidatId', function (req, res, next) {
 });
 
 //update Candidats
-router.patch('/:CandidatId', async function (req, res, next) {
+router.patch('/:CandidatId', async (req, res, next) => {
 		const id = req.params.CandidatId;
 		const updateOps = {};
 		for (const ops of req.body) {
@@ -173,7 +173,7 @@ router.patch('/:CandidatId', async function (req, res, next) {
 
 
 //Candidats Deleted
-router.delete('/:CandidatId', function (req, res, next) {
+router.delete('/:CandidatId', (req, res, next) => {
 	const id = req.params.CandidatId;
 	Candidat.deleteOne({
 			_id: id

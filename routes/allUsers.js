@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = require('../models/User');
+const checkAuth = require('../middleware/checkLogin');
 
 /* GET Users page. */
-router.get('/', function (req, res, next) {
+router.get('/', checkAuth, (req, res, next) => {
 
 	User.find()
 		.select('name email _id dob')
@@ -36,48 +37,14 @@ router.get('/', function (req, res, next) {
 
 });
 
-router.post('/', function (req, res, next) {
-	const user = new User({
-			name: req.body.name,
-			email: req.body.email,
-			password: req.body.password,
-			gender:req.body.gender,
-			dob: req.body.dob,
-	})
-	user.save()
-		.then(result => {
-			console.log(result);
-			res.status(201).json({
-				createdUser: {
-					_id: result._id,
-					name: result.name,
-					email: result.email,
-					dob: result.dob,
-					gender: result.gender
-				},
-				request: {
-					message: 'User is sorted',
-					type: "GET",
-					url: "http://localhost:4040/allusers/" + result._id
-				}
-			});
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
-			})
-		});
-});
 
-
-router.get('/:userId', function (req, res, next) {
+router.get('/:userId', (req, res, next) => {
 	const id = req.params.userId;
 	User.findById(id)
 		.exec()
 		.then(user => {
 			if (!user) {
-				return res.status(404).json({
+				return res.status(400).json({
 					message: 'User not found'
 				})
 			}
@@ -96,7 +63,55 @@ router.get('/:userId', function (req, res, next) {
 			})
 		});
 });
-router.delete('/:userId', function (req, res, next) {
+
+
+router.patch('/:userId', async (req, res, next) => {
+	const id = req.params.userId;
+	const updateOps = {};
+	for (const ops of req.body) {
+		console.log("ops.propName", ops.propName);
+
+		await User.findOne({
+				[ops.propName]: {
+					$exists: true
+				}
+			})
+			.exec()
+			.then(user => {
+				if (user) {
+					updateOps[ops.propName] = ops.value;
+				} else {
+					res.json({
+						error: "invalid propName Value",
+						value: ops.propName
+					});
+				}
+			})
+	}
+	User.updateOne({
+			_id: id
+		}, {
+			$set: updateOps
+		})
+		.exec()
+		.then(result => {
+			res.status(200).json({
+				message: 'User updated',
+				request: {
+					type: 'GET',
+					url: 'http://localhost:4040/allUsers/' + id
+				}
+			});
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({
+				error: err
+			});
+		});
+});
+
+router.delete('/:userId', (req, res, next) => {
 	const id = req.params.userId;
 	User.remove({
 			_id: id

@@ -37,7 +37,7 @@ router.get('/', function (req, res) {
 });
 
 //add OpenPositions
-router.post('/', function (req, res, next) {
+router.post('/', (req, res, next) => {
 //check deccription and title
 OpenPosition.find({$or: [ {title:req.body.title}, {description: req.body.description} ]},{_id:0})
     .exec()
@@ -70,7 +70,7 @@ openPosition.save()
 			request: {
 				message: 'OpenPosition is sorted',
 				type: "GET",
-				url: "http://localhost:4040/allopenpositions/" + result._id
+				url: `http://localhost:4040/allopenpositions/ + ${result._id}`
 			}
 		});
 	})
@@ -85,7 +85,7 @@ openPosition.save()
 });
 
 //get OpenPositions by ID
-router.get('/:openPositionId', function (req, res, next) {
+router.get('/:openPositionId', (req, res, next) => {
 	const id = req.params.openPositionId;
 	OpenPosition.findById(id)
 		.select('title description _id salary')
@@ -94,14 +94,14 @@ router.get('/:openPositionId', function (req, res, next) {
 			if (!openPosition) {
 				return res.status(404).json({
 					message: 'OpenPositions is  not found',
-					back: "http://localhost:4040/allopenpositions"
+					back: `http://localhost:4040/allopenpositions`
 				})
 			}
 			res.status(200).json({
 				OpenPosition: openPosition,
 				request: {
 					type: "GET",
-					url: "http://localhost:4040/allopenpositions"
+					url: `http://localhost:4040/allopenpositions`
 				}
 			});
 		})
@@ -114,7 +114,7 @@ router.get('/:openPositionId', function (req, res, next) {
 });
 
 //update OpenPositions
-router.patch('/:OpenPositionId', async function (req, res, next) {
+router.patch('/:OpenPositionId', async (req, res, next) => {
 	const id = req.params.OpenPositionId;
 	const updateOps = {};
 	for (const ops of req.body) {
@@ -144,7 +144,7 @@ router.patch('/:OpenPositionId', async function (req, res, next) {
 				message: 'OpenPosition updated',
 				request: {
 					type: 'GET',
-					url: 'http://localhost:4040/allopenpositions/' + id
+					url: `http://localhost:4040/allopenpositions/ + ${id}`
 				}
 			});
 		})
@@ -158,7 +158,7 @@ router.patch('/:OpenPositionId', async function (req, res, next) {
 
 
 //OpenPositions Deleted
-router.delete('/:OpenPositionId', function (req, res, next) {
+router.delete('/:OpenPositionId', (req, res, next) => {
 	const id = req.params.OpenPositionId;
 	OpenPosition.deleteOne({
 			_id: id

@@ -6,18 +6,19 @@ const express = require('express')
 const app = express();
 const passport = require('passport')
 const flash = require('express-flash')
-const session = require('express-session')
-
-
+const session = require('express-session');
 const mongoose = require("mongoose");
 
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: false
 }))
-mongoose.connect("mongodb://localhost:27017/Users", {
+
+
+mongoose.connect(process.env.DB_CONNECTION, {
 		useUnifiedTopology: true,
-		useNewUrlParser: true
+		useNewUrlParser: true,
+		useCreateIndex: true,
 	},
 	(err) => console.log(err));
 
@@ -54,7 +55,6 @@ app.use(passport.session());
 
 const homeRouter = require('./routes/home');
 const registerRouter = require('./routes/register');
-const loginRouter = require('./routes/login');
 const BenefitRouter = require('./routes/Benefit');
 const BenefitHistoryRouter = require('./routes/BenefitHistory');
 const allUsersRouter = require('./routes/allUsers');
@@ -63,8 +63,7 @@ const candidatRouter = require('./routes/Candidats');
 const TicketListRouter = require('./routes/TicketList');
 
 app.use('/', homeRouter);
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
+app.use('/signup', registerRouter);
 app.use('/allbenefits', BenefitRouter);
 app.use('/allbenefitshistory', BenefitHistoryRouter);
 app.use('/allusers', allUsersRouter);
@@ -88,4 +87,4 @@ app.use((error, req, res, next) => {
 	});
 })
 
-app.listen(4040, () => console.log("server start in 4040"))
+module.exports = app;
