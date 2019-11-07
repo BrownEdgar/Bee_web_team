@@ -33,7 +33,18 @@ const condidatSchema = mongoose.Schema({
 		required:true,
 		min:18,
 		max:63
+	},
+	skills:{
+
+	},
+	education: {
+		
+	},
+	experience :{
+
 	}
+	
+
 });
 
 

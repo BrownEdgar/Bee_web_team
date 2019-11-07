@@ -96,7 +96,7 @@ router.post("/login", (req, res, next) => {
 });
 
 router.delete("/:userId", (req, res, next) => {
-	User.remove({
+	User.deletoOne({
 			_id: req.params.userId
 		})
 		.exec()

@@ -2,35 +2,38 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 const Benefit = require('../models/Benefit');
+const BenefitsController = require('../Controller/Benefits');
+const controller = new BenefitsController();
 
 //get all Benefits
-router.get('/', function (req, res) {
-	Benefit.find()
-		.exec()
-		.then(docs => {
-			const allBenefits = {
-				count: docs.length,
-				benefits: docs.map(doc => {
-					return {
-						_id: doc._id,
-						title: doc.title,
-						request: {
-							type: "GET",
-							url: "http://localhost:4040/allbenefits/" + doc._id
-						}
-					}
-				})
-			}
-			res.status(201).json(allBenefits);
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
-			})
-		});
+router.get("/", controller.getBenefits)
+// router.get('/', function (req, res) {
+// 	Benefit.find()
+// 		.exec()
+// 		.then(docs => {
+// 			const allBenefits = {
+// 				count: docs.length,
+// 				benefits: docs.map(doc => {
+// 					return {
+// 						_id: doc._id,
+// 						title: doc.title,
+// 						request: {
+// 							type: "GET",
+// 							url: "http://localhost:4040/allbenefits/" + doc._id
+// 						}
+// 					}
+// 				})
+// 			}
+// 			res.status(201).json(allBenefits);
+// 		})
+// 		.catch(err => {
+// 			console.log(err);
+// 			res.status(500).json({
+// 				error: err
+// 			})
+// 		});
 
-});
+// });
 
 //add Benefits
 router.post('/', (req, res, next) => {

@@ -11,7 +11,7 @@ const benefitHistorySchema = mongoose.Schema({
 		ref: 'User',
 		required: true
 	},
-	date: {
+	createdAt: {
 		type: Date,
 		default: new Date().toDateString()
 	}
