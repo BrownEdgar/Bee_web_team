@@ -26,7 +26,6 @@ class BenefitsController {
 		return benefit;
 	};
 
-
 	//add new Benefit in Collection
 	async addBenefits(title, description = "for a good job!") {
 		const norBenefit = new this.models.benefits({
@@ -36,10 +35,16 @@ class BenefitsController {
 		return norBenefit.save();
 	};
 
-	
 	//Update Benefit in Collection
-	async updateBenefits() {
-		
+	async updateBenefits(_id, updateOps) {
+	const updateBenefit = await this.models.benefits.findOneAndUpdate(_id, updateOps, {
+		new: true
+	})
+	.select('title description _id');
+	if (!updateBenefit) {
+		throw new Error('Benefit update failed');
+	}
+	return updateBenefit;
 	};
 
 	//delete Benefit by Id

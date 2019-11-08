@@ -30,42 +30,17 @@ class BenefitsController {
 	};
 
 	async updateBenefits(req, res) {
-		const id = req.params.CandidatId;
-		const updateOps = {};
-		for (const ops of req.body) {
-			await req.app.services.benefits.findOne({
-					[ops.propName]: {
-						$exists: true
-					}
-				})
-				.exec()
-				.then(user => {
-					if (user) {
-						updateOps[ops.propName] = ops.value;
-					} else {
-						res.json({
-							error: "invalid propName Value",
-							value: ops.propName
-						});
-					}
-				})
-		}
-		req.app.services.benefits.updateOne({
-				_id: id
-			}, {
-				$set: updateOps
-			})
-			.exec()
+		const id = req.params.id;
+		const updateOps = req.body;
+		let x = await req.app.services.benefits.updateBenefits(id, updateOps)
+		x.save()
 			.then(result => {
-				res.status(200).json({
-					message: 'Candidat updated'
-				});
+				res.status(200).json(result);
 			})
 			.catch(err => {
-				console.log(err);
 				res.status(500).json({
 					error: err
-				});
+				})
 			});
 	};
 

@@ -16,7 +16,7 @@ router.post('/', controller.addBenefits);
 router.get('/:id',  controller.getBenefit);
 
 //update benefits
-router.patch('/:Id', controller.addBenefits);
+router.patch('/:id', controller.updateBenefits);
 // router.patch('/:benefitId', (req, res, next) => {
 // 	const id = req.params.benefitId;
 // 	Benefit.updateOne( {_id:id}, { $set:{title:req.body.title} } )
