@@ -71,6 +71,21 @@ app.use('/allopenpositions', OpenPositionRouter);
 app.use('/allcandidats', candidatRouter);
 app.use('/ticketlists', TicketListRouter);
 
+app.models = {
+	users: require('./models/User'),
+	benefits: require('./models/Benefit')
+}
+
+app.services = {
+	users: new(require('./services/Users'))(app.models),
+	benefits: new(require('./services/Benefits'))(app.models)
+};
+
+app.use(function (req, res, next) {
+	req.app = app;
+	next();
+});
+
 
 app.use((req, res, next) => {
 	const error = new Error("not found");

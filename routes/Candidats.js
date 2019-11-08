@@ -129,8 +129,6 @@ router.patch('/:CandidatId', async (req, res, next) => {
 		const id = req.params.CandidatId;
 		const updateOps = {};
 		for (const ops of req.body) {
-			console.log("ops.propName", ops.propName);
-
 			await Candidat.findOne({
 					[ops.propName]: {
 						$exists: true
