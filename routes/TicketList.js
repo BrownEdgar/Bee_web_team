@@ -3,83 +3,60 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const TicketList = require('../models/TicketList');
 const User = require('../models/User');
+const TicketListsController = require('../Controller/TicketList');
+const controller = new TicketListsController();
 
 //get all TicketLists
-router.get('/', function (req, res) {
-	TicketList.find()
-		.exec()
-		.then(docs => {
-			const allTicketLists = {
-				count: docs.length,
-				TicketLists: docs.map(doc => {
-					return {
-						benefitId: doc.benefitId,
-						userId: doc.userId,
-						givesDate: doc.date,
-						request: {
-							type: "GET",
-							url: "http://localhost:4040/ticketlists/" + doc._id
-						}
-					}
-				})
-			}
-			res.status(201).json(allTicketLists);
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
-			})
-		});
+router.get('/', controller.getAllTicketLists);
 
-});
 
 //add TicketLists
-router.post('/', async (req, res, next) => {
-	const id = req.body.userid;
-	await User.findById(id)
-		.then(result => {
-			if (result) {
-				const newTicket = new TicketList({
-					_id: new mongoose.Types.ObjectId(),
-					dateStart: req.body.dateStart,
-					dateEnd: req.body.dateEnd,
-					userid: req.body.userid
-				})
-				newTicket.save()
-					.then(result => {
-						console.log(result);
-						res.status(201).json({
-							createdTicketList: {
-								_id: result._id,
-								dateStart: result.dateStart,
-								dateEnd: result.dateEnd,
-								userid: result.userid
-							},
-							request: {
-								message: 'TicketList is sorted',
-								type: "GET",
-								url: "http://localhost:4040/ticketlists/" + result._id,
-								userInfo: "http://localhost:4040/allusers/" + result.userid
-							}
-						});
-					})
+router.post('/', controller.addTicketList);
+// router.post('/', async (req, res, next) => {
+// 	const id = req.body.userid;
+// 	await User.findById(id)
+// 		.then(result => {
+// 			if (result) {
+// 				const newTicket = new TicketList({
+// 					_id: new mongoose.Types.ObjectId(),
+// 					dateStart: req.body.dateStart,
+// 					dateEnd: req.body.dateEnd,
+// 					userid: req.body.userid
+// 				})
+// 				newTicket.save()
+// 					.then(result => {
+// 						console.log(result);
+// 						res.status(201).json({
+// 							createdTicketList: {
+// 								_id: result._id,
+// 								dateStart: result.dateStart,
+// 								dateEnd: result.dateEnd,
+// 								userid: result.userid
+// 							},
+// 							request: {
+// 								message: 'TicketList is sorted',
+// 								type: "GET",
+// 								url: "http://localhost:4040/ticketlists/" + result._id,
+// 								userInfo: "http://localhost:4040/allusers/" + result.userid
+// 							}
+// 						});
+// 					})
 
-			} else {
-				return res.status(409).json({
-					message: 'invalid  USER ID, please check it',
-					url: "http://localhost:4040/allusers/"
-				})
+// 			} else {
+// 				return res.status(409).json({
+// 					message: 'invalid  USER ID, please check it',
+// 					url: "http://localhost:4040/allusers/"
+// 				})
 
-			}
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(500).json({
-				error: err
-			})
-		});
-});
+// 			}
+// 		})
+// 		.catch(err => {
+// 			console.log(err);
+// 			res.status(500).json({
+// 				error: err
+// 			})
+// 		});
+// });
 
 
 //get TicketLists by ID

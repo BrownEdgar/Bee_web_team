@@ -1,6 +1,8 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
 
 class UsersController {
 	constructor(models) {
@@ -12,7 +14,7 @@ class UsersController {
 		let user = await this.models.users.findOne({_id})
 			.select('name email dob role _id')
 		if (!user) {
-			throw new Error("User not found");
+			throw new ErrorHandler(409, `User ${ErrorMessage.ID_ERROR}`);
 		}
 		return user;
 	};
@@ -20,9 +22,9 @@ class UsersController {
 	//get All users from User Collections done
 	async getAllUsers() {
 		let users = await this.models.users.find()
-			.select('name email dob role _id');
+			.select('name surname age email dob role _id');
 		if (users.length < 1) {
-			throw new Error('Users not found')
+			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
 		return {
 			count: users.length,
@@ -30,17 +32,19 @@ class UsersController {
 		};
 	}
 
-	//add new Benefit in Collection
-	async addUser(name, email, password, gender, dob, role) {
+	//add new users in Collection
+	async addUser(name, surname, age, email, password, gender, dob, role) {
 		this.models.users.find({email})
 			.exec()
 			.then(user => {
 				if (user.length >= 1) {
-					 throw new Error("Mail exists");
+					 throw new ErrorHandler(409, `${ErrorMessage.EMAIL_EXIST}`);
 				} 
 					const norUser = new this.models.users({
 						_id: new mongoose.Types.ObjectId(),
 						name,
+						surname, 
+						age,
 						email,
 						password,
 						gender,
@@ -71,7 +75,7 @@ class UsersController {
 		})
 			.select('name email gender dob _id');
 		if (!updateUser) {
-			throw new Error('User update failed');
+			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return updateUser;
 	};
@@ -82,7 +86,7 @@ class UsersController {
 			_id
 		})
 		if (!user) {
-			return new Error('User not found')
+			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return {
 			count: user.length,

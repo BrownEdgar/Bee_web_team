@@ -1,3 +1,6 @@
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
+
 class BenefitsController {
 // -------------------------------------
 	async getBenefit(req, res) {
@@ -59,10 +62,8 @@ class BenefitsController {
 					benefitId: req.params.id
 				})
 			}
-			res.status(409).json({
-				message: "Benefit Id is not found!",
-				BenefitId: req.params.id
-			});
+			throw new ErrorHandler(409, ErrorMessage.ID_ERROR);
+			
 		} catch (error) {
 			res.status(500).send(error.message);
 		}

@@ -1,3 +1,6 @@
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
+
 class BenefitsController {
 	constructor(models) {
 		this.models = models;
@@ -8,7 +11,7 @@ class BenefitsController {
 		let benefits = await this.models.benefits.find()
 			.select('title description _id');
 		if (benefits.length < 1) {
-			throw new Error('!benefits not found')
+			throw new ErrorHandler(404, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: benefits.length,
@@ -23,7 +26,7 @@ class BenefitsController {
 			})
 			.select('title description _id')
 		if (!benefit) {
-			throw new Error("Benefit not found");
+			throw new ErrorHandler(404, ErrorMessage.NOTFOUND_ERROR);
 		}
 		return benefit;
 	};
@@ -48,7 +51,7 @@ class BenefitsController {
 				 			})
 	.select('title description _id');
 	if (!updateBenefit) {
-		throw new Error('Benefit update failed');
+		throw new ErrorHandler(404, ErrorMessage.ID_ERROR);
 	}
 	return updateBenefit;
 	};
@@ -59,7 +62,7 @@ class BenefitsController {
 			_id
 		})
 		if (!benefits) {
-			return new Error('benefits not found')
+			throw new ErrorHandler(404, ErrorMessage.NOTFOUND_ERROR);
 		}
 		return {
 			count: benefits.length,

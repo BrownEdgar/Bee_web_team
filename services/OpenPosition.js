@@ -1,3 +1,6 @@
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
+
 class OpenPositionController {
 	constructor(models) {
 		this.models = models;
@@ -8,7 +11,7 @@ class OpenPositionController {
 		let positions = await this.models.openPosition.find()
 			.select('_id title description ageLimit salary');
 		if (positions.length < 1) {
-			throw new Error('!Open position is not found')
+			throw new ErrorHandler(500, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: positions.length,
@@ -23,7 +26,7 @@ class OpenPositionController {
 			})
 			.select('_id title description ageLimit salary');
 		if (!position) {
-			throw new Error("Position not found");
+			throw new ErrorHandler(500, `Position ${ErrorMessage.ID_ERROR}`);
 		}
 		return position;
 	};
@@ -35,11 +38,7 @@ class OpenPositionController {
 			.exec()
 			.then(result => {
 				if (result.length >= 1) {
-					const message = {
-						status: 409,
-						message:"This description or title already exists"
-					}
-					return message;
+					throw new ErrorHandler(500, `${ErrorMessage.POSITION_EXIST}`);
 				} else {
 	const norPosition = new this.models.openPosition({
 		title,
@@ -55,10 +54,7 @@ class OpenPositionController {
 	})
 }
 			}).catch(err => {
-		 		return ({
-		 			status: 500,
-		 			message: "Sameting is Wrong, Server error"
-		 		})
+		 		throw new ErrorHandler(500, `${ErrorMessage.SERVER_ERROR}`);
 				 });
 		return sumary
 	};
@@ -74,7 +70,7 @@ class OpenPositionController {
 	})
 	.select('_id title description ageLimit salary');
 	if (!updatePosition) {
-		throw new Error('Open Position  update failed');
+		throw new ErrorHandler(500, `Open Position ${ErrorMessage.UPDATE_ERROR}`);
 	}
 	return updatePosition;
 	};
@@ -85,7 +81,7 @@ class OpenPositionController {
 			_id
 		})
 		if (!position) {
-			return new Error('Open Position is  not found')
+			throw new ErrorHandler(500, `Open Position ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return {
 			count: position.length,

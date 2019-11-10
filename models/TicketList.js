@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+let maxDate = Date.now() + 60 * 24 * 60 * 60 * 1000;
+
 const ticketSchema = mongoose.Schema({
 	userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -7,13 +9,17 @@ const ticketSchema = mongoose.Schema({
 		required: true
     },
     dateStart: {
-        type: Date,
-        default: new Date().toDateString(),
+		type: Date,
+		min: Date.now,
+		max: maxDate,
+		default: () => Date.now() + 3 * 60 * 60 * 1000,
         required: true
     },
     dateEnd: {
-        type: Date,
-        default: new Date().toDateString(),
+		type: Date,
+		min: Date.now,
+		max: maxDate,
+		default: () => Date.now() + 7 * 24 * 60 * 60 * 1000,
 		required:true
 	}
 });

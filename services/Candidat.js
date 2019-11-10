@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
+
 class CandidatsController {
 	constructor(models) {
 		this.models = models;
@@ -9,7 +12,7 @@ class CandidatsController {
 		let candidats = await this.models.candidat.find()
 			.select('openPosId name surname email age skills experience');
 		if (candidats.length < 1) {
-			throw new Error('Candidats is not found')
+			 throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: candidats.length,
@@ -24,7 +27,7 @@ class CandidatsController {
 			})
 			.select('openPosId name surname email age skills experience');
 		if (!candidats) {
-			throw new Error("Candidat is not found");
+			throw new ErrorHandler(409, ErrorMessage.NOTFOUND_ERROR);
 		}
 		return candidats;
 	};
@@ -37,11 +40,7 @@ class CandidatsController {
 			.exec()
 			.then(result => {
 				if (result.length >= 1) {
-					const message = {
-						status: 409,
-						message: "This Email is already exists"
-					}
-					return message;
+					return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
 				} else {
 					const norCandidat = new this.models.candidat({
 						_id: new mongoose.Types.ObjectId(),
@@ -62,10 +61,7 @@ class CandidatsController {
 					})
 				}
 			}).catch(err => {
-				return ({
-					status: 500,
-					message: "Sameting is Wrong, Server error"
-				})
+				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 			});
 		return sumary
 	};
@@ -79,11 +75,7 @@ class CandidatsController {
 			.exec()
 			.then(async (result) => {
 				if (result.length >= 1) {
-					const message = {
-						status: 409,
-						message: "Email already exists"
-					}
-					return message;
+					 return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
 				} else {
 					const updateCandidat = await this.models.candidat.findByIdAndUpdate({
 						_id
@@ -93,16 +85,13 @@ class CandidatsController {
 						new: true
 					})
 					if (!updateCandidat) {
-						throw new Error('Candidats  update failed');
+						return new ErrorHandler(409, ErrorMessage.UPDATE_ERROR);
 					}
 					return updateCandidat;
 				}
 			})
 			.catch(err => {
-				return ({
-					status: 500,
-					message: "Sameting is Wrong, Server error"
-				})
+				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 			});
 
 		return sumary
@@ -115,7 +104,7 @@ class CandidatsController {
 			_id
 		})
 		if (!candidats) {
-			return new Error('Candidats is  not found')
+			throw new ErrorHandler(409, ErrorMessage.NOTFOUND_ERROR );
 		}
 		return {
 			count: candidats.length,

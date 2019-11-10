@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const app = express();
+const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session');
@@ -71,18 +72,23 @@ app.use('/allopenpositions', OpenPositionRouter);
 app.use('/allcandidats', candidatRouter);
 app.use('/ticketlists', TicketListRouter);
 
+
 app.models = {
 	users: require('./models/User'),
 	benefits: require('./models/Benefit'),
 	openPosition: require('./models/OpenPosition'),
 	candidat: require('./models/Candidats'),
+	benefitsHistory: require('./models/BenefitsHistory'),
+	ticketList: require('./models/TicketList')
 }
 
 app.services = {
 	users: new(require('./services/Users'))(app.models),
 	benefits: new(require('./services/Benefits'))(app.models),
 	openPositions: new(require('./services/OpenPosition'))(app.models),
-	candidats: new(require('./services/Candidat'))(app.models)
+	candidats: new(require('./services/Candidat'))(app.models),
+	benefitsHistorys: new(require('./services/BenefitsHistory'))(app.models),
+	ticketLists: new(require('./services/TicketList'))(app.models)
 };
 
 app.use(function (req, res, next) {
@@ -92,9 +98,7 @@ app.use(function (req, res, next) {
 
 
 app.use((req, res, next) => {
-	const error = new Error("not found");
-	error.status = 404; 
-	next(error);
+	 throw new ErrorHandler(404, 'page is not found')
 })
 
 app.use((error, req, res, next) => {
@@ -105,5 +109,8 @@ app.use((error, req, res, next) => {
 		}
 	});
 })
+app.use((err, req, res, next) => {
+	handleError(err, res);
+});
 
 module.exports = app;

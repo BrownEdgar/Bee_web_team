@@ -17,22 +17,6 @@ router.get('/:id',  controller.getBenefit);
 
 //update benefits
 router.patch('/:id', controller.updateBenefits);
-// router.patch('/:benefitId', (req, res, next) => {
-// 	const id = req.params.benefitId;
-// 	Benefit.updateOne( {_id:id}, { $set:{title:req.body.title} } )
-// 	.exec()
-// 	.then(result =>{
-// 		console.log(result);
-// 		res.status(200).json(result);
-// 	})
-// 	.catch(err => {
-// 		console.log(err);
-// 		res.status(500).json({
-// 			error: err
-// 		})
-// 	});
-// });
-
 
 //benefits Deleted
 router.delete('/:id', controller.deleteBenefits);

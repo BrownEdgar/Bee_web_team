@@ -1,3 +1,6 @@
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const  ErrorMessage  = require('../helpers/error');
+
 class OpenPositionController {
 
 	// ------------------------------------- done
@@ -38,8 +41,6 @@ class OpenPositionController {
 	async updateOpenPosition(req, res) {
 		const id = req.params.openPositionId;
 		const updateOps = req.body;
-		console.log("updateOps:",updateOps);
-		
 		let x = await req.app.services.openPositions.updateOpenPosition(id, updateOps)
 		x.save()
 			.then(result => {
@@ -65,10 +66,7 @@ class OpenPositionController {
 					benefitId: id
 				})
 			}
-			res.status(409).json({
-				message: "Open Position ID is not found!",
-				BenefitId: id
-			});
+			throw new ErrorHandler(409, `Open Position ${ErrorMessage.ID_ERROR}`);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}

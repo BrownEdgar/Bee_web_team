@@ -12,7 +12,7 @@ router.get('/', controller.getAllOpenPosition);
 router.post('/', controller.addOpenPosition);
 
 //get OpenPositions by ID
-router.post('/:openPositionId', controller.getSpecialPosition);
+router.get('/:openPositionId', controller.getSpecialPosition);
 
 //update OpenPositions
 router.patch('/:openPositionId', controller.updateOpenPosition);

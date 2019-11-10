@@ -10,6 +10,18 @@ const userSchema = mongoose.Schema({
 		maxlength: 1024,
 		minlength: 2
 	},
+	surname: {
+		type: String,
+		required: true,
+		maxlength: 1024,
+		minlength: 2
+	},
+	age: {
+		type: Number,
+		required: true,
+		min:16,
+		max:67
+	},
 	email: {
 		type: String,
 		required: true,
