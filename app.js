@@ -73,12 +73,16 @@ app.use('/ticketlists', TicketListRouter);
 
 app.models = {
 	users: require('./models/User'),
-	benefits: require('./models/Benefit')
+	benefits: require('./models/Benefit'),
+	openPosition: require('./models/OpenPosition'),
+	candidat: require('./models/Candidats'),
 }
 
 app.services = {
 	users: new(require('./services/Users'))(app.models),
-	benefits: new(require('./services/Benefits'))(app.models)
+	benefits: new(require('./services/Benefits'))(app.models),
+	openPositions: new(require('./services/OpenPosition'))(app.models),
+	candidats: new(require('./services/Candidat'))(app.models)
 };
 
 app.use(function (req, res, next) {

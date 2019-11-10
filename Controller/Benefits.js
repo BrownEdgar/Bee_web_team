@@ -1,4 +1,5 @@
 class BenefitsController {
+// -------------------------------------
 	async getBenefit(req, res) {
 		try {
 			let benefit = await req.app.services.benefits.getBenefit(req.params.id);
@@ -7,7 +8,8 @@ class BenefitsController {
 			res.send(err.message);
 		}
 	};
-
+	
+// -------------------------------------
 	async getAllBenefits(req, res) {
 		try {
 			let allbenefits = await req.app.services.benefits.getAllBenefits();
@@ -16,6 +18,8 @@ class BenefitsController {
 			res.status(500).send(err.message);
 		}
 	};
+
+// -------------------------------------	
 	async addBenefits(req, res) {
 		let {
 			title,
@@ -29,11 +33,11 @@ class BenefitsController {
 		}
 	};
 
+// -------------------------------------
 	async updateBenefits(req, res) {
 		const id = req.params.id;
 		const updateOps = req.body;
 		let x = await req.app.services.benefits.updateBenefits(id, updateOps)
-		x.save()
 			.then(result => {
 				res.status(200).json(result);
 			})
@@ -44,6 +48,7 @@ class BenefitsController {
 			});
 	};
 
+// -------------------------------------
 	async deleteBenefits(req, res) {
 		try {
 			let delbenefits = await req.app.services.benefits.deleteBenefits(req.params.id);

@@ -2,6 +2,7 @@ class BenefitsController {
 	constructor(models) {
 		this.models = models;
 	}
+	
 	//get all Benefit Lists
 	async getAllBenefits() {
 		let benefits = await this.models.benefits.find()
@@ -14,6 +15,7 @@ class BenefitsController {
 			benefits
 		};
 	};
+	
 	//get benefit by spesial ID
 	async getBenefit(_id) {
 		let benefit = await this.models.benefits.findOne({
@@ -37,9 +39,13 @@ class BenefitsController {
 
 	//Update Benefit in Collection
 	async updateBenefits(_id, updateOps) {
-	const updateBenefit = await this.models.benefits.findOneAndUpdate(_id, updateOps, {
-		new: true
-	})
+	const updateBenefit = await this.models.benefits.findByIdAndUpdate({
+				 				_id
+				 			}, {
+				 				$set: updateOps
+				 			}, {
+				 				new: true
+				 			})
 	.select('title description _id');
 	if (!updateBenefit) {
 		throw new Error('Benefit update failed');

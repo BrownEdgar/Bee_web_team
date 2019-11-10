@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const benefitSchema = mongoose.Schema({
-	id: {
+	_id: {
         type: mongoose.Schema.Types.ObjectId
 	},
 	title: {

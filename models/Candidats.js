@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const condidatSchema = mongoose.Schema({
+	_id: {
+		type: mongoose.Schema.Types.ObjectId
+	},
 	openPosId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'OpenPosition',
@@ -35,16 +38,17 @@ const condidatSchema = mongoose.Schema({
 		max:63
 	},
 	skills:{
-
+		type: String,
+		required: true
 	},
 	education: {
-		
+		type: String,
+		required: true
 	},
-	experience :{
-
+	experience:{
+		type: String,
+		required: true
 	}
-	
-
 });
 
 
