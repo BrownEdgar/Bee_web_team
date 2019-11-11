@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require("mongoose");
-const TicketList = require('../models/TicketList');
-const User = require('../models/User');
 const TicketListsController = require('../Controller/TicketList');
 const controller = new TicketListsController();
 

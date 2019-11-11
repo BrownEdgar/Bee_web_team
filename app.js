@@ -9,6 +9,9 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session');
 const mongoose = require("mongoose");
+const models = require("./models/index");
+const sevices = require("./services/index");
+
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -74,21 +77,22 @@ app.use('/ticketlists', TicketListRouter);
 
 
 app.models = {
-	users: require('./models/User'),
-	benefits: require('./models/Benefit'),
-	openPosition: require('./models/OpenPosition'),
-	candidat: require('./models/Candidats'),
-	benefitsHistory: require('./models/BenefitsHistory'),
-	ticketList: require('./models/TicketList')
+	users: models.User,
+	benefits: models.Benefit, 
+	openPosition: models.OpenPosition, 
+	candidat: models.Candidats, 
+	benefitsHistory: models.BenefitsHistory, 
+	ticketList: models.TicketList
 }
 
 app.services = {
-	users: new(require('./services/Users'))(app.models),
-	benefits: new(require('./services/Benefits'))(app.models),
-	openPositions: new(require('./services/OpenPosition'))(app.models),
-	candidats: new(require('./services/Candidat'))(app.models),
-	benefitsHistorys: new(require('./services/BenefitsHistory'))(app.models),
-	ticketLists: new(require('./services/TicketList'))(app.models)
+	
+	users: new(sevices.User)(app.models), 
+	benefits: new(sevices.Benefit)(app.models), 
+	openPositions: new(sevices.OpenPosition)(app.models), 
+	candidats: new(sevices.Candidat)(app.models), 
+	benefitsHistorys: new(sevices.BenefitsHistory)(app.models), 
+	ticketLists: new(sevices.TicketList)(app.models)
 };
 
 app.use(function (req, res, next) {
