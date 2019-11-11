@@ -41,7 +41,7 @@ async getAllTicketLists(req, res) {
 		const updateOps = req.body;
 		let x = await req.app.services.ticketLists.updateTicketList(id, updateOps)
 			.then(result => {
-				res.status(result.statusCode).json(result);
+				res.status(result.statusCode).send(result);
 			})
 			.catch(err => {
 				res.status(500).json({
@@ -51,23 +51,18 @@ async getAllTicketLists(req, res) {
 	};
 
 // -------------------------------------
-	async deleteBenefitHistory(req, res) {
-		const id = req.params.historyId;
+	async deleteTicketList(req, res) {
+		const id = req.params.ticketId;
 		try {
-			let delbenefits = await req.app.services.ticketLists.deleteBenefitHistory(id);
-			console.log("delbenefits:", delbenefits);
-			
-			let check = delbenefits.benHistory.deletedCount;
+			let delbenefits = await req.app.services.ticketLists.deleteTicketList(id);
+			let check = delbenefits.ticketList.deletedCount;
 			if (check) {
 				return res.status(201).json({
-					message: "Benefit is deleted!",
+					message: "Ticket Lists is deleted!",
 					benefitId: id
 				})
 			}
-			res.status(409).json({
-				message: "Benefit Id is not found!",
-				BenefitId: req.params.id
-			});
+			throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}

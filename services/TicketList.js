@@ -6,7 +6,7 @@ class TicketListsController {
 		this.models = models;
 	}
 
-	//get all Ticket List Lists done
+	//get all Ticket List  done
 	async getAllTicketLists() {
 		let ticketList = await this.models.ticketList.find().sort({dateStart:1})
 		if (ticketList.length < 1) {
@@ -18,7 +18,7 @@ class TicketListsController {
 		};
 	};
 
-	//get Ticket Lists History by spesial ID
+	//get Ticket Lists by spesial ID
 	async getTicketListById(_id) {
 		let ticketListId = await this.models.ticketList.findOne({_id},{_id:0})
 		.select(`userId dateStart dateEnd`)
@@ -28,7 +28,7 @@ class TicketListsController {
 		return ticketListId;
 	};
 
-	//add new Ticket Lists History in Collection
+	//add new Ticket Lists in Collection
 	async addTicketList(userId, dateStart, dateEnd) {
 		let sumary =this.models.ticketList.find({
 				 userId
@@ -55,9 +55,8 @@ class TicketListsController {
 			return sumary;
 	};
 
-	//Update Ticket Lists History in Collection
+	//Update Ticket Lists in Collection
 	async updateTicketList(_id, updateOps) {
-
 		const updateTicketList = await this.models.ticketList.findByIdAndUpdate({
 				_id
 			}, {
@@ -70,16 +69,16 @@ class TicketListsController {
 		if (!updateTicketList) {
 			return new ErrorHandler(409, `Ticket ListError ${Message.UPDATE_ERROR}`);
 		}
-		return new ErrorHandler(200, `${updateTicketList}`
-	};
+		return new ErrorHandler(200, updateTicketList);
+	}
 
-	//delete Ticket Lists History by Id
-	async deleteTicketListHistory(_id) {
+	//delete Ticket Lists by Id
+	async deleteTicketList(_id) {
 		let ticketList = await this.models.ticketList.deleteOne({
 			_id
 		})
 		if (!ticketList) {
-			return new ErrorHandler(500, `Ticket List History ${ErrorMessage.NOTFOUND_ERROR}`);
+			return new ErrorHandler(500, `Ticket List ${ErrorMessage.NOTFOUND_ERROR}`);
 			 
 		}
 		return {
