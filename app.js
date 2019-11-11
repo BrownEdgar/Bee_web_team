@@ -2,7 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config()
 }
 
-const express = require('express')
+const express = require('express');
 const app = express();
 const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
 const passport = require('passport')
@@ -53,9 +53,6 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
-
-
-
 
 const homeRouter = require('./routes/home');
 const registerRouter = require('./routes/register');
