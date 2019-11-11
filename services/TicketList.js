@@ -10,7 +10,7 @@ class TicketListsController {
 	async getAllTicketLists() {
 		let ticketList = await this.models.ticketList.find().sort({dateStart:1})
 		if (ticketList.length < 1) {
-			throw new Error('Ticket Lists is not found')
+			 throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: ticketList.length,
@@ -19,12 +19,11 @@ class TicketListsController {
 	};
 
 	//get Ticket Lists History by spesial ID
-	async getHistoryById(_id) {
-		let ticketListId = await this.models.ticketList.findOne({
-			_id
-		})
+	async getTicketListById(_id) {
+		let ticketListId = await this.models.ticketList.findOne({_id},{_id:0})
+		.select(`userId dateStart dateEnd`)
 		if (!ticketListId) {
-			throw new Error("Ticket Lists ID is not found");
+			 throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
 		}
 		return ticketListId;
 	};
@@ -37,11 +36,7 @@ class TicketListsController {
 			.exec()
 			.then(result => {
 				if (result.length >= 1) {
-					const message = {
-						status: 409,
-						message: "You cannot ask for vacation while on vacation"
-					}
-					return message;
+					return new ErrorHandler(409, ErrorMessage.VACATION_ERROR);
 				} else {
 					const norTicketList = new this.models.ticketList({
 						userId,
@@ -55,29 +50,27 @@ class TicketListsController {
 					})
 				}
 			}).catch(err => {
-				return ({
-					status: 500,
-					message: "Sameting is Wrong, Server error"
-				})
+				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 			});
 			return sumary;
 	};
 
 	//Update Ticket Lists History in Collection
-	async updateTicketLists(_id, updateOps) {
+	async updateTicketList(_id, updateOps) {
 
 		const updateTicketList = await this.models.ticketList.findByIdAndUpdate({
 				_id
 			}, {
 				$set: updateOps
-			}, {
+			}, 
+			{
 				new: true
 			})
-			.select('title description _id');
+			.select(`userId dateStart dateEnd`)
 		if (!updateTicketList) {
-			throw new Error('Ticket List update failed');
+			return new ErrorHandler(409, `Ticket ListError ${Message.UPDATE_ERROR}`);
 		}
-		return updateTicketList;
+		return new ErrorHandler(200, `${updateTicketList}`
 	};
 
 	//delete Ticket Lists History by Id
@@ -86,7 +79,8 @@ class TicketListsController {
 			_id
 		})
 		if (!ticketList) {
-			return new Error('Ticket List History is not found')
+			return new ErrorHandler(500, `Ticket List History ${ErrorMessage.NOTFOUND_ERROR}`);
+			 
 		}
 		return {
 			count: ticketList.length,

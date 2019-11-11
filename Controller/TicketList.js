@@ -13,11 +13,11 @@ async getAllTicketLists(req, res) {
 	}
 };
 
-// -------------------------------------
-	async getHistoryById(req, res) {
-		const id = req.params.historyId;
+// ------------------------------------- done
+	async getTicketListById(req, res) {
+		const id = req.params.ticketId;
 		try {
-			let ticketList = await req.app.services.ticketLists.getHistoryById(id);
+			let ticketList = await req.app.services.ticketLists.getTicketListById(id);
 			res.send(ticketList);
 		} catch (error) {
 			res.send(error.message);
@@ -29,19 +29,19 @@ async getAllTicketLists(req, res) {
 		let { userId, dateStart, dateEnd } = req.body;
 		try {
 			let newTicketList = await req.app.services.ticketLists.addTicketList( userId, dateStart, dateEnd );
-			res.status(newTicketList.status).send(newTicketList);
+			res.status(newTicketList.statusCode).send(newTicketList);
 		} catch (err) {
 			res.status(500).send(err.message);
 		}
 	};
 
 // -------------------------------------
-	async updateBenefits(req, res) {
-		const id = req.params.id;
+	async updateTicketList(req, res) {
+		const id = req.params.ticketId;
 		const updateOps = req.body;
-		let x = await req.app.services.ticketLists.updateBenefits(id, updateOps)
+		let x = await req.app.services.ticketLists.updateTicketList(id, updateOps)
 			.then(result => {
-				res.status(200).json(result);
+				res.status(result.statusCode).json(result);
 			})
 			.catch(err => {
 				res.status(500).json({
