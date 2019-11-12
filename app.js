@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const app = express();
+const cors = require('cors')
 const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
 const session = require('express-session');
 const mongoose = require("mongoose");

@@ -3,8 +3,8 @@ const router = express.Router();
 const { handleError, ErrorHandler } = require('../middleware/ErrorHendler')
 
 
-router.get('/error', (req, res) => {
-	throw new ErrorHandler(500, 'Internal server error');
+router.get('/', (req, res) => {
+	res.status(200).send("Welcome to BeeWeb home page")
 })
 
 module.exports = router;
