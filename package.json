@@ -35,8 +35,5 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "nodemon": "^1.19.4"
-  },
-  "engines": {
-    "node": ">=9.0.0"
   }
 }
