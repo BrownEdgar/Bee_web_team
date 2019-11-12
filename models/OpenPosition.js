@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 
 const openPositionSchema = mongoose.Schema({
+	
 	id: {
 		type: mongoose.Schema.Types.ObjectId,
 	},
