@@ -1,25 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require("mongoose");
-const Benefit = require('../models/Benefit');
 const BenefitsController = require('../Controller/Benefits');
 const controller = new BenefitsController();
+const checkAuth = require('../middleware/checkLogin');
 
 //get all Benefits
-router.get('/', controller.getAllBenefits);
+router.get('/', checkAuth,  controller.getAllBenefits);
 
 //add Benefits
-router.post('/', controller.addBenefits);
+router.post('/', checkAuth,  controller.addBenefits);
 
 
 //get benefits by ID
-router.get('/:id',  controller.getBenefit);
+router.get('/:id', checkAuth,   controller.getBenefit);
 
 //update benefits
-router.patch('/:id', controller.updateBenefits);
+router.patch('/:id', checkAuth,  controller.updateBenefits);
 
 //benefits Deleted
-router.delete('/:id', controller.deleteBenefits);
+router.delete('/:id', checkAuth,  controller.deleteBenefits);
 
 
 module.exports = router;

@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const checkAuth = require('../middleware/checkLogin');
 const TicketListsController = require('../Controller/TicketList');
 const controller = new TicketListsController();
 
 //get all TicketLists
-router.get('/', controller.getAllTicketLists);
+router.get('/', checkAuth, controller.getAllTicketLists);
 
 //add TicketLists
-router.post('/', controller.addTicketList);
+router.post('/', checkAuth, controller.addTicketList);
 
 //get TicketLists by ID
-router.get('/:ticketId', controller.getTicketListById);
+router.get('/:ticketId', checkAuth, controller.getTicketListById);
 
 //update TicketLists
-router.patch('/:ticketId', controller.updateTicketList);
+router.patch('/:ticketId', checkAuth, controller.updateTicketList);
 
 //TicketLists Deleted
-router.delete('/:ticketId', controller.deleteTicketList);
+router.delete('/:ticketId', checkAuth, controller.deleteTicketList);
 
 module.exports = router;

@@ -1,24 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require("mongoose");
-const OpenPosition = require('../models/OpenPosition');
+const checkAuth = require('../middleware/checkLogin');
 const OpenPositionController = require('../Controller/OpenPosition');
 const controller = new OpenPositionController();
 
 //get all OpenPositions
-router.get('/', controller.getAllOpenPosition);
+router.get('/', checkAuth, controller.getAllOpenPosition);
 
 //add OpenPositions
-router.post('/', controller.addOpenPosition);
+router.post('/', checkAuth, controller.addOpenPosition);
 
 //get OpenPositions by ID
-router.get('/:openPositionId', controller.getSpecialPosition);
+router.get('/:openPositionId', checkAuth, controller.getSpecialPosition);
 
 //update OpenPositions
-router.patch('/:openPositionId', controller.updateOpenPosition);
+router.patch('/:openPositionId', checkAuth, controller.updateOpenPosition);
 
 //OpenPositions Deleted
-router.delete('/:openPositionId', controller.deleteOpenPosition);
+router.delete('/:openPositionId', checkAuth, controller.deleteOpenPosition);
 
 
 

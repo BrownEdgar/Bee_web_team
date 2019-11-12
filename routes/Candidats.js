@@ -1,24 +1,23 @@
 const express = require('express');
 const router = express.Router();
-
-const Candidat = require('../models/Candidats');
+const checkAuth = require('../middleware/checkLogin');
 const CandidatsController = require('../Controller/Candidats');
 const controller = new CandidatsController();
 
 //get all Candidats
-router.get('/', controller.getAllCandidats);
+router.get('/', checkAuth, controller.getAllCandidats);
 
 //add Candidats
-router.post('/', controller.addCandidats);
+router.post('/', checkAuth, controller.addCandidats);
 
 //get Candidats by ID
-router.get('/:candidatId', controller.getSpecialCandidat);
+router.get('/:candidatId', checkAuth, controller.getSpecialCandidat);
 
 //update Candidats
-router.patch('/:candidatId', controller.updateCandidat);
+router.patch('/:candidatId', checkAuth, controller.updateCandidat);
 
 //Candidats Deleted
-router.delete('/:candidatId', controller.deleteCandidat);
+router.delete('/:candidatId', checkAuth, controller.deleteCandidat);
 
 
 
