@@ -37,9 +37,7 @@ app.use(session({
 	saveUninitialized: false
 }))
 
-app.get('/', (req, res) => { 
-	res.send('hello world')
-});
+
 const homeRouter = require('./routes/home');
 const registerRouter = require('./routes/register');
 const BenefitRouter = require('./routes/Benefit');
