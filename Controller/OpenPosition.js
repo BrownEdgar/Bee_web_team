@@ -4,9 +4,9 @@ const  ErrorMessage  = require('../helpers/error');
 class OpenPositionController {
 
 	// ------------------------------------- done
-	async getAllOpenPosition(req, res) {
+	async getOpenPosition(req, res) {
 		try {
-			let allPositions = await req.app.services.openPositions.getAllOpenPosition();
+			let allPositions = await req.app.services.openPositions.getOpenPosition();
 			res.status(201).send(allPositions);
 		} catch (error) {
 			res.status(500).send(error.message);

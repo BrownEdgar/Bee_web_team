@@ -8,7 +8,7 @@ class CandidatsController {
 	}
 
 	//get all Candidat Lists done!
-	async getAllCandidats() {
+	async getCandidats() {
 		let candidats = await this.models.candidat.find()
 			.select('openPosId name surname email age skills experience');
 		if (candidats.length < 1) {

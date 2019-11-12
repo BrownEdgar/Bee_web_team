@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { handleError, ErrorHandler } = require('../middleware/ErrorHendler')
 
 
 router.get('/', (req, res) => {

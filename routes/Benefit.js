@@ -5,7 +5,7 @@ const controller = new BenefitsController();
 const checkAuth = require('../middleware/checkLogin');
 
 //get all Benefits
-router.get('/', checkAuth,  controller.getAllBenefits);
+router.get('/', checkAuth, controller.getBenefits);
 
 //add Benefits
 router.post('/', checkAuth,  controller.addBenefits);

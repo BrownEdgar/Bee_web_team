@@ -5,7 +5,7 @@ const CandidatsController = require('../Controller/Candidats');
 const controller = new CandidatsController();
 
 //get all Candidats
-router.get('/', checkAuth, controller.getAllCandidats);
+router.get('/', checkAuth, controller.getCandidats);
 
 //add Candidats
 router.post('/', checkAuth, controller.addCandidats);

@@ -5,7 +5,7 @@ const UsersController = require('../Controller/Users');
 const controller = new UsersController();
 
 /* GET Users page. */
-router.get('/', checkAuth, controller.getAllUsers);
+router.get('/', checkAuth, controller.getUsers);
 
 router.get('/:userId', checkAuth, controller.getUser);
 

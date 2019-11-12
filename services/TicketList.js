@@ -7,7 +7,7 @@ class TicketListsController {
 	}
 
 	//get all Ticket List  done
-	async getAllTicketLists() {
+	async getTicketLists() {
 		let ticketList = await this.models.ticketList.find().sort({dateStart:1})
 		if (ticketList.length < 1) {
 			 throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);

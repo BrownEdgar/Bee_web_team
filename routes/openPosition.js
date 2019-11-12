@@ -5,7 +5,7 @@ const OpenPositionController = require('../Controller/OpenPosition');
 const controller = new OpenPositionController();
 
 //get all OpenPositions
-router.get('/', checkAuth, controller.getAllOpenPosition);
+router.get('/', checkAuth, controller.getOpenPosition);
 
 //add OpenPositions
 router.post('/', checkAuth, controller.addOpenPosition);

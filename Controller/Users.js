@@ -6,9 +6,9 @@ const ErrorMessage = require('../helpers/error');
 class UsersController {
 
 	// ------------------------------------- done
-	async getAllUsers(req, res) {
+	async getUsers(req, res) {
 		try {
-			let allusers = await req.app.services.users.getAllUsers();
+			let allusers = await req.app.services.users.getUsers();
 			res.status(201).send(allusers);
 		} catch (error) {
 			res.status(500).send(error.message);

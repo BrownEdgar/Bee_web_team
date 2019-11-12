@@ -5,7 +5,7 @@ const TicketListsController = require('../Controller/TicketList');
 const controller = new TicketListsController();
 
 //get all TicketLists
-router.get('/', checkAuth, controller.getAllTicketLists);
+router.get('/', checkAuth, controller.getTicketLists);
 
 //add TicketLists
 router.post('/', checkAuth, controller.addTicketList);

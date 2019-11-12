@@ -4,9 +4,9 @@ const  ErrorMessage  = require('../helpers/error');
 class BenefitHistoryController {
 
 // -------------------------------------
-async getAllBenefitsHistory(req, res) {
+async getBenefitsHistory(req, res) {
 	try {
-		let allHistory = await req.app.services.benefitsHistorys.getAllBenefitsHistory();
+		let allHistory = await req.app.services.benefitsHistorys.getBenefitsHistory();
 		res.status(201).send(allHistory);
 	} catch (error) {
 		res.status(500).send(err.message);

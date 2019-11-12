@@ -8,7 +8,7 @@ class BenefitsController {
 	}
 	
 	//get all Benefit Lists
-	async getAllBenefits() {
+	async getBenefits() {
 		let benefits = await this.models.benefits.find()
 			.select('title description _id');
 		if (benefits.length < 1) {

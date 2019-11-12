@@ -13,9 +13,9 @@ class BenefitsController {
 	};
 	
 // -------------------------------------
-	async getAllBenefits(req, res) {
+	async getBenefits(req, res) {
 		try {
-			let allbenefits = await req.app.services.benefits.getAllBenefits();
+			let allbenefits = await req.app.services.benefits.getBenefits();
 			res.status(201).send(allbenefits);
 		} catch (error) {
 			res.status(500).send(err.message);

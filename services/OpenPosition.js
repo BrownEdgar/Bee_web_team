@@ -7,7 +7,7 @@ class OpenPositionController {
 	}
 	
 	//get all Benefit Lists done!
-	async getAllOpenPosition() {
+	async getOpenPosition() {
 		let positions = await this.models.openPosition.find()
 			.select('_id title description ageLimit salary');
 		if (positions.length < 1) {

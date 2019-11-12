@@ -5,9 +5,9 @@ class CandidatsController {
 
 	// ------------------------------------- done!
 
-	async getAllCandidats(req, res) {
+	async getCandidats(req, res) {
 		try {
-			let allcandidats = await req.app.services.candidats.getAllCandidats();
+			let allcandidats = await req.app.services.candidats.getCandidats();
 			res.status(201).send(allcandidats);
 		} catch (error) {
 			res.status(500).send(error.message);

@@ -8,7 +8,7 @@ const controller = new BenefitHistoryController();
 //no Update Url => "patch"
 
 //get all BenefitHistorys
-router.get('/', checkAuth, controller.getAllBenefitsHistory);
+router.get('/', checkAuth, controller.getBenefitsHistory);
 
 //add BenefitHistorys
 router.post('/', checkAuth, controller.addBenefitsHistory);

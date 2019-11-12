@@ -7,7 +7,7 @@ class BenefitHistoryController {
 	}
 
 	//get all Benefit Lists done
-	async getAllBenefitsHistory() {
+	async getBenefitsHistory() {
 		let benHistory = await this.models.benefitsHistory.find()
 		if (benHistory.length < 1) {
 			throw new ErrorHandler(500, ErrorMessage.NO_DATA_ERROR);

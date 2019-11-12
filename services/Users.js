@@ -20,7 +20,7 @@ class UsersController {
 	};
 
 	//get All users from User Collections done
-	async getAllUsers() {
+	async getUsers() {
 		let users = await this.models.users.find()
 			.select('name surname age email dob role _id');
 		if (users.length < 1) {
