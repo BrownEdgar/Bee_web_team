@@ -5,12 +5,10 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const app = express();
 const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
-const passport = require('passport')
-const flash = require('express-flash')
 const session = require('express-session');
 const mongoose = require("mongoose");
-const models = require("./models/index");
-const sevices = require("./services/index");
+const models = require("./models");
+const sevices = require("./services");
 
 
 app.use(express.json());
@@ -27,32 +25,17 @@ mongoose.connect(process.env.DB_CONNECTION, {
 	(err) => console.log(err));
 
 //CORS
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept Authorization"
-	);
-	if (req.method === 'OPTIONS') {
-		res.header('Access-Control-Allow-Methods', 'PUT', 'GET', 'PATCH', 'DELETE', 'POST', 'UPDATE')
-		res.status(200).json({});
-	}
-	next(); //partadir
-});
-
-app.set('view-engine', 'ejs');
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(flash())
 app.use(session({
 	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false
 }))
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 const homeRouter = require('./routes/home');
 const registerRouter = require('./routes/register');
@@ -82,8 +65,7 @@ app.models = {
 	ticketList: models.TicketList
 }
 
-app.services = {
-	
+app.services = {	
 	users: new(sevices.User)(app.models), 
 	benefits: new(sevices.Benefit)(app.models), 
 	openPositions: new(sevices.OpenPosition)(app.models), 

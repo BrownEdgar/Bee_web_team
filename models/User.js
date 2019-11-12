@@ -31,8 +31,8 @@ const userSchema = mongoose.Schema({
 	password: {
 		type: String,
 		required: true,
-		maxlength: 1024,
-		minlength: 6
+		maxlength: 156,
+		minlength: 8
 	},
 	gender: {
 		type: String,
@@ -40,13 +40,18 @@ const userSchema = mongoose.Schema({
 	},
 	dob: {
 		type: Date,
-		required: true,
+		required: [true, 'dob field is required'],
 		min: '1957-09-28',
 		max: '2000-01-01'
 	},
 	role:{
 		type: String,
-		required: true
+		enum: ["0", "1", "2"],
+		required: [true,'Must by "0"-admin "1"-meneger, "2"-stuff']
+	},
+	deletedAt:{
+		type:Date,
+		default:null
 	}
 });
 

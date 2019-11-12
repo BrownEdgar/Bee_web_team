@@ -51,7 +51,7 @@ class UsersController {
 						dob,
 						role
 					});
-			 	 bcrypt.genSalt(10, (err, salt) => {
+			 	bcrypt.genSalt(10, (err, salt) => {
 			  	bcrypt.hash(norUser.password, salt,  function (err, hash) {
 			  		if (err) {
 			  			throw err;
@@ -80,10 +80,13 @@ class UsersController {
 		return updateUser;
 	};
 
-	//delete Benefit by Id done!
+	//delete User by Id done!
 	async deleteUser(_id) {
-		let user = await this.models.users.deleteOne({
+		let user = await this.models.users.findByIdAndUpdate({
 			_id
+		},
+		{
+			deletedAt:Date.now()
 		})
 		if (!user) {
 			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
