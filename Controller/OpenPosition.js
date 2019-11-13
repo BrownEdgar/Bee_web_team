@@ -63,10 +63,10 @@ class OpenPositionController {
 			if (check) {
 				return res.status(201).json({
 					message: "Open Position is deleted!",
-					benefitId: id
+					openPositionsId: id
 				})
 			}
-			throw new ErrorHandler(409, `Open Position ${ErrorMessage.ID_ERROR}`);
+			throw new ErrorHandler(400, `Open Position ${ErrorMessage.ID_ERROR}`);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}

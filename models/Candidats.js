@@ -33,21 +33,21 @@ const condidatSchema = mongoose.Schema({
 	},
 	age: {
 		type: Number,
-		required:true,
+		required: [true, 'please indicate your age'],
 		min:18,
 		max:63
 	},
 	skills:{
 		type: String,
-		required: true
+		required: [true, 'please indicate yours skills'],
 	},
 	education: {
 		type: String,
-		required: true
+		required: [true, 'please indicate where you studied'],
 	},
 	experience:{
 		type: String,
-		required: true
+		required: [true, 'please indicate yours experience'],
 	}
 });
 

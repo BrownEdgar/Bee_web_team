@@ -1,6 +1,6 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
 const  ErrorMessage  = require('../helpers/error');
-
+const mongoose = require("mongoose");
 
 class BenefitsController {
 	constructor(models) {
@@ -27,18 +27,32 @@ class BenefitsController {
 			})
 			.select('title description _id')
 		if (!benefit) {
-			throw new ErrorHandler(404, ErrorMessage.NOTFOUND_ERROR);
+			throw new ErrorHandler(404, `Benefit ${ErrorMessage.ID_ERROR}`);
 		}
 		return benefit;
 	};
 
 	//add new Benefit in Collection
 	async addBenefits(title, description = "for a good job!") {
-		const norBenefit = new this.models.benefits({
-			title,
-			description
-		});
-		return norBenefit.save();
+		console.log(title, description);
+		
+		let sumary = this.models.benefits.find({
+				title,
+				description
+			})
+			.exec()
+			.then(result => {
+					if (result.length >= 1) {
+						return new ErrorHandler(409, ErrorMessage.POSITION_EXIST);
+					} else {
+						const norBenefit = new this.models.benefits({
+							_id: new mongoose.Types.ObjectId(),
+							title,
+							description
+						});
+						return norBenefit.save();
+					}});
+			return sumary;
 	};
 
 	//Update Benefit in Collection

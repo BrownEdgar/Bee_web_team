@@ -6,11 +6,11 @@ const benefitSchema = mongoose.Schema({
 	},
 	title: {
         type: String,
-        required:true
+        required: [true, "field is required, please fill in the field"]
 	},
 	description: {
 		type: String,
-		required: true
+		required: [true, "field is required, please add a description"]
 	}
 });
 

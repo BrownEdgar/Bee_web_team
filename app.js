@@ -49,11 +49,11 @@ const TicketListRouter = require('./routes/TicketList');
 
 app.use('/', homeRouter);
 app.use('/signup', registerRouter);
-app.use('/allbenefits', BenefitRouter);
-app.use('/allbenefitshistory', BenefitHistoryRouter);
-app.use('/allusers', allUsersRouter);
-app.use('/allopenpositions', OpenPositionRouter);
-app.use('/allcandidats', candidatRouter);
+app.use('/benefits', BenefitRouter);
+app.use('/benefitshistorys', BenefitHistoryRouter);
+app.use('/users', allUsersRouter);
+app.use('/openpositions', OpenPositionRouter);
+app.use('/candidats', candidatRouter);
 app.use('/ticketlists', TicketListRouter);
 
 

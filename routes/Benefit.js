@@ -5,20 +5,20 @@ const controller = new BenefitsController();
 const checkAuth = require('../middleware/checkLogin');
 
 //get all Benefits
-router.get('/', checkAuth, controller.getBenefits);
+router.get('/',  controller.getBenefits);
 
 //add Benefits
-router.post('/', checkAuth,  controller.addBenefits);
+router.post('/',   controller.addBenefits);
 
 
 //get benefits by ID
-router.get('/:id', checkAuth,   controller.getBenefit);
+router.get('/:id',    controller.getBenefit);
 
 //update benefits
-router.patch('/:id', checkAuth,  controller.updateBenefits);
+router.patch('/:id',   controller.updateBenefits);
 
 //benefits Deleted
-router.delete('/:id', checkAuth,  controller.deleteBenefits);
+router.delete('/:id',   controller.deleteBenefits);
 
 
 module.exports = router;

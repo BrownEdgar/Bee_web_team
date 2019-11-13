@@ -85,7 +85,7 @@ class CandidatsController {
 						new: true
 					})
 					if (!updateCandidat) {
-						return new ErrorHandler(409, ErrorMessage.UPDATE_ERROR);
+						return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);
 					}
 					return updateCandidat;
 				}
@@ -104,7 +104,7 @@ class CandidatsController {
 			_id
 		})
 		if (!candidats) {
-			throw new ErrorHandler(409, ErrorMessage.NOTFOUND_ERROR );
+			throw new ErrorHandler(409, `Candidat ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return {
 			count: candidats.length,

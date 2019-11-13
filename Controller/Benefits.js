@@ -6,16 +6,17 @@ class BenefitsController {
 	async getBenefit(req, res) {
 		try {
 			let benefit = await req.app.services.benefits.getBenefit(req.params.id);
-			res.send(benefit);
+			res.status(200).send(benefit);
 		} catch (error) {
-			res.send(err.message);
+			res.status(error.statusCode).send(error);
 		}
 	};
 	
 // -------------------------------------
 	async getBenefits(req, res) {
 		try {
-			let allbenefits = await req.app.services.benefits.getBenefits();
+			let allbenefits = await req.app.services.benefits.getBenefits()
+			
 			res.status(201).send(allbenefits);
 		} catch (error) {
 			res.status(500).send(err.message);

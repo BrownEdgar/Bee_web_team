@@ -48,19 +48,6 @@ async getBenefitsHistory(req, res) {
 	};
 
 // -------------------------------------
-	async updateBenefitsHistory(req, res) {
-		const id = req.params.id;
-		const updateOps = req.body;
-		let x = await req.app.services.benefitsHistorys.updateBenefitsHistory(id, updateOps)
-			.then(result => {
-				res.status(200).json(result);
-			})
-			.catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
-			});
-	};
-
-// -------------------------------------
 	async deleteBenefitHistory(req, res) {
 		const id = req.params.historyId;
 		try {
@@ -70,7 +57,7 @@ async getBenefitsHistory(req, res) {
 			let check = delbenefits.benHistory.deletedCount;
 			if (check) {
 				return res.status(201).json({
-					message: "Benefit is deleted!",
+					message: "Benefit History is deleted!",
 					benefitId: id
 				})
 			}

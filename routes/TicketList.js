@@ -5,18 +5,18 @@ const TicketListsController = require('../Controller/TicketList');
 const controller = new TicketListsController();
 
 //get all TicketLists
-router.get('/', checkAuth, controller.getTicketLists);
+router.get('/', controller.getTicketLists);
 
 //add TicketLists
-router.post('/', checkAuth, controller.addTicketList);
+router.post('/', controller.addTicketList);
 
 //get TicketLists by ID
-router.get('/:ticketId', checkAuth, controller.getTicketListById);
+router.get('/:ticketId', controller.getTicketListById);
 
 //update TicketLists
-router.patch('/:ticketId', checkAuth, controller.updateTicketList);
+router.patch('/:ticketId', controller.updateTicketList);
 
 //TicketLists Deleted
-router.delete('/:ticketId', checkAuth, controller.deleteTicketList);
+router.delete('/:ticketId', controller.deleteTicketList);
 
 module.exports = router;

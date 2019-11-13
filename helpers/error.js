@@ -1,5 +1,5 @@
 const EMAIL_EXIST = 'This Email is already exists';
-const SERVER_ERROR = 'Sameting is Wrong, Server error';
+const SERVER_ERROR = 'Something is Wrong, Server error';
 const ID_ERROR = 'ID is not found';
 const NOTFOUND_ERROR = 'Is not found';
 const BENERR_FAILED = 'Benefit update failed';

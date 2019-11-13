@@ -5,12 +5,12 @@ const UsersController = require('../Controller/Users');
 const controller = new UsersController();
 
 /* GET Users page. */
-router.get('/', checkAuth, controller.getUsers);
+router.get('/', controller.getUsers);
 
-router.get('/:userId', checkAuth, controller.getUser);
+router.get('/:userId', controller.getUser);
 
-router.patch('/:userId', checkAuth, controller.updateUser);
+router.patch('/:userId', controller.updateUser);
 
-router.delete('/:userId', checkAuth, controller.deleteUser);
+router.delete('/:userId', controller.deleteUser);
 
 module.exports = router;

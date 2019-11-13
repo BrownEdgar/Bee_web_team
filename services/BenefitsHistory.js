@@ -45,31 +45,12 @@ class BenefitHistoryController {
 						userId
 					});
 					norBenefitHistory.save();
-					return ({
-						status: 201,
-						message: "Benefit History is created"
-					})
+					return norBenefitHistory
 				}
 			}).catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				throw new ErrorHandler(500, ErrorMessage.GIFT_ERROR);
 			});
 			return sumary;
-	};
-
-	//Update Benefits History in Collection
-	async updateBenefitsHistory(_id, updateOps) {
-		const updateBenefit = await this.models.benefitsHistory.findByIdAndUpdate({
-				_id
-			}, {
-				$set: updateOps
-			}, {
-				new: true
-			})
-			.select('title description _id');
-		if (!updateBenefit) {
-			throw new ErrorHandler(500, ErrorMessage.UPDATE_ERROR);
-		}
-		return updateBenefit;
 	};
 
 	//delete Benefits History by Id

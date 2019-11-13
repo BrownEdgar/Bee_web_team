@@ -8,15 +8,15 @@ const controller = new BenefitHistoryController();
 //no Update Url => "patch"
 
 //get all BenefitHistorys
-router.get('/', checkAuth, controller.getBenefitsHistory);
+router.get('/', controller.getBenefitsHistory);
 
 //add BenefitHistorys
-router.post('/', checkAuth, controller.addBenefitsHistory);
+router.post('/', controller.addBenefitsHistory);
 
 //get BenefitHistorys by ID 
-router.get('/:historyId', checkAuth, controller.getHistoryById);
+router.get('/:historyId', controller.getHistoryById);
 
 //BenefitHistorys Deleted
-router.delete('/:historyId', checkAuth, controller.deleteBenefitHistory);
+router.delete('/:historyId', controller.deleteBenefitHistory);
 
 module.exports = router;

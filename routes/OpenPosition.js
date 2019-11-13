@@ -5,19 +5,19 @@ const OpenPositionController = require('../Controller/OpenPosition');
 const controller = new OpenPositionController();
 
 //get all OpenPositions
-router.get('/', checkAuth, controller.getOpenPosition);
+router.get('/', controller.getOpenPosition);
 
 //add OpenPositions
-router.post('/', checkAuth, controller.addOpenPosition);
+router.post('/', controller.addOpenPosition);
 
 //get OpenPositions by ID
-router.get('/:openPositionId', checkAuth, controller.getSpecialPosition);
+router.get('/:openPositionId', controller.getSpecialPosition);
 
 //update OpenPositions
-router.patch('/:openPositionId', checkAuth, controller.updateOpenPosition);
+router.patch('/:openPositionId', controller.updateOpenPosition);
 
 //OpenPositions Deleted
-router.delete('/:openPositionId', checkAuth, controller.deleteOpenPosition);
+router.delete('/:openPositionId', controller.deleteOpenPosition);
 
 
 

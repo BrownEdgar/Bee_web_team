@@ -5,19 +5,19 @@ const CandidatsController = require('../Controller/Candidats');
 const controller = new CandidatsController();
 
 //get all Candidats
-router.get('/', checkAuth, controller.getCandidats);
+router.get('/',  controller.getCandidats);
 
 //add Candidats
-router.post('/', checkAuth, controller.addCandidats);
+router.post('/', controller.addCandidats);
 
 //get Candidats by ID
-router.get('/:candidatId', checkAuth, controller.getSpecialCandidat);
+router.get('/:candidatId', controller.getSpecialCandidat);
 
 //update Candidats
-router.patch('/:candidatId', checkAuth, controller.updateCandidat);
+router.patch('/:candidatId', controller.updateCandidat);
 
 //Candidats Deleted
-router.delete('/:candidatId', checkAuth, controller.deleteCandidat);
+router.delete('/:candidatId', controller.deleteCandidat);
 
 
 
