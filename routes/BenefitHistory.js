@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const checkAuth = require('../middleware/checkLogin');
 const BenefitHistoryController = require('../Controller/BenefitsHistory');
 const controller = new BenefitHistoryController();
+const loginValidator = require('../Validate/loginValidator');
+const checkAuth = new loginValidator();
 
 
 //no Update Url => "patch"

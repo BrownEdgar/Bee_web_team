@@ -1,6 +1,4 @@
-const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
+const {ErrorHandler} = require('../middleware/ErrorHendler');
 const ErrorMessage = require('../helpers/error');
 
 class UsersController {
@@ -29,21 +27,24 @@ class UsersController {
 
 	// ------------------------------------- done ?	/signup -ov
 	async addUser(req, res) {
-		const { name, surname, age, email, password, gender, dob, role} = req.body;
+		const { name, surname, age, email, password, gender, dob, role } = req.body;
 		let norUser = await req.app.services.users.addUser(name, surname, age, email, password, gender, dob, role)
 			.then(result => {
 				if (result) {
-					res.status(200).json({
-						message: "user Created"
+					res.status(result.statusCode).json({
+						message: result.message
 					})
 
+				}else{
+					res.status(result.statusCode).json({
+						result
+					})
 				}
-				res.status(norUser.statusCode).json({
-					result
-				})
+
+				
 			})
 			.catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 			});
 	};
 

@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const checkAuth = require('../middleware/checkLogin');
 const OpenPositionController = require('../Controller/OpenPosition');
 const controller = new OpenPositionController();
+const loginValidator = require('../Validate/loginValidator');
+const checkAuth = new loginValidator();
 
 //get all OpenPositions
 router.get('/', controller.getOpenPosition);

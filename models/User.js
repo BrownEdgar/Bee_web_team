@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
 	},
 	surname: {
 		type: String,
-		required: true,
+		required: [true, `surname fields is required`],
 		maxlength: 1024,
 		minlength: 2
 	},
@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		maxlength: 1024,
-		minlength: 6
+		minlength: 5
 	},
 	password: {
 		type: String,

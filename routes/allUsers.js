@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const checkAuth = require('../middleware/checkLogin');
 const UsersController = require('../Controller/Users');
 const controller = new UsersController();
+const loginValidator = require('../Validate/loginValidator');
+const checkAuth = new loginValidator();
 
 /* GET Users page. */
 router.get('/', controller.getUsers);

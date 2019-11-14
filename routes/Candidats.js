@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const checkAuth = require('../middleware/checkLogin');
 const CandidatsController = require('../Controller/Candidats');
 const controller = new CandidatsController();
+const loginValidator = require('../Validate/loginValidator');
+const checkAuth = new loginValidator();
 
 //get all Candidats
 router.get('/',  controller.getCandidats);
