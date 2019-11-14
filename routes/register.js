@@ -9,6 +9,10 @@ const controller = new UserController();
 router.get('/', (req, res, next) => {
 res.send("register page")
 });
+router.get('/login', (req, res, next) => {
+	res.send("login page")
+});
+
 router.post('/', controller.addUser);
 
 // router.post('/login', controller.loginUser);
