@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const UserController = require('../Controller/Users');
 const controller = new UserController();
 
+router.get('/', (req, res, next) => {
+res.send("register page")
+});
 router.post('/', controller.addUser);
 
 // router.post('/login', controller.loginUser);
