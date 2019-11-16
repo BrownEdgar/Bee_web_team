@@ -6,7 +6,7 @@ const loginValidator = require('../Validate/loginValidator');
 const checkAuth = new loginValidator();
 
 //get all Benefits
-router.get('/', checkAuth.isLogin, controller.getBenefits);
+router.get('/',  controller.getBenefits);
 
 //add Benefits
 router.post('/',   controller.addBenefits);

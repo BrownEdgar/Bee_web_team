@@ -1,6 +1,7 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error')
 const mongoose = require("mongoose");
+const Error = new Errors();
 
 class BenefitsController {
 	constructor(models) {
@@ -8,11 +9,11 @@ class BenefitsController {
 	}
 	
 	//get all Benefit Lists
-	async getBenefits() {
+	async getBenefits(res) {
 		let benefits = await this.models.benefits.find()
 			.select('title description _id');
 		if (benefits.length < 1) {
-			throw new ErrorHandler(404, ErrorMessage.NO_DATA_ERROR);
+			Error.conflictError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: benefits.length,
@@ -21,19 +22,19 @@ class BenefitsController {
 	};
 	
 	//get benefit by spesial ID
-	async getBenefit(_id) {
+	async getBenefit(res, _id) {
 		let benefit = await this.models.benefits.findOne({
 				_id
 			})
 			.select('title description _id')
 		if (!benefit) {
-			throw new ErrorHandler(404, `Benefit ${ErrorMessage.ID_ERROR}`);
+			Error.conflictError(res, ErrorMessage.ID_ERROR)
 		}
 		return benefit;
 	};
 
 	//add new Benefit in Collection
-	async addBenefits(title, description = "for a good job!") {
+	async addBenefits(res, title, description = "for a good job!") {
 		console.log(title, description);
 		
 		let sumary = this.models.benefits.find({
@@ -43,7 +44,7 @@ class BenefitsController {
 			.exec()
 			.then(result => {
 					if (result.length >= 1) {
-						return new ErrorHandler(409, ErrorMessage.POSITION_EXIST);
+						Error.conflictError(res, ErrorMessage.POSITION_EXIST);
 					} else {
 						const norBenefit = new this.models.benefits({
 							_id: new mongoose.Types.ObjectId(),
@@ -56,7 +57,7 @@ class BenefitsController {
 	};
 
 	//Update Benefit in Collection
-	async updateBenefits(_id, updateOps) {
+	async updateBenefits(res, _id, updateOps) {
 	const updateBenefit = await this.models.benefits.findByIdAndUpdate({
 				 				_id
 				 			}, {
@@ -66,18 +67,20 @@ class BenefitsController {
 				 			})
 	.select('title description _id');
 	if (!updateBenefit) {
-		throw new ErrorHandler(404, ErrorMessage.ID_ERROR);
+	return 	Error.notFoundError(res);
 	}
 	return updateBenefit;
 	};
 
 	//delete Benefit by Id
-	async deleteBenefits(_id) {
+	async deleteBenefit(_id) {
 		let benefits = await this.models.benefits.deleteOne({
 			_id
 		})
-		if (!benefits) {
-			throw new ErrorHandler(404, ErrorMessage.NOTFOUND_ERROR);
+		console.log("benefits: ", benefits);
+		let check = benefits.deletedCount;
+		if (check == 0) {
+		return Error.conflictError(409, ErrorMessage.ID_ERROR);
 		}
 		return {
 			count: benefits.length,

@@ -1,25 +1,26 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error');
+const Error = new Errors();
 
 class BenefitsController {
 // -------------------------------------
 	async getBenefit(req, res) {
+		const id = req.params.id;
 		try {
-			let benefit = await req.app.services.benefits.getBenefit(req.params.id);
+			let benefit = await req.app.services.benefits.getBenefit(res, id);
 			res.status(200).send(benefit);
 		} catch (error) {
-			res.status(error.statusCode).send(error);
+			res.status(500).send(error.message);
 		}
 	};
 	
 // -------------------------------------
 	async getBenefits(req, res) {
 		try {
-			let allbenefits = await req.app.services.benefits.getBenefits()
-			
+			let allbenefits = await req.app.services.benefits.getBenefits(res)
 			res.status(201).send(allbenefits);
 		} catch (error) {
-			res.status(500).send(err.message);
+			res.status(500).send(error.message);
 		}
 	};
 
@@ -30,7 +31,7 @@ class BenefitsController {
 			description
 		} = req.body;
 		try {
-			let addBenefit = await req.app.services.benefits.addBenefits(title, description);
+			let addBenefit = await req.app.services.benefits.addBenefits(res, title, description);
 			res.status(200).send(addBenefit);
 		} catch (err) {
 			res.status(500).send(err.message);
@@ -41,7 +42,7 @@ class BenefitsController {
 	async updateBenefits(req, res) {
 		const id = req.params.id;
 		const updateOps = req.body;
-		let x = await req.app.services.benefits.updateBenefits(id, updateOps)
+		let x = await req.app.services.benefits.updateBenefits(res, id, updateOps)
 			.then(result => {
 				res.status(200).json(result);
 			})
@@ -54,17 +55,13 @@ class BenefitsController {
 
 // -------------------------------------
 	async deleteBenefits(req, res) {
+		const _id = req.params.id;
 		try {
-			let delbenefits = await req.app.services.benefits.deleteBenefits(req.params.id);
-			let check = delbenefits.benefits.deletedCount;
-			if (check) {
+			let delbenefits = await req.app.services.benefits.deleteBenefit(_id);
 				return res.status(201).json({
 					message: "Benefit is deleted!",
-					benefitId: req.params.id
+					benefitId: _id
 				})
-			}
-			throw new ErrorHandler(409, ErrorMessage.ID_ERROR);
-			
 		} catch (error) {
 			res.status(500).send(error.message);
 		}
