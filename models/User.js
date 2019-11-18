@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const userSchema = mongoose.Schema({
 	_id: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -7,13 +8,13 @@ const userSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
-		maxlength: 1024,
-		minlength: 2
+		maxlength: 100,
+		minlength: 2,
 	},
 	surname: {
 		type: String,
 		required: [true, `surname fields is required`],
-		maxlength: 1024,
+		maxlength: 100,
 		minlength: 2
 	},
 	age: {
@@ -30,9 +31,10 @@ const userSchema = mongoose.Schema({
 	},
 	password: {
 		type: String,
-		required: true,
-		maxlength: 156,
-		minlength: 8
+		required: [true, 'password field is required'],
+		uppercase: true,
+		maxlength: [156, 'Too much characters'],
+		minlength: [6, 'Too few characters'],
 	},
 	gender: {
 		type: String,
@@ -47,13 +49,11 @@ const userSchema = mongoose.Schema({
 	role:{
 		type: String,
 		enum: ["0", "1", "2"],
-		required: [true,'Must by "0"-admin "1"-meneger, "2"-stuff']
+		required: [true, 'Must by "0"-admin "1"-meneger, "2"-stuff']
 	},
 	deletedAt:{
 		type:Date,
 		default:null
 	}
 });
-
-
 module.exports = mongoose.model("User", userSchema);

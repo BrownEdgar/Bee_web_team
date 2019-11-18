@@ -1,10 +1,8 @@
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const ErrorMessage = require('../helpers/error');
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const {ErrorMessage, Errors} = require('../helpers/error');
+const Error = new Errors();
 
 class UsersController {
 	constructor(models) {
@@ -12,13 +10,13 @@ class UsersController {
 	}
 
 	//get user done
-	async getUser(_id) {
+	async getUser(res, _id) {
 		let user = await this.models.users.findOne({
 				_id
 			})
 			.select('name email dob role _id')
 		if (!user) {
-			throw new ErrorHandler(409, `User ${ErrorMessage.ID_ERROR}`);
+			Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
 		return user;
 	};
@@ -26,7 +24,7 @@ class UsersController {
 	//get All users from User Collections done
 	async getUsers() {
 		let users = await this.models.users.find()
-			.select('name surname age email dob role _id');
+			.select('name surname age email password dob role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
@@ -37,16 +35,17 @@ class UsersController {
 	}
 
 	//add new users in Collection
-	async addUser(name, surname, age, email, password, gender, dob, role) {
+	async addUser(res, name, surname, age, email, password, gender, dob, role) {
 		let result = this.models.users.find({
 				email
 			})
 			.exec()
 			.then(user => {
+				console.log("user: ", user);
+				
 				if (user.length >= 1) {
-					console.log(user.length);
-					return new ErrorHandler(409, `${ErrorMessage.EMAIL_EXIST}`);
-				}
+					return Error.conflictError(res, `${ErrorMessage.EMAIL_EXIST}`);
+				} 
 				const norUser = new this.models.users({
 					_id: new mongoose.Types.ObjectId(),
 					name,
@@ -58,17 +57,25 @@ class UsersController {
 					dob,
 					role
 				});
+
 				bcrypt.genSalt(10, (err, salt) => {
 					bcrypt.hash(norUser.password, salt, function (err, hash) {
 						if (err) {
 							throw err;
 						}
 						norUser.password = hash;
-						let r = norUser.save();
+						let r = norUser.save(function(err){
+							if (err) {
+								return Error.saveError(res, `${err.message}`);
+							}
+							return Error.successful(res);
+						})
 						return r;
 					})
-				})
-				return new ErrorHandler(201, `${ErrorMessage.SUCCESSFUL}`);
+				})	
+			})
+			.catch(err =>{
+				return Error.successful(res, `${err.message}`);
 			});
 		return result
 	};

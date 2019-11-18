@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
-const {ErrorHandler} = require('../middleware/ErrorHendler');
-const ErrorMessage = require('../helpers/error');
+const { Errors, ErrorMessage } = require('../helpers/error');
+const Error = new Errors();
 
 
 
@@ -10,15 +10,17 @@ class LoginValidator {
 
 isRegister(req, res, next) {
 	let size = _.size(req.body);
+	let passLength = req.body.password.length;
 	if (size != 8 ) {
-		return res.status(412).json({
-			message:ErrorMessage.EXTRA_ERROR
-		});
+		return Error.registerError(res)
+	} else if (passLength <= 6) {
+		return Error.registerError(res, `Too few characters for password ${passLength} it's must by 6+`)
 	}
 	for(let key in req.body){
+		
 		let bool = _.includes(REG_FIELDS, key);
 		if (!bool) {
-			return res.status(412).send(ErrorMessage.REGISTER_ERROR);
+		return Error.registerError(res)
 		}	
 	}
 	next();
@@ -36,8 +38,6 @@ isRegister(req, res, next) {
 		});
 	}
 };
-
-
 }
 
 module.exports = LoginValidator;

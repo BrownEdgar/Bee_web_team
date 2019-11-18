@@ -16,6 +16,11 @@ const ErrorMessage = {
 }
 
 class Errors {
+	successful(res, message = ErrorMessage.SUCCESSFUL) {
+		res.status(201).json({
+			message
+		})
+	}
 	notFoundError(res, message = ErrorMessage.NOTFOUND_ERROR) {
 		res.status(404).json({
 			message
@@ -27,6 +32,11 @@ class Errors {
 		})
 	}
 	registerError(res, message = ErrorMessage.REGISTER_ERROR) {
+		res.status(412).json({
+			message
+		})
+	}
+	saveError(res, message = ErrorMessage.REGISTER_ERROR) {
 		res.status(412).json({
 			message
 		})

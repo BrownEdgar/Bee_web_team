@@ -17,7 +17,7 @@ class UsersController {
 	async getUser(req, res) {
 		const id = req.params.userId
 		try {
-			let user = await req.app.services.users.getUser(id);
+			let user = await req.app.services.users.getUser(res, id);
 			res.status(201).send(user);
 		} catch (error) {
 			res.status(500).send(error.message);
@@ -28,20 +28,18 @@ class UsersController {
 	// ------------------------------------- done ?	/signup -ov
 	async addUser(req, res) {
 		const { name, surname, age, email, password, gender, dob, role } = req.body;
-		let norUser = await req.app.services.users.addUser(name, surname, age, email, password, gender, dob, role)
+		let norUser = await req.app.services.users.addUser(res, name, surname, age, email, password, gender, dob, role)
 			.then(result => {
+				console.log("result:", result);
 				if (result) {
 					res.status(result.statusCode).json({
 						message: result.message
 					})
-
 				}else{
 					res.status(result.statusCode).json({
-						result
+						message:result
 					})
 				}
-
-				
 			})
 			.catch(err => {
 				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
