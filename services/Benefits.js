@@ -1,6 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const { ErrorMessage, Errors } = require('../helpers/error')
-const mongoose = require("mongoose");
+import { ErrorMessage, Errors } from '../helpers/error';
+import mongoose from "mongoose";
 const Error = new Errors();
 
 class BenefitsController {
@@ -89,4 +88,4 @@ class BenefitsController {
 	}
 }
 
-module.exports = BenefitsController;
+export default BenefitsController;

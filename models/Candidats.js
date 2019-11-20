@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const condidatSchema = mongoose.Schema({
 	_id: {
@@ -52,4 +52,4 @@ const condidatSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("Condidat", condidatSchema);
+export default  mongoose.model("Condidat", condidatSchema);

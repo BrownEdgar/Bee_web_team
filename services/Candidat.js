@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import mongoose from "mongoose";
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import  { ErrorMessage } from '../helpers/error';
 
 class CandidatsController {
 	constructor(models) {
@@ -113,4 +113,4 @@ class CandidatsController {
 	}
 }
 
-module.exports = CandidatsController;
+export default CandidatsController;

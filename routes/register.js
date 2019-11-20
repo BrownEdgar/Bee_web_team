@@ -1,11 +1,11 @@
-const express = require("express");
+import express from 'express';
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const UserController = require('../Controller/Users');
+import bcrypt from "bcrypt";
+import User from "../models/User";
+import jwt from "jsonwebtoken";
+import UserController from '../Controller/Users';
 const controller = new UserController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator()
 
 router.get('/', (req, res, next) => {
@@ -64,4 +64,4 @@ router.post('/', checkAuth.isRegister, controller.addUser);
  		});
  });
 
-module.exports = router;
+export default router;

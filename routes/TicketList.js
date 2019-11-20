@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const TicketListsController = require('../Controller/TicketList');
+import TicketListsController from '../Controller/TicketList';
 const controller = new TicketListsController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 //get all TicketLists
@@ -20,4 +20,4 @@ router.patch('/:ticketId', controller.updateTicketList);
 //TicketLists Deleted
 router.delete('/:ticketId', controller.deleteTicketList);
 
-module.exports = router;
+export default router;

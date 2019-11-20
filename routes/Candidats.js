@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const CandidatsController = require('../Controller/Candidats');
+import CandidatsController from '../Controller/Candidats';
 const controller = new CandidatsController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 //get all Candidats
@@ -22,4 +22,4 @@ router.delete('/:candidatId', controller.deleteCandidat);
 
 
 
-module.exports = router;
+export default router;

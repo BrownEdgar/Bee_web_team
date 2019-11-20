@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 
 class BenefitHistoryController {
 
@@ -67,4 +67,4 @@ async getBenefitsHistory(req, res) {
 		}
 	};
 }
-module.exports = BenefitHistoryController;
+export default  BenefitHistoryController;

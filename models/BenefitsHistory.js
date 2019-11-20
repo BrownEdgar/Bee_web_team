@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const benefitHistorySchema = mongoose.Schema({
 	benefitId: {
@@ -18,4 +18,4 @@ const benefitHistorySchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("BenefitHistory", benefitHistorySchema);
+export default  mongoose.model("BenefitHistory", benefitHistorySchema);

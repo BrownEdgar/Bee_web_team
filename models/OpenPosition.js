@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 
 const openPositionSchema = mongoose.Schema({
@@ -41,4 +41,4 @@ const openPositionSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("OpenPosition", openPositionSchema);
+export default  mongoose.model("OpenPosition", openPositionSchema);

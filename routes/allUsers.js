@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const UsersController = require('../Controller/Users');
+import UsersController from '../Controller/Users';
 const controller = new UsersController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 /* GET Users page. */
@@ -14,4 +14,4 @@ router.patch('/:userId', controller.updateUser);
 
 router.delete('/:userId', controller.deleteUser);
 
-module.exports = router;
+export default router;

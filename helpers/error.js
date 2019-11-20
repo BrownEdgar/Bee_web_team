@@ -39,7 +39,7 @@ class Errors {
 }
 
 
-module.exports = {
+export {
 	ErrorMessage,
 	Errors
 }

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	 Benefit: require('./Benefits'),
 	 BenefitsHistory: require('./BenefitsHistory'),
 	 User: require('./Users'),

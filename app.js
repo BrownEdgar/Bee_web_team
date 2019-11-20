@@ -2,14 +2,14 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config()
 }
 
-const express = require('express');
+import express from 'express';
 const app = express();
-const cors = require('cors')
-const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
-const session = require('express-session');
-const mongoose = require("mongoose");
-const models = require("./models");
-const sevices = require("./services");
+import cors from 'cors'
+import { handleError, ErrorHandler } from './middleware/ErrorHendler'
+import session from 'express-session';
+import mongoose from "mongoose";
+import models from "./models";
+import sevices from "./services";
 
 
 app.use(express.json());
@@ -38,14 +38,14 @@ app.use(session({
 }))
 
 
-const homeRouter = require('./routes/home');
-const registerRouter = require('./routes/register');
-const BenefitRouter = require('./routes/Benefit');
-const BenefitHistoryRouter = require('./routes/BenefitHistory');
-const allUsersRouter = require('./routes/allUsers');
-const OpenPositionRouter = require('./routes/OpenPosition');
-const candidatRouter = require('./routes/Candidats');
-const TicketListRouter = require('./routes/TicketList');
+import homeRouter from './routes/home';
+import registerRouter from './routes/register';
+import BenefitRouter from './routes/Benefit';
+import BenefitHistoryRouter from './routes/BenefitHistory';
+import allUsersRouter from './routes/allUsers';
+import OpenPositionRouter from './routes/OpenPosition';
+import candidatRouter from './routes/Candidats';
+import TicketListRouter from './routes/TicketList';
 
 app.use('/', homeRouter);
 app.use('/signup', registerRouter);
@@ -97,4 +97,4 @@ app.use((err, req, res, next) => {
 	handleError(err, res);
 });
 
-module.exports = app;
+export default app;

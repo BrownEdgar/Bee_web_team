@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const OpenPositionController = require('../Controller/OpenPosition');
+import OpenPositionController from '../Controller/OpenPosition';
 const controller = new OpenPositionController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 //get all OpenPositions
@@ -22,4 +22,4 @@ router.delete('/:openPositionId', controller.deleteOpenPosition);
 
 
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import  { ErrorMessage } from '../helpers/error';
 
 class OpenPositionController {
 	constructor(models) {
@@ -90,4 +90,4 @@ class OpenPositionController {
 	}
 }
 
-module.exports = OpenPositionController;
+export default OpenPositionController;

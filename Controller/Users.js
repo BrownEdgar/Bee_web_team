@@ -1,5 +1,5 @@
-const {ErrorHandler} = require('../middleware/ErrorHendler');
-const ErrorMessage = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 
 class UsersController {
 
@@ -40,8 +40,6 @@ class UsersController {
 						result
 					})
 				}
-
-				
 			})
 			.catch(err => {
 				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
@@ -82,4 +80,4 @@ class UsersController {
 	};
 
 }
-module.exports = UsersController;
+export default  UsersController;

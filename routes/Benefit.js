@@ -22,4 +22,4 @@ router.patch('/:id',   controller.updateBenefits);
 router.delete('/:id',   controller.deleteBenefits);
 
 
-module.exports = router;
+export default router;

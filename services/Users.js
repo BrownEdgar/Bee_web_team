@@ -1,10 +1,7 @@
-const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const ErrorMessage = require('../helpers/error');
+import bcrypt from "bcrypt";
+import mongoose from "mongoose";
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import  { ErrorMessage } from '../helpers/error';
 
 class UsersController {
 	constructor(models) {
@@ -105,4 +102,4 @@ class UsersController {
 		};
 	}
 }
-module.exports = UsersController;
+export default UsersController;

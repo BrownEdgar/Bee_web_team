@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 
 class CandidatsController {
 
@@ -81,4 +81,4 @@ class CandidatsController {
 		}
 	};
 }
-module.exports = CandidatsController;
+export default  CandidatsController;
