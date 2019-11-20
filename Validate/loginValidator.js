@@ -12,7 +12,10 @@ isRegister(req, res, next) {
 	let size = _.size(req.body);
 	if (size != 8 ) {
 		return Error.registerError(res)	
-	} else if (req.body.password.length <= 6) {
+	} 
+	if (!(req.body.password)){
+		return Error.registerError(res, `Please add password field`);
+	}else if (req.body.password.length <= 6) {
 		return Error.registerError(res, `Too few characters for password ${req.body.password.length} it's must by 6+`)
 	}
 	for(let key in req.body){
@@ -36,6 +39,7 @@ isRegister(req, res, next) {
 		});
 	}
 };
+
 isIdCorrect(req, res, next) {
 		const id = req.params.userId;
 		if (id.length != 12) {
