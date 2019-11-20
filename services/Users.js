@@ -12,9 +12,10 @@ class UsersController {
 	//get user done
 	async getUser(res, _id) {
 		let user = await this.models.users.findOne({
-				_id
-			})
-			.select('firsname lastname email birthday phoneNumber role salary _id')
+			_id: _id,
+			deletedAt: null
+		})
+		.select('firsname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
 			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
@@ -24,7 +25,7 @@ class UsersController {
 	//get All users from User Collections done
 	async getUsers() {
 		let users = await this.models.users.find()
-			.select('firstname lastname salary phoneNumber email birthday role _id');
+			.select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
