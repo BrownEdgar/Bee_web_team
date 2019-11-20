@@ -14,9 +14,9 @@ class UsersController {
 		let user = await this.models.users.findOne({
 				_id
 			})
-			.select('name email dob role _id')
+			.select('firsname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
-			Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
+			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
 		return user;
 	};
@@ -24,7 +24,7 @@ class UsersController {
 	//get All users from User Collections done
 	async getUsers() {
 		let users = await this.models.users.find()
-			.select('name surname age email password dob role _id');
+			.select('firstname lastname salary phoneNumber email birthday role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
@@ -35,27 +35,19 @@ class UsersController {
 	}
 
 	//add new users in Collection
-	async addUser(res, name, surname, age, email, password, gender, dob, role) {
+	async addUser(res, firstname, lastname, salary, phoneNumber, email, password, birthday, role) {
 		let result = this.models.users.find({
 				email
 			})
 			.exec()
 			.then(user => {
 				console.log("user: ", user);
-				
 				if (user.length >= 1) {
 					return Error.conflictError(res, `${ErrorMessage.EMAIL_EXIST}`);
 				} 
 				const norUser = new this.models.users({
 					_id: new mongoose.Types.ObjectId(),
-					name,
-					surname,
-					age,
-					email,
-					password,
-					gender,
-					dob,
-					role
+					firstname, lastname, salary, phoneNumber, email, password, birthday, role
 				});
 
 				bcrypt.genSalt(10, (err, salt) => {
@@ -89,7 +81,7 @@ class UsersController {
 			}, {
 				new: true
 			})
-			.select('name email gender dob _id');
+			.select('firsname lastname salary phoneNumber email birthday role');
 		if (!updateUser) {
 			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
 		}

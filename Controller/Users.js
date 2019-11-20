@@ -1,5 +1,6 @@
-const {ErrorHandler} = require('../middleware/ErrorHendler');
-const ErrorMessage = require('../helpers/error');
+const { ErrorHandler } = require('../middleware/ErrorHendler');
+const { Errors, ErrorMessage } = require('../helpers/error');
+const Error = new Errors();
 
 class UsersController {
 
@@ -27,8 +28,8 @@ class UsersController {
 
 	// ------------------------------------- done ?	/signup -ov
 	async addUser(req, res) {
-		const { name, surname, age, email, password, gender, dob, role } = req.body;
-		let norUser = await req.app.services.users.addUser(res, name, surname, age, email, password, gender, dob, role)
+		const { firstname, lastname, salary, phoneNumber, email, password, birthday, role } = req.body;
+		let norUser = await req.app.services.users.addUser(res, firstname, lastname, salary, phoneNumber, email, password, birthday, role)
 			.then(result => {
 				console.log("result:", result);
 				if (result) {

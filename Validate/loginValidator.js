@@ -5,22 +5,20 @@ const Error = new Errors();
 
 
 
-const REG_FIELDS = ['name', 'surname', 'age', 'email', 'password', 'gender', 'dob', 'role']
+const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', 'birthday', 'role']
 class LoginValidator {
 
 isRegister(req, res, next) {
 	let size = _.size(req.body);
-	let passLength = req.body.password.length;
 	if (size != 8 ) {
-		return Error.registerError(res)
-	} else if (passLength <= 6) {
-		return Error.registerError(res, `Too few characters for password ${passLength} it's must by 6+`)
+		return Error.registerError(res)	
+	} else if (req.body.password.length <= 6) {
+		return Error.registerError(res, `Too few characters for password ${req.body.password.length} it's must by 6+`)
 	}
 	for(let key in req.body){
-		
-		let bool = _.includes(REG_FIELDS, key);
-		if (!bool) {
-		return Error.registerError(res)
+		let fieldCheck = _.includes(REG_FIELDS, key);
+		if (!fieldCheck) {
+		return Error.registerError(res, `${key} field is not present, please fill correct`)
 		}	
 	}
 	next();
@@ -38,6 +36,13 @@ isRegister(req, res, next) {
 		});
 	}
 };
+isIdCorrect(req, res, next) {
+		const id = req.params.userId;
+		if (id.length != 12) {
+			console.log(id);
+			return Error.idLengthError(res);
+		}
+}
 }
 
 module.exports = LoginValidator;

@@ -2,6 +2,7 @@ const ErrorMessage = {
  EMAIL_EXIST: 'This Email is already exists',
  SERVER_ERROR: 'Something is Wrong, Server error',
  ID_ERROR: 'ID is not found',
+ ID_LENGTH_ERROR: 'ID is not found, it is too short',
  NOTFOUND_ERROR: 'Is not found',
  BENERR_FAILED: 'Benefit update failed',
  NO_DATA_ERROR: `We don't have any data yet`,
@@ -18,6 +19,12 @@ const ErrorMessage = {
 class Errors {
 	successful(res, message = ErrorMessage.SUCCESSFUL) {
 		res.status(201).json({
+			message
+		})
+	}
+
+	idLengthError(res, message = ErrorMessage.ID_LENGTH_ERROR) {
+		res.status(409).json({
 			message
 		})
 	}

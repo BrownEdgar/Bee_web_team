@@ -5,29 +5,33 @@ const userSchema = mongoose.Schema({
 	_id: {
 		type: mongoose.Schema.Types.ObjectId,
 	},
-	name: {
+	firstname: {
 		type: String,
 		required: true,
 		maxlength: 100,
 		minlength: 2,
 	},
-	surname: {
+	lastname: {
 		type: String,
 		required: [true, `surname fields is required`],
 		maxlength: 100,
 		minlength: 2
 	},
-	age: {
+	phoneNumber: {
 		type: Number,
-		required: true,
-		min:16,
-		max:67
+		required: [true, `phoneNumber fields is required`]
 	},
 	email: {
 		type: String,
 		required: true,
 		maxlength: 1024,
-		minlength: 5
+		minlength: 5,
+		unique:true
+	},
+	salary: {
+		type: Number,
+		required: true,
+		default:null
 	},
 	password: {
 		type: String,
@@ -36,11 +40,7 @@ const userSchema = mongoose.Schema({
 		maxlength: [156, 'Too much characters'],
 		minlength: [6, 'Too few characters'],
 	},
-	gender: {
-		type: String,
-		enum: ["male", "female"]
-	},
-	dob: {
+	birthday: {
 		type: Date,
 		required: [true, 'dob field is required'],
 		min: '1957-09-28',
@@ -55,5 +55,8 @@ const userSchema = mongoose.Schema({
 		type:Date,
 		default:null
 	}
-});
+},
+	{
+		timestamps:{createAt:"created_at"}
+	});
 module.exports = mongoose.model("User", userSchema);
