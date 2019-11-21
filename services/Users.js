@@ -24,7 +24,7 @@ class UsersController {
 	//get All users from User Collections done
 	async getUsers() {
 		let users = await this.models.users.find()
-			.select('firstname lastname salary phoneNumber email birthday role _id');
+			.select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}

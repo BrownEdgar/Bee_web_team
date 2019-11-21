@@ -28,7 +28,7 @@ router.post("/login", (req, res, next) => {
 			if (user.length < 1) {
 				return res.status(401).json({
 					message: "login failed",
-					"kind": "Invalid username/password supplied"
+					"kind": "Invalid email address"
 				});
 			}
 			bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -47,6 +47,7 @@ router.post("/login", (req, res, next) => {
 						}
 					);
 					return res.status(200).json({
+						user,
 						message: "Login successful",
 						token: token
 					});
