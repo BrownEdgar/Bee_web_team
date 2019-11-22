@@ -8,7 +8,10 @@ const Error = new Errors();
 const checkAuth = new loginValidator();
 
 /* GET Users page. */
-router.get('/', controller.getUsers);
+
+router.get('/',  controller.getUsers);
+
+router.get('/me', checkAuth.isLogin, controller.getMyInfo);
 
 router.get('/:userId', [checkAuth.isIdCorrect], controller.getUser);
 

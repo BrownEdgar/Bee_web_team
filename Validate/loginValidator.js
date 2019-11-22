@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const { Errors, ErrorMessage } = require('../helpers/error');
 const Error = new Errors();
+const User = require('../models/User')
 
 
 
@@ -27,11 +28,12 @@ isRegister(req, res, next) {
 	next();
 }
 
- isLogin (req, res, next){
+async isLogin (req, res, next){
 	try {
-		const token = req.headers.authorization.split(" ")[1];
+		const token = req.headers.authorization;
 		const decoded = jwt.verify(token, process.env.SESSION_SECRET);
 		req.userData = decoded;
+		console.log('req.userData', req.userData);
 		next();
 	} catch (error) {
 		return res.status(401).json({

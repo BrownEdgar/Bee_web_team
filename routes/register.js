@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 	res.send("register page")
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/login',  (req, res, next) => {
 	res.send("login page")
 });
 

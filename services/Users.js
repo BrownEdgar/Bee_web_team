@@ -12,9 +12,10 @@ class UsersController {
 	//get user done
 	async getUser(res, _id) {
 		let user = await this.models.users.findOne({
-				_id
-			})
-			.select('firsname lastname email birthday phoneNumber role salary _id')
+			_id: _id,
+			deletedAt: null
+		})
+		.select('firsname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
 			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
