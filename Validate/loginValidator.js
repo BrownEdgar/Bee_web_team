@@ -6,7 +6,7 @@ const User = require('../models/User')
 
 
 
-const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', "resetPassword",
+const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', "repeatPassword",
 	'birthday', 'role'
 ]
 class LoginValidator {
