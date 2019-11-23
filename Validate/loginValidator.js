@@ -6,12 +6,14 @@ const User = require('../models/User')
 
 
 
-const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', 'birthday', 'role']
+const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', "resetPassword",
+	'birthday', 'role'
+]
 class LoginValidator {
 
 isRegister(req, res, next) {
 	let size = _.size(req.body);
-	if (size != 8 ) {
+	if (size != 9 ) {
 		return Error.registerError(res)	
 	} 
 	if (!(req.body.password)){
@@ -33,7 +35,6 @@ async isLogin (req, res, next){
 		const token = req.headers.authorization;
 		const decoded = jwt.verify(token, process.env.SESSION_SECRET);
 		req.userData = decoded;
-		console.log('req.userData', req.userData);
 		next();
 	} catch (error) {
 		return res.status(401).json({
