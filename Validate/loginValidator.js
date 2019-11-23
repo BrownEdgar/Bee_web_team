@@ -47,7 +47,7 @@ async isLogin (req, res, next){
 
 isIdCorrect(req, res, next) {
 		const id = req.params.userId;
-		if (id.length != 12) {
+		if (id.length != 24) {
 			console.log(id);
 			return Error.idLengthError(res);
 		}
