@@ -9,16 +9,16 @@ const checkAuth = new loginValidator();
 router.get('/',  controller.getCandidats);
 
 //add Candidats
-router.post('/', controller.addCandidats);
+router.post('/', checkAuth.checkCandidatAdds, controller.addCandidats);
 
 //get Candidats by ID
-router.get('/:candidatId', controller.getSpecialCandidat);
+router.get('/:candidatId', checkAuth.isIdCorrect, controller.getSpecialCandidat);
 
 //update Candidats
-router.patch('/:candidatId', controller.updateCandidat);
+router.patch('/:candidatId', checkAuth.isIdCorrect, controller.updateCandidat);
 
 //Candidats Deleted
-router.delete('/:candidatId', controller.deleteCandidat);
+router.delete('/:candidatId', checkAuth.isIdCorrect, controller.deleteCandidat);
 
 
 

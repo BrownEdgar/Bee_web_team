@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error');
+const Error = new Errors();
 
 class CandidatsController {
 	constructor(models) {
@@ -8,11 +9,11 @@ class CandidatsController {
 	}
 
 	//get all Candidat Lists done!
-	async getCandidats() {
+	async getCandidats(res) {
 		let candidats = await this.models.candidat.find()
 			.select('openPosId name surname email age skills experience');
 		if (candidats.length < 1) {
-			 throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
+			 throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: candidats.length,
@@ -33,14 +34,14 @@ class CandidatsController {
 	};
 
 	//add new candidats in Collection done!
-	async addCandidats(openPosId, name, surname, email, age, gender, skills, education, experience) {
+	async addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience) {
 		let sumary = this.models.candidat.find({
 				email
 			})
 			.exec()
 			.then(result => {
 				if (result.length >= 1) {
-					return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
+					return Error.conflictError(res, ErrorMessage.EMAIL_EXIST);
 				} else {
 					const norCandidat = new this.models.candidat({
 						_id: new mongoose.Types.ObjectId(),
@@ -54,16 +55,19 @@ class CandidatsController {
 						education,
 						experience
 					});
-					norCandidat.save();
-					return ({
-						status: 201,
-						message: "Candidats is created"
-					})
+				 	norCandidat.save(function(err){
+						if (err) {
+							return Error.saveError(res, `${err.message}`);
+						}
+						return Error.successful(res);
+					});	
 				}
 			}).catch(err => {
-				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				console.log("sebastian", err);
+				return Error.serverError(res)
 			});
-		return sumary
+
+			return sumary
 	};
 
 	//Update Candidat in Collection done!

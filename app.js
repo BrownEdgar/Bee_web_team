@@ -26,7 +26,11 @@ mongoose.connect(process.env.DB_CONNECTION, {
 	(err) => console.log(err));
 
 //CORS
-app.use(cors());
+const corsOptions = {
+	origin: true,
+	optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

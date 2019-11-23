@@ -76,15 +76,11 @@ class UsersController {
 	async deleteUser(req, res) {
 		const id = req.params.userId;
 		try {
-			let delUsers = await req.app.services.users.deleteUser(id);
-			let check = delUsers.user.deletedCount;
-			if (check) {
+			let delUsers = await req.app.services.users.deleteUser(res, id);
 				return res.status(201).json({
 					message: "User is deleted!",
 					userId: id
 				})
-			}
-			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
 		} catch (error) {
 			throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 		}

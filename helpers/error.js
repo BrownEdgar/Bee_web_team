@@ -7,6 +7,7 @@ const ErrorMessage = {
  BENERR_FAILED: 'Benefit update failed',
  NO_DATA_ERROR: `We don't have any data yet`,
  CANDIDAT_NOTFOUND: 'Candidat is not found',
+ CANDIDAT_DELETED: 'Candidat is alredy deleted!',
  UPDATE_ERROR: 'Update failed',
  GIFT_ERROR: `This user has already received this benefit.`,
  POSITION_EXIST: `This description or title already exists`,
@@ -34,6 +35,11 @@ class Errors {
 		})
 	}
 	conflictError(res, message = "Something is Wrong") {
+		res.status(409).json({
+			message
+		})
+	}
+	candidatDelError(res, message = ErrorMessage.CANDIDAT_DELETED) {
 		res.status(409).json({
 			message
 		})

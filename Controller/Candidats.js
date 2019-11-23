@@ -1,5 +1,6 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const  {ErrorMessage, Errors } = require('../helpers/error');
+const Error = new Errors();
 
 class CandidatsController {
 
@@ -7,7 +8,7 @@ class CandidatsController {
 
 	async getCandidats(req, res) {
 		try {
-			let allcandidats = await req.app.services.candidats.getCandidats();
+			let allcandidats = await req.app.services.candidats.getCandidats(res);
 			res.status(201).send(allcandidats);
 		} catch (error) {
 			res.status(500).send(error.message);
@@ -29,20 +30,9 @@ class CandidatsController {
 
 	// ------------------------------------- done!	
 	async addCandidats(req, res) {
-		let {
-			openPosId,
-			name,
-			surname,
-			email,
-			age,
-			gender,
-			skills,
-			education,
-			experience
-		} = req.body;
+		let { openPosId, name, surname, email, age, gender, skills, education, experience} = req.body;
 		try {
-			let addcandidat = await req.app.services.candidats.addCandidats(openPosId, name, surname, email, age, gender, skills, education, experience);
-			res.status(addcandidat.statusCode).send(addcandidat);
+			 await req.app.services.candidats.addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience);
 		} catch (err) {
 			res.status(500).send(err.message);
 		}
@@ -70,12 +60,10 @@ class CandidatsController {
 			let delbenefits = await req.app.services.candidats.deleteCandidat(id);
 			let check = delbenefits.candidats.deletedCount;
 			if (check) {
-				return res.status(201).json({
-					message: "Candidat is deleted!",
-					benefitId: id
-				})
+					return Error.successful(res, `Candidat is deleted`);
+			}else{
+					return Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
 			}
-			throw new ErrorHandler(409, ErrorMessage.ID_ERROR);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}

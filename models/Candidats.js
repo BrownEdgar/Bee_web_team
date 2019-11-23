@@ -7,29 +7,30 @@ const condidatSchema = mongoose.Schema({
 	openPosId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'OpenPosition',
-		required: true
+		required: [true, 'openPosId is required, please indicate it'],
 	},
 	name:{
 		type: String,
-		required:true,
+		required: [true, 'please indicate a field'],
 		max:255,
 		min:2
     },
     surname:{
 		type: String,
-		required:true,
+		required: [true, 'please indicate a field'],
 		max:255,
 		min:2
 	},
 	email: {
 		type: String,
-		required: true,
+		required: [true, 'please indicate a field'],
 		max:255,
 		min:6,
 	},
 	gender: {
 		type: String,
-		enum: ["male", "female"]
+		enum: ["male", "female"],
+		required: [true, 'please indicate your gender'],
 	},
 	age: {
 		type: Number,
