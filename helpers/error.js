@@ -34,6 +34,12 @@ class Errors {
 			message
 		})
 	}
+
+	noDataError(res, message = ErrorMessage.NO_DATA_ERROR) {
+		res.status(500).json({
+			message
+		})
+	}
 	conflictError(res, message = "Something is Wrong") {
 		res.status(409).json({
 			message

@@ -1,5 +1,7 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error')
+const Error = new Errors();
+
 
 class BenefitHistoryController {
 	constructor(models) {
@@ -7,10 +9,12 @@ class BenefitHistoryController {
 	}
 
 	//get all Benefit Lists done
-	async getBenefitsHistory() {
+	async getBenefitsHistory(res) {
 		let benHistory = await this.models.benefitsHistory.find()
-		if (benHistory.length < 1) {
-			throw new ErrorHandler(500, ErrorMessage.NO_DATA_ERROR);
+		.populate("benefitId", "title")
+		.populate("userId", 'firstname')
+		if (!benHistory.length) {
+			throw Error.noDataError(res);
 		}
 		return {
 			count: benHistory.length,
@@ -30,7 +34,14 @@ class BenefitHistoryController {
 	};
 
 	//add new Benefits History in Collection
-	async addBenefitsHistory(benefitId, userId) {
+	async addBenefitsHistory(res, benefitId, userId) {
+		let check = await this.models.benefits.find({
+			_id: benefitId
+		})
+		console.log("check: ", check);
+		if (check.length< 1) {
+			throw Error.notFoundError(res, `benefitId is not found`);
+		}
 		let sumary =this.models.benefitsHistory.find({
 				benefitId,
 				userId
@@ -38,14 +49,14 @@ class BenefitHistoryController {
 			.exec()
 			.then(result => {
 				if (result.length >= 1) {
-					throw new ErrorHandler(409, ErrorMessage.GIFT_ERROR);
+					Error.notFoundError(res, ErrorMessage.GIFT_ERROR);
 				} else {
 					const norBenefitHistory = new this.models.benefitsHistory({
 						benefitId,
 						userId
 					});
-					norBenefitHistory.save();
-					return norBenefitHistory
+					norBenefitHistory.save()
+					return  norBenefitHistory;
 				}
 			}).catch(err => {
 				throw new ErrorHandler(500, ErrorMessage.GIFT_ERROR);

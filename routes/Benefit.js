@@ -9,7 +9,7 @@ const checkAuth = new loginValidator();
 router.get('/', checkAuth.isLogin, controller.getBenefits);
 
 //add Benefits
-router.post('/',   controller.addBenefits);
+router.post('/',  controller.addBenefits);
 
 
 //get benefits by ID

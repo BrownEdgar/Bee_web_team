@@ -15,7 +15,7 @@ class UsersController {
 				_id: _id,
 				deletedAt: null
 			})
-			.select('firsname lastname email birthday phoneNumber role salary _id')
+			.select('firstname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
 			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}

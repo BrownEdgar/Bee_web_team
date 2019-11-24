@@ -15,11 +15,11 @@ class UsersController {
 	};
 	// ------------------------------------- done
  async getMyInfo(req, res, next) {
-	 console.log("req.user.id: ", req.userData.userId);
+
 	 
  	try {
  		let user = await req.app.services.users.getUser(res, req.userData.userId);
- 		return res.status(201).json({user});
+ 		return res.status(201).send(user);
  	} catch (err) {
  		return Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
  	}
