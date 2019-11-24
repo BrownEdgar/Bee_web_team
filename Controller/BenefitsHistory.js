@@ -1,15 +1,16 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error')
+const Error = new Errors();
 
 class BenefitHistoryController {
 
 // -------------------------------------
 async getBenefitsHistory(req, res) {
 	try {
-		let allHistory = await req.app.services.benefitsHistorys.getBenefitsHistory();
+		let allHistory = await req.app.services.benefitsHistorys.getBenefitsHistory(res);
 		res.status(201).send(allHistory);
 	} catch (error) {
-		res.status(500).send(err.message);
+		Error.serverError(res, error.message);
 	}
 };
 
@@ -33,18 +34,17 @@ async getBenefitsHistory(req, res) {
 // -------------------------------------
 	async addBenefitsHistory(req, res) {
 		let { benefitId, userId } = req.body;
-			let addBenHistory = await req.app.services.benefitsHistorys.addBenefitsHistory(benefitId, userId)
-			.then(result => {
-					if (result) {
-						res.status(200).send(result);
-					}
-					res.status(addBenHistory.statusCode).send(result);
-				})
-				.catch(err => {
-					res.status(err.statusCode).json({
-						error: err
-					})
-				});
+		try {
+			let addBenHistory = await req.app.services.benefitsHistorys.addBenefitsHistory(res, benefitId, userId);
+			if (addBenHistory) {
+				res.status(201).send(addBenHistory);
+			}
+		} catch (error) {
+			Error.serverError(res, error);
+		}
+		
+					
+			
 	};
 
 // -------------------------------------

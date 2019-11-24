@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const UserController = require('../Controller/Users');
@@ -20,7 +20,13 @@ router.post('/', checkAuth.isRegister, controller.addUser);
 
 // router.post('/login', controller.loginUser);
 router.post("/login", (req, res, next) => {
-	User.find({
+	if (!req.body.email || !req.body.password) {
+		return res.status(401).json({
+			message: "login failed",
+			"kind": "Invalid email or password"
+		});
+	}
+	User.findOne({
 			email: req.body.email
 		})
 		.exec()
@@ -31,7 +37,7 @@ router.post("/login", (req, res, next) => {
 					"kind": "Invalid email address"
 				});
 			}
-			bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+			bcrypt.compare(req.body.password, user.password, (err, result) => {
 				if (err) {
 					return res.status(401).json({
 						message: "login failed"
@@ -39,8 +45,8 @@ router.post("/login", (req, res, next) => {
 				}
 				if (result) {
 					const token = jwt.sign({
-							email: user[0].email,
-							userId: user[0]._id
+							email: user.email,
+							userId: user._id
 						},
 						process.env.SESSION_SECRET, {
 							expiresIn: "1h"

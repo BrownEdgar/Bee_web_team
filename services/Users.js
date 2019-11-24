@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { ErrorHandler } = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error');
@@ -15,25 +15,25 @@ class UsersController {
 				_id: _id,
 				deletedAt: null
 			})
-			.select('firsname lastname email birthday phoneNumber role salary _id')
+			.select('firstname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
 			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
 		return user;
 	};
 
-	//get All users from User Collections done
-	async getUsers() {
-		let users = await this.models.users.find({
-				deletedAt: null
-			})
-			.select('firstname lastname salary phoneNumber email birthday password role _id');
+	//get All users from User Collections 
+	async getUsers(res) {
+	let users = await this.models.users.find({
+			deletedAt: null
+		})
+		.select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
 		return {
 			count: users.length,
-			users
+			users: res.pagination
 		};
 	}
 
@@ -100,7 +100,7 @@ class UsersController {
 
 	//delete User by Id done!
 	async deleteUser(res, _id) {
-		let chekDeleted = await await this.models.users.find({
+		let chekDeleted = await this.models.users.find({
 			_id,
 			deletedAt: {
 				$gt: 1
@@ -124,5 +124,7 @@ class UsersController {
 	}
 	}
 }
+
+
 
 module.exports = UsersController;
