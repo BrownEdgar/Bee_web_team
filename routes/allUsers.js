@@ -9,7 +9,7 @@ const checkAuth = new loginValidator();
 
 /* GET Users page. */
 
-router.get('/',  controller.getUsers);
+router.get('/',  checkAuth.isLogin, controller.getUsers);
 
 router.get('/me', checkAuth.isLogin, controller.getMyInfo);
 
