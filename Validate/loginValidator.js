@@ -41,7 +41,8 @@ class LoginValidator {
 			next();
 		} catch (error) {
 			return res.status(401).json({
-				message: 'Please Login before doing any operations'
+				message: 'Please Login before doing any operations',
+				error
 			});
 		}
 	};
