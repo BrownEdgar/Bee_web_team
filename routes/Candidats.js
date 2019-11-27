@@ -10,7 +10,6 @@ const storage = multer.diskStorage({
 		cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
 	}
 });
-
 const upload = multer({ 
 	storage,
 	limits:{
@@ -38,7 +37,5 @@ router.patch('/:candidatId', checkAuth.isIdCorrect, controller.updateCandidat);
 
 //Candidats Deleted
 router.delete('/:candidatId', checkAuth.isIdCorrect, controller.deleteCandidat);
-
-
 
 module.exports = router;
