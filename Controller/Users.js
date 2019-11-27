@@ -7,7 +7,7 @@ class UsersController {
 	// ------------------------------------- done
 	async getUsers(req, res) {
 		try {
-			let allusers = await req.app.services.users.getUsers();
+			let allusers = await req.app.services.users.getUsers(res);
 			res.status(201).send(allusers);
 		} catch (error) {
 			res.status(500).send(error.message);
@@ -15,8 +15,6 @@ class UsersController {
 	};
 	// ------------------------------------- done
  async getMyInfo(req, res, next) {
-
-	 
  	try {
  		let user = await req.app.services.users.getUser(res, req.userData.userId);
  		return res.status(201).send(user);

@@ -1,9 +1,6 @@
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
-const {
-	Errors,
-	ErrorMessage
-} = require('../helpers/error');
+const { Errors, ErrorMessage } = require('../helpers/error');
 const Error = new Errors();
 const User = require('../models/User')
 
@@ -35,10 +32,16 @@ class LoginValidator {
 
 	async isLogin(req, res, next) {
 		try {
-			const token = req.headers.authorization.split(" ")[1];
-			const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+			const token = req.headers.authorization.split(' ')[1];
 		
-			req.userData = decoded;
+			const decoded = jwt.verify(token, process.env.SESSION_SECRET);
+				if (!decoded) {
+					return res.status(401).json({
+						message: 'jwt token Error',
+					});
+				}else{
+					req.userData = decoded;
+				}
 			next();
 		} catch (error) {
 			return res.status(401).json({
@@ -69,6 +72,8 @@ class LoginValidator {
 		}
 		next();
 	}
+	
+
 
 }
 
