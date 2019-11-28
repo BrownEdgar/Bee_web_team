@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const UsersController = require('../Controller/Users');
+import UsersController from '../Controller/Users';
 const controller = new UsersController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
-const User = require('../models/User');
-const Pagination = require('../middleware/getUsers');
+import User from '../models/User';
+import Pagination from '../middleware/getUsers';
 
 /* GET Users page. */
 
@@ -23,4 +23,4 @@ router.delete('/:userId', [checkAuth.isIdCorrect], controller.deleteUser);
 
 
 
-module.exports = router;
+export default router;

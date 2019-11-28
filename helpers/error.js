@@ -1,4 +1,4 @@
-const ErrorMessage = {
+export const ErrorMessage = {
  EMAIL_EXIST: 'This Email is already exists',
  SERVER_ERROR: 'Something is Wrong, Server error',
  ID_ERROR: 'ID is not found',
@@ -17,7 +17,7 @@ const ErrorMessage = {
  REGISTER_ERROR: `Some field is not present, please fill correct`
 }
 
-class Errors {
+export class Errors {
 	successful(res, message = ErrorMessage.SUCCESSFUL) {
 		res.status(201).json({
 			message
@@ -65,10 +65,4 @@ class Errors {
 			message
 		})
 	}
-}
-
-
-module.exports = {
-	ErrorMessage,
-	Errors
 }

@@ -1,9 +1,9 @@
-const {Errors} = require('../helpers/error');
+import {Errors} from '../helpers/error';
 const Error = new Errors();
 
 
 
-module.exports = function pagination(model) {
+export default  function pagination(model) {
 	return async (req, res, next) => {
 		let checkUsers = await model.find({
 			deletedAt: null
@@ -11,14 +11,17 @@ module.exports = function pagination(model) {
 		if (checkUsers.length < 1) {
 			Error.noDataError(res);
 		}
+		if(!req.query.page){
+			req.query.page = 1;
+		}
+		if(!req.query.limit){
+			req.query.limit = 6;
+		}
 		const page = parseInt(req.query.page);
 		const limit = parseInt(req.query.limit);
 		const startIndex = (page - 1) * limit;
 		const endIndex = page * limit;
-		console.log('page', page);
-		console.log('limit', limit);
-		console.log('startIndex', startIndex);
-		console.log('endIndex', endIndex);
+
 		const results = {}
 		if (endIndex < await model.countDocuments().exec()) {
 			results.next = {

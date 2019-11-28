@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const BenefitHistoryController = require('../Controller/BenefitsHistory');
+import BenefitHistoryController from '../Controller/BenefitsHistory';
 const controller = new BenefitHistoryController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 
@@ -20,4 +20,4 @@ router.get('/:historyId', controller.getHistoryById);
 //BenefitHistorys Deleted
 router.delete('/:historyId', controller.deleteBenefitHistory);
 
-module.exports = router;
+export default router;

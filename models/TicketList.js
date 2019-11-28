@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 let maxDate = Date.now() + 60 * 24 * 60 * 60 * 1000;
 
@@ -24,4 +24,4 @@ const ticketSchema = mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model("Ticket", ticketSchema);
+export default mongoose.model("Ticket", ticketSchema);

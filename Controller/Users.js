@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const { Errors, ErrorMessage } = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 const Error = new Errors();
 
 class UsersController {
@@ -85,4 +85,4 @@ class UsersController {
 	};
 
 }
-module.exports = UsersController;
+export default  UsersController;

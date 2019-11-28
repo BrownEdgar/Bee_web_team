@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const benefitSchema = mongoose.Schema({
 	_id: {
@@ -21,4 +21,4 @@ const benefitSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("Benefit", benefitSchema);
+export default mongoose.model("Benefit", benefitSchema);

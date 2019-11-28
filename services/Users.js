@@ -1,7 +1,7 @@
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const { ErrorMessage, Errors } = require('../helpers/error');
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 const Error = new Errors();
 
 class UsersController {
@@ -127,4 +127,4 @@ class UsersController {
 
 
 
-module.exports = UsersController;
+export default UsersController;

@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 
 class TicketListsController {
 
@@ -68,4 +68,4 @@ async getTicketLists(req, res) {
 		}
 	};
 }
-module.exports = TicketListsController;
+export default  TicketListsController;

@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const multer = require('multer')
-const fileFilter = require('../middleware/fileFilter')
+import multer from 'multer'
+import fileFilter from '../middleware/fileFilter'
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, './uploads/');
@@ -10,6 +10,7 @@ const storage = multer.diskStorage({
 		cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
 	}
 });
+
 const upload = multer({ 
 	storage,
 	limits:{
@@ -17,9 +18,9 @@ const upload = multer({
 	}, 
 	fileFilter
  })
-const CandidatsController = require('../Controller/Candidats');
+import CandidatsController from '../Controller/Candidats';
 const controller = new CandidatsController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 
@@ -38,4 +39,4 @@ router.patch('/:candidatId', checkAuth.isIdCorrect, controller.updateCandidat);
 //Candidats Deleted
 router.delete('/:candidatId', checkAuth.isIdCorrect, controller.deleteCandidat);
 
-module.exports = router;
+export default router;

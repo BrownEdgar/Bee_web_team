@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const { ErrorMessage, Errors } = require('../helpers/error')
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 const Error = new Errors();
 
 
@@ -79,4 +79,4 @@ class BenefitHistoryController {
 	}
 }
 
-module.exports = BenefitHistoryController;
+export default BenefitHistoryController;

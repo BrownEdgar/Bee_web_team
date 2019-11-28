@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const BenefitsController = require('../Controller/Benefits');
+import BenefitsController from '../Controller/Benefits';
 const controller = new BenefitsController();
-const loginValidator = require('../Validate/loginValidator');
+import loginValidator from '../Validate/loginValidator';
 const checkAuth = new loginValidator();
 
 //get all Benefits
@@ -22,4 +22,4 @@ router.patch('/:id',   controller.updateBenefits);
 router.delete('/:id',   controller.deleteBenefits);
 
 
-module.exports = router;
+export default router;

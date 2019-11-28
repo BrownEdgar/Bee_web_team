@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-const { Errors, ErrorMessage } = require('../helpers/error');
+import jwt from 'jsonwebtoken';
+import _ from 'lodash';
+import { Errors, ErrorMessage } from '../helpers/error';
 const Error = new Errors();
-const User = require('../models/User')
+import User from '../models/User'
 
 
 
@@ -77,4 +77,4 @@ class LoginValidator {
 
 }
 
-module.exports = LoginValidator;
+export default LoginValidator;

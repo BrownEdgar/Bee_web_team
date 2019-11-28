@@ -1,5 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+import { ErrorHandler } from '../middleware/ErrorHendler';
+import { ErrorMessage, Errors } from '../helpers/error';
 
 class TicketListsController {
 	constructor(models) {
@@ -88,4 +88,4 @@ class TicketListsController {
 	}
 }
 
-module.exports = TicketListsController;
+export default TicketListsController;
