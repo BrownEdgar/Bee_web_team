@@ -9,6 +9,7 @@ const ErrorMessage = {
  CANDIDAT_NOTFOUND: 'Candidat is not found',
  CANDIDAT_DELETED: 'Candidat is alredy deleted!',
  UPDATE_ERROR: 'Update failed',
+ LOGIN_ERROR: 'Login failed',
  GIFT_ERROR: `This user has already received this benefit.`,
  POSITION_EXIST: `This description or title already exists`,
  VACATION_ERROR: `You cannot ask for vacation while on vacation`,
@@ -53,6 +54,12 @@ class Errors {
 	registerError(res, message = ErrorMessage.REGISTER_ERROR) {
 		res.status(412).json({
 			message
+		})
+	}
+	loginError(res, kind, message = ErrorMessage.LOGIN_ERROR) {
+		res.status(401).json({
+			message,
+			kind
 		})
 	}
 	saveError(res, message = ErrorMessage.REGISTER_ERROR) {

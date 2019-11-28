@@ -35,8 +35,6 @@ class BenefitsController {
 
 	//add new Benefit in Collection
 	async addBenefits(res, title, description = "for a good job!") {
-
-		
 		let sumary = this.models.benefits.find({
 				title,
 				description

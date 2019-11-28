@@ -8,6 +8,7 @@ const User = require('../models/User')
 
 const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', "repeatPassword", 'birthday', 'role'];
 const CANDIDATS_FIELDS = ['openPosId', 'name', 'surname', 'age', 'email', 'skills', "experience", 'education', 'gender'];
+const OPEN_POSITIONS_FIELDS = ['title', 'description', 'gender', 'ageLimit', 'salary'];
 class LoginValidator {
 	isRegister(req, res, next) {
 		let size = _.size(req.body);
@@ -52,7 +53,7 @@ class LoginValidator {
 	};
 
 	isIdCorrect(req, res, next) {
-		const id = req.params.userId;
+		const id = req.params.Id;
 		if (id.length != 24) {
 			return Error.idLengthError(res);
 		}
@@ -68,6 +69,23 @@ class LoginValidator {
 			let fieldCheck = _.includes(CANDIDATS_FIELDS, key);
 			if (!fieldCheck) {
 				return Error.registerError(res, `${key} field is not present, please fill correct`)
+			}
+		}
+		next();
+	}
+	checkOpenPositionAdds(req, res, next) {
+		console.log("1111");
+		let size = _.size(req.body);
+		if (size > 5) {
+			return Error.registerError(res, `Presented too many fields.`)
+		} else if (size < 5){
+			return Error.registerError(res, `We need five fields, to successfully complete the operation`);
+		}
+		for (let key in req.body) {
+			console.log(key);	
+			let fieldCheck = _.includes(OPEN_POSITIONS_FIELDS, key);
+			if (!fieldCheck) {
+			return Error.registerError(res, `${key} field is not present, please fill correct`)
 			}
 		}
 		next();

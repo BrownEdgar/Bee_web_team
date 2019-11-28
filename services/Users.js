@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const { ErrorHandler } = require('../middleware/ErrorHendler');
+const {ErrorHandler} = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
 
@@ -8,6 +8,46 @@ class UsersController {
 	constructor(models) {
 		this.models = models;
 	}
+
+	async loginUser(req, res) {
+		if (!req.body.email || !req.body.password) {
+			Error.loginError(res, `Invalid email or password field`);
+		}
+		this.models.users.findOne({
+				email: req.body.email,
+				deletedAt: null
+			})
+			.exec()
+			.then(user => {
+				if (!user) {
+					Error.loginError(res, `Invalid email address`);
+				}
+				bcrypt.compare(req.body.password, user.password, (err, result) => {
+					if (err) {
+						Error.loginError(res, `${err.name}: ${err.message}`);
+					}
+					if (result) {
+						const token = jwt.sign({
+								email: user.email,
+								userId: user._id
+							},
+							process.env.SESSION_SECRET, {
+								expiresIn: "1h"
+							}
+						);
+						return res.status(200).json({
+							user,
+							message: "Login successful",
+							token: token
+						});
+					}
+						Error.loginError(res, `Login failed, wrong password`)
+				});
+			})
+			.catch(err => {
+				Error.serverError(res, err.message);
+			});
+	};
 
 	//get user done
 	async getUser(res, _id) {
@@ -24,10 +64,10 @@ class UsersController {
 
 	//get All users from User Collections 
 	async getUsers(res) {
-	let users = await this.models.users.find({
-			deletedAt: null
-		})
-		.select('firstname lastname salary phoneNumber email birthday password role _id');
+		let users = await this.models.users.find({
+				deletedAt: null
+			})
+			.select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}
@@ -106,22 +146,22 @@ class UsersController {
 				$gt: 1
 			}
 		})
-		if (chekDeleted.length >=1) {
+		if (chekDeleted.length >= 1) {
 			throw Error.notFoundError(res, `User is alredy Deleted`);
-		}else{
-		let user = await this.models.users.findByIdAndUpdate({
-			_id
-		}, {
-			deletedAt: Date.now()
-		})
-		if (!user) {
-			throw Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
+		} else {
+			let user = await this.models.users.findByIdAndUpdate({
+				_id
+			}, {
+				deletedAt: Date.now()
+			})
+			if (!user) {
+				throw Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
+			}
+			return {
+				count: user.length,
+				user
+			}
 		}
-		return {
-			count: user.length,
-			user
-		}
-	}
 	}
 }
 

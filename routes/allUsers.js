@@ -15,11 +15,11 @@ router.get("/", [checkAuth.isLogin, Pagination(User)], function (req, res) {
 
 router.get('/me', checkAuth.isLogin, controller.getMyInfo);
 
-router.get('/:userId', [checkAuth.isIdCorrect], controller.getUser);
+router.get('/:Id', [checkAuth.isIdCorrect], controller.getUser);
 
-router.patch('/:userId', [checkAuth.isIdCorrect], controller.updateUser);
+router.patch('/:Id', [checkAuth.isIdCorrect], controller.updateUser);
 
-router.delete('/:userId', [checkAuth.isIdCorrect], controller.deleteUser);
+router.delete('/:Id', [checkAuth.isIdCorrect], controller.deleteUser);
 
 
 
