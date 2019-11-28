@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config()
-}
+// if (process.env.NODE_ENV !== 'production') {
+// 	from 'dotenv').config()
+// }
 
 import express from 'express';
 const app = express();
@@ -10,13 +10,12 @@ import session from 'express-session';
 import mongoose from "mongoose";
 import models from "./models";
 import sevices from "./services";
-
-
+import dotenv from 'dotenv';
+dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({
 	extended: false
 }))
-
 
 mongoose.connect(process.env.DB_CONNECTION, {
 		useUnifiedTopology: true,

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "start:dev": "webpack-dev-server --mode development",
+    "start:dev": "webpack-dev-server --config webpack.config.js --progress --open --watch",
     "build": "webpack --mode production"
   },
   "repository": {
@@ -41,6 +41,8 @@
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-loader": "^8.0.6",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "dotenv": "^8.2.0",
     "nodemon": "^1.19.4",
     "webpack": "^4.41.2",

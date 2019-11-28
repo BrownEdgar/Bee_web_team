@@ -1,5 +1,6 @@
 const path = require('path');
-var nodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
+
 
 
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, 'dist'),
-		publicPath: '/',
+		publicPath: 'dist/',
 		filename: `[name].js`,
 	},
 	module: {
@@ -23,6 +24,17 @@ module.exports = {
 			}
 		}, ]
 	},
+	 optimization: {
+	 	minimize: false
+	 },
+	 devServer: {
+	 	publicPath: "dist/",
+	 	contentBase: path.join(__dirname, './dist'),
+	 	compress: true,
+	 	port: 9000,
+		 hot: true,
+		 overlay: true
+	 },
 	target: 'node', // in order to ignore built-in modules like path, fs, etc. 
 	externals: [nodeExternals()],
 };

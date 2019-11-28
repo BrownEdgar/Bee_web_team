@@ -58,4 +58,5 @@ const userSchema = mongoose.Schema({
 	{
 		timestamps:{createAt:"created_at"}
 	});
+	
 export default mongoose.model("User", userSchema);

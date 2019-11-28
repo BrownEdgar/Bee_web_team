@@ -1,8 +1,16 @@
+import Benefit from './Benefits';
+import BenefitsHistory from './BenefitsHistory';
+import User from './Users';
+import Candidat from './Candidat';
+import OpenPosition from './OpenPosition';
+import TicketList from './TicketList';
+
+
 export default {
-	 Benefit: require('./Benefits'),
-	 BenefitsHistory: require('./BenefitsHistory'),
-	 User: require('./Users'),
-	 Candidat: require('./Candidat'),
-	 OpenPosition: require('./OpenPosition'),
-	 TicketList: require('./TicketList')
+	Benefit,
+	BenefitsHistory,
+	User,
+	Candidat,
+	OpenPosition,
+	TicketList
 }
