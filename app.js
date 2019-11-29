@@ -43,7 +43,7 @@ app.use(session({
 
 
 const homeRouter = require('./routes/home');
-const registerRouter = require('./routes/auth');
+const authRouter = require('./routes/auth');
 const BenefitRouter = require('./routes/Benefit');
 const BenefitHistoryRouter = require('./routes/BenefitHistory');
 const allUsersRouter = require('./routes/allUsers');
@@ -52,7 +52,7 @@ const candidatRouter = require('./routes/Candidats');
 const TicketListRouter = require('./routes/TicketList');
 
 app.use('/', homeRouter);
-app.use('/signup', registerRouter);
+app.use('/signup', authRouter);
 app.use('/benefits', BenefitRouter);
 app.use('/benefits-historys', BenefitHistoryRouter);
 app.use('/users', allUsersRouter);
