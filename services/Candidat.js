@@ -68,7 +68,6 @@ class CandidatsController {
 					});
 				}
 			}).catch(err => {
-				console.log("sebastian", err);
 				return Error.serverError(res)
 			});
 
@@ -92,8 +91,6 @@ class CandidatsController {
 					return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 				});
 		}
-
-
 		const updateCandidat = await this.models.candidat.findByIdAndUpdate({
 			_id
 		}, {
@@ -101,7 +98,6 @@ class CandidatsController {
 		}, {
 			new: true
 		})
-		console.log("updateCandidat", updateCandidat);
 
 		if (!updateCandidat) {
 			return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);

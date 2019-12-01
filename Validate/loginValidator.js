@@ -34,7 +34,6 @@ class LoginValidator {
 	async isLogin(req, res, next) {
 		try {
 			const token = req.headers.authorization.split(' ')[1];
-		
 			const decoded = jwt.verify(token, process.env.SESSION_SECRET);
 				if (!decoded) {
 					return res.status(401).json({
@@ -74,7 +73,6 @@ class LoginValidator {
 		next();
 	}
 	checkOpenPositionAdds(req, res, next) {
-		console.log("1111");
 		let size = _.size(req.body);
 		if (size > 5) {
 			return Error.registerError(res, `Presented too many fields.`)
@@ -90,9 +88,6 @@ class LoginValidator {
 		}
 		next();
 	}
-	
-
-
 }
 
 module.exports = LoginValidator;

@@ -15,7 +15,9 @@ const ErrorMessage = {
  VACATION_ERROR: `You cannot ask for vacation while on vacation`,
  SUCCESSFUL: `Successful operation`,
  EXTRA_ERROR: `Some field is superfluous / extra field`,
- REGISTER_ERROR: `Some field is not present, please fill correct`
+ TIKCKET_LIST_SUCCESSFUL: `Thanck you, Ticket List is pending`,
+ TIKCKET_LIST_DATA_ERROR: `dateStart can not be equal  or more than dateEnd.`,
+ REGISTER_ERROR: `Some field is not present, please fill correct`,
 }
 
 class Errors {
@@ -65,6 +67,17 @@ class Errors {
 	saveError(res, message = ErrorMessage.REGISTER_ERROR) {
 		res.status(412).json({
 			message
+		})
+	}
+	ticketSaveError(res, message = ErrorMessage.TIKCKET_LIST_DATA_ERROR) {
+		res.status(412).json({
+			message
+		})
+	}
+	ticketSaveSuccessfuly(res, ticket, message = ErrorMessage.TIKCKET_LIST_SUCCESSFUL) {
+		res.status(412).json({
+			message,
+			ticket
 		})
 	}
 	serverError(res, message = ErrorMessage.SERVER_ERROR) {

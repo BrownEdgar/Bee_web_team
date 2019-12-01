@@ -23,7 +23,7 @@ class UsersController {
 				if (!user) {
 					Error.loginError(res, `Invalid email address`);
 				}
-				bcrypt.compare(req.body.password, user.password, (err, result) => {
+				bcrypt.compareSync(req.body.password, user.password, (err, result) => {
 					if (err) {
 						Error.loginError(res, `${err.name}: ${err.message}`);
 					}
@@ -50,7 +50,7 @@ class UsersController {
 			});
 	};
 
-	//get user done
+	//get user by Id
 	async getUser(res, _id) {
 		let user = await this.models.users.findOne({
 				_id: _id,
