@@ -4,9 +4,18 @@ const Error = new Errors();
 
 class UsersController {
 
+	async refreshTokens(req, res) {
+		const { refreshToken } = req.body;
+		try {
+			await req.app.services.users.refreshTokens(req, res, refreshToken);
+		} catch (e) {
+			Error.serverError(res, `invalid Token!`);
+		}
+	};
+
 		async loginUser(req, res) {
 			try {
-				await req.app.services.users.loginUser(req, res);
+				await req.app.services.users.loginUser(req, res);	
 			} catch (error) {
 				Error.serverError(res, error.message);
 			}

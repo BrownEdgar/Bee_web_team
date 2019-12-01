@@ -4,46 +4,86 @@ const jwt = require("jsonwebtoken");
 const {ErrorHandler} = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
+const authHelper = require('../helpers/authHelper');
+const secret = process.env.SESSION_SECRET || "secretWord";
+const models = require("../models");
+const Token = models.Token;
+
 
 class UsersController {
 	constructor(models) {
 		this.models = models;
 	}
+	async refreshTokens(req, res, refreshToken) {
+		let payload;
+		try {
+			payload = jwt.verify(refreshToken, secret);
+			
+			if (payload.type !== "refresh") {
+				Error.serverError(res, `invalid Token!`);
+				return;
+			}
+		} catch (e) {
+			if (e instanceof jwt.TokenExpiredError) {
+				Error.serverError(res, `Token expired!`);
+				returnn;
+			} else if (e instanceof jwt.JsonWebTokenError) {
+				Error.serverError(res, `invalid token!`);
+				return;
+			}
+		}
+			Token.findOne({ tokenId: peyload.id})
+			exec()
+			.then((token) => {
+				if (token === null) {
+				throw Error.serverError(res, `invalid token`);
+				}
+				this.updateTokens(token.userId);
+			})
+			.then(tokens => res.json(tokens))
+			.catch(err => res.status(400).json({
+				message:err.message
+			}))
+	};
+		async updateTokens(userId) {
+			const accessToken = authHelper.generateAccessToken(userId);
+			const refreshToken = authHelper.generateRefreshToken();
+			return authHelper.replaseRefreshToken(refreshToken.id, userId)
+				.then((x) => ({
+
+					accessToken,
+					refreshToken: refreshToken.token
+				}));
+		};
+
 
 	async loginUser(req, res) {
-		if (!req.body.email || !req.body.password) {
+		const {email, password } = req.body;
+
+		if (!email || !password) {
 			Error.loginError(res, `Invalid email or password field`);
 		}
 		this.models.users.findOne({
-				email: req.body.email,
+				email,
 				deletedAt: null
 			})
 			.exec()
 			.then(user => {
+				
 				if (!user) {
-					Error.loginError(res, `Invalid email address`);
+					Error.loginError(res, `User does not exist`);
 				}
-				bcrypt.compareSync(req.body.password, user.password, (err, result) => {
-					if (err) {
-						Error.loginError(res, `${err.name}: ${err.message}`);
-					}
-					if (result) {
-						const token = jwt.sign({
-								email: user.email,
-								userId: user._id
-							},
-							process.env.SESSION_SECRET, {
-								expiresIn: "1h"
-							}
-						);
-						return res.status(200).json({
-							user,
-							message: "Login successful",
-							token: token
-						});
-					}
-						Error.loginError(res, `Login failed, wrong password`)
-				});
+				// new logic
+				 const isValid = bcrypt.compareSync(password, user.password);
+				 console.log('isValid', isValid);
+				 
+					if (isValid) {		
+						this.updateTokens(user._id).then(tokens => {
+					      Error.successfulToken(res, tokens);// uxarkum enq 2 token
+						})
+					}else{
+					  return Error.serverError(res, `Invalid credentials!`);
+					}	
 			})
 			.catch(err => {
 				Error.serverError(res, err.message);

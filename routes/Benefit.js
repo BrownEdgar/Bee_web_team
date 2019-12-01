@@ -4,9 +4,10 @@ const BenefitsController = require('../Controller/Benefits');
 const controller = new BenefitsController();
 const loginValidator = require('../Validate/loginValidator');
 const checkAuth = new loginValidator();
+const authMiddleware = require('../middleware/checkLogin');
 
 //get all Benefits
-router.get('/', checkAuth.isLogin, controller.getBenefits);
+router.get('/', authMiddleware, controller.getBenefits);
 
 //add Benefits
 router.post('/',  controller.addBenefits);

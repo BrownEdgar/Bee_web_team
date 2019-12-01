@@ -70,7 +70,6 @@ class CandidatsController {
 			}).catch(err => {
 				return Error.serverError(res)
 			});
-
 		return sumary
 	};
 

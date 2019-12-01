@@ -46,7 +46,7 @@ class LoginValidator {
 		} catch (error) {
 			return res.status(401).json({
 				message: 'Please Login before doing any operations',
-				error
+				error: error.message
 			});
 		}
 	};
@@ -75,15 +75,14 @@ class LoginValidator {
 	checkOpenPositionAdds(req, res, next) {
 		let size = _.size(req.body);
 		if (size > 5) {
-			return Error.registerError(res, `Presented too many fields.`)
+			throw  Error.registerError(res, `Presented too many fields.`)
 		} else if (size < 5){
-			return Error.registerError(res, `We need five fields, to successfully complete the operation`);
+			throw  Error.registerError(res, `We need five fields, to successfully complete the operation`);
 		}
-		for (let key in req.body) {
-			console.log(key);	
+		for (let key in req.body) {	
 			let fieldCheck = _.includes(OPEN_POSITIONS_FIELDS, key);
 			if (!fieldCheck) {
-			return Error.registerError(res, `${key} field is not present, please fill correct`)
+			throw  Error.registerError(res, `${key} field is not present, please fill correct`)
 			}
 		}
 		next();

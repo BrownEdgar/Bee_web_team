@@ -22,9 +22,11 @@ const ErrorMessage = {
 
 class Errors {
 	successful(res, message = ErrorMessage.SUCCESSFUL) {
-		res.status(201).json({
-			message
-		})
+		res.status(201).json(message)
+	}
+	
+	successfulToken(res, message) {
+		res.status(201).json(message)
 	}
 
 	idLengthError(res, message = ErrorMessage.ID_LENGTH_ERROR) {
@@ -65,9 +67,7 @@ class Errors {
 		})
 	}
 	saveError(res, message = ErrorMessage.REGISTER_ERROR) {
-		res.status(412).json({
-			message
-		})
+		res.status(412).json(message)
 	}
 	ticketSaveError(res, message = ErrorMessage.TIKCKET_LIST_DATA_ERROR) {
 		res.status(412).json({
@@ -86,7 +86,6 @@ class Errors {
 		})
 	}
 }
-
 
 module.exports = {
 	ErrorMessage,

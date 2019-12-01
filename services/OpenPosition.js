@@ -52,25 +52,25 @@ class OpenPositionController {
 			.then(result => {
 				if (result) {
 					Error.serverError(res, `${ErrorMessage.POSITION_EXIST}`);
+				}else{
+					const norPosition = new this.models.openPosition({
+						title,
+						description,
+						gender,
+						ageLimit,
+						salary
+					});
+					 norPosition.save(function (err, data) {
+					 	if (err) {
+					 		return Error.saveError(res, `${err.message}`);
+					 	}
+					 	return Error.successful(res);
+					 });
 				}
 			}).catch(err => {
-				throw new ErrorHandler(500, err);
+				return Error.serverError(res)
 			});
-		const norPosition = new this.models.openPosition({
-			title,
-			description,
-			gender,
-			ageLimit,
-			salary
-		});
-		let x = await norPosition.save(function (err, data) {
-			if (err) {
-				return Error.saveError(res, `${err.message}`);
-			}
-			return data
-		});
-		console.log("4444");
-		Error.successful(res);
+		return sumary	
 	};
 
 	//Update OpenPosition in Collection done
@@ -105,3 +105,5 @@ class OpenPositionController {
 }
 
 module.exports = OpenPositionController;
+
+

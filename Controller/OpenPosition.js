@@ -31,9 +31,7 @@ class OpenPositionController {
 	async addOpenPosition(req, res) {
 		let { title, description, gender, ageLimit, salary} = req.body;
 		try {
-			let x =  await req.app.services.openPositions.addOpenPosition(res, title, description, gender, ageLimit, salary);
-			console.log("x:  ", x);
-			
+			await req.app.services.openPositions.addOpenPosition(res, title, description, gender, ageLimit, salary);
 		} catch (err) {
 			Error.serverError(res, err.message);
 		}
