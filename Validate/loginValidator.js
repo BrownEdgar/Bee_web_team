@@ -8,6 +8,7 @@ const User = require('../models/User')
 
 const REG_FIELDS = ['firstname', 'lastname', 'salary', 'phoneNumber', 'email', 'password', "repeatPassword", 'birthday', 'role'];
 const CANDIDATS_FIELDS = ['openPosId', 'name', 'surname', 'age', 'email', 'skills', "experience", 'education', 'gender'];
+const OPEN_POSITIONS_FIELDS = ['title', 'description', 'gender', 'ageLimit', 'salary'];
 class LoginValidator {
 	isRegister(req, res, next) {
 		let size = _.size(req.body);
@@ -33,7 +34,6 @@ class LoginValidator {
 	async isLogin(req, res, next) {
 		try {
 			const token = req.headers.authorization.split(' ')[1];
-		
 			const decoded = jwt.verify(token, process.env.SESSION_SECRET);
 				if (!decoded) {
 					return res.status(401).json({
@@ -46,13 +46,13 @@ class LoginValidator {
 		} catch (error) {
 			return res.status(401).json({
 				message: 'Please Login before doing any operations',
-				error
+				error: error.message
 			});
 		}
 	};
 
 	isIdCorrect(req, res, next) {
-		const id = req.params.userId;
+		const id = req.params.Id;
 		if (id.length != 24) {
 			return Error.idLengthError(res);
 		}
@@ -72,9 +72,21 @@ class LoginValidator {
 		}
 		next();
 	}
-	
-
-
+	checkOpenPositionAdds(req, res, next) {
+		let size = _.size(req.body);
+		if (size > 5) {
+			throw  Error.registerError(res, `Presented too many fields.`)
+		} else if (size < 5){
+			throw  Error.registerError(res, `We need five fields, to successfully complete the operation`);
+		}
+		for (let key in req.body) {	
+			let fieldCheck = _.includes(OPEN_POSITIONS_FIELDS, key);
+			if (!fieldCheck) {
+			throw  Error.registerError(res, `${key} field is not present, please fill correct`)
+			}
+		}
+		next();
+	}
 }
 
 module.exports = LoginValidator;

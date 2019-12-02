@@ -30,12 +30,12 @@ router.get('/',  controller.getCandidats);
 router.post('/', [checkAuth.checkCandidatAdds, upload.single('cv')], controller.addCandidats);
 
 //get Candidats by ID
-router.get('/:candidatId', checkAuth.isIdCorrect, controller.getSpecialCandidat);
+router.get('/:Id', checkAuth.isIdCorrect, controller.getSpecialCandidat);
 
 //update Candidats
-router.patch('/:candidatId', checkAuth.isIdCorrect, controller.updateCandidat);
+router.patch('/:Id', checkAuth.isIdCorrect, controller.updateCandidat);
 
 //Candidats Deleted
-router.delete('/:candidatId', checkAuth.isIdCorrect, controller.deleteCandidat);
+router.delete('/:Id', checkAuth.isIdCorrect, controller.deleteCandidat);
 
 module.exports = router;

@@ -9,18 +9,26 @@ const ErrorMessage = {
  CANDIDAT_NOTFOUND: 'Candidat is not found',
  CANDIDAT_DELETED: 'Candidat is alredy deleted!',
  UPDATE_ERROR: 'Update failed',
+ LOGIN_ERROR: 'Login failed',
  GIFT_ERROR: `This user has already received this benefit.`,
  POSITION_EXIST: `This description or title already exists`,
  VACATION_ERROR: `You cannot ask for vacation while on vacation`,
  SUCCESSFUL: `Successful operation`,
  EXTRA_ERROR: `Some field is superfluous / extra field`,
- REGISTER_ERROR: `Some field is not present, please fill correct`
+ TIKCKET_LIST_SUCCESSFUL: `Thanck you, Ticket List is pending`,
+ TIKCKET_LIST_DATA_ERROR: `dateStart can not be equal  or more than dateEnd.`,
+ REGISTER_ERROR: `Some field is not present, please fill correct`,
 }
 
 class Errors {
 	successful(res, message = ErrorMessage.SUCCESSFUL) {
+		res.status(201).json(message)
+	}
+	
+	successfulToken(res, user, tokens) {
 		res.status(201).json({
-			message
+			user,
+			tokens,
 		})
 	}
 
@@ -55,9 +63,24 @@ class Errors {
 			message
 		})
 	}
+	loginError(res, kind, message = ErrorMessage.LOGIN_ERROR) {
+		res.status(401).json({
+			message,
+			kind
+		})
+	}
 	saveError(res, message = ErrorMessage.REGISTER_ERROR) {
+		res.status(412).json(message)
+	}
+	ticketSaveError(res, message = ErrorMessage.TIKCKET_LIST_DATA_ERROR) {
 		res.status(412).json({
 			message
+		})
+	}
+	ticketSaveSuccessfuly(res, ticket, message = ErrorMessage.TIKCKET_LIST_SUCCESSFUL) {
+		res.status(412).json({
+			message,
+			ticket
 		})
 	}
 	serverError(res, message = ErrorMessage.SERVER_ERROR) {
@@ -66,7 +89,6 @@ class Errors {
 		})
 	}
 }
-
 
 module.exports = {
 	ErrorMessage,

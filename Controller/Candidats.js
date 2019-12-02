@@ -17,22 +17,20 @@ class CandidatsController {
 
 	// ------------------------------------- done
 	async getSpecialCandidat(req, res) {
-		const id = req.params.candidatId
+		const id = req.params.Id
 		try {
-			let candidat = await req.app.services.candidats.getSpecialCandidat(id);
-			res.status(201).send(candidat);
+			await req.app.services.candidats.getSpecialCandidat(res, id);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}
 	};
 
 
-
 	// ------------------------------------- done!	
 	async addCandidats(req, res) {
 		console.log("file:  ", req.file);
 		
-		let { openPosId, name, surname, email, age, gender, skills, education, experience} = req.body;
+		let { openPosId, name, surname, email, age, gender, skills, education, experience } = req.body;
 		try {
 			 await req.app.services.candidats.addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience);
 		} catch (err) {
@@ -42,32 +40,22 @@ class CandidatsController {
 
 	// ------------------------------------- done
 	async updateCandidat(req, res) {
-		const id = req.params.candidatId;
+		const id = req.params.Id;
 		const updateOps = req.body;
-		let updateCandidat = await req.app.services.candidats.updateCandidat(id, updateOps)
-			.then(result => {
-				res.status(result.statusCode).send(result);
-			})
-			.catch(err => {
-				res.status(500).json({
-					error: err
-				})
-			});
-	};
+		try {
+			 await req.app.services.candidats.updateCandidat(res, id, updateOps);	
+		} catch (error) {
+			Error.serverError(res, error.message);
+		}
+	}
 
 	// ------------------------------------- done!
 	async deleteCandidat(req, res) {
-		const id = req.params.candidatId;
+		const id = req.params.Id;
 		try {
-			let delbenefits = await req.app.services.candidats.deleteCandidat(id);
-			let check = delbenefits.candidats.deletedCount;
-			if (check) {
-					return Error.successful(res, `Candidat is deleted`);
-			}else{
-					return Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
-			}
+			await req.app.services.candidats.deleteCandidat(res, id);
 		} catch (error) {
-			res.status(500).send(error.message);
+			Error.serverError(res, error.message);
 		}
 	};
 }

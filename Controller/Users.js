@@ -4,6 +4,23 @@ const Error = new Errors();
 
 class UsersController {
 
+	async refreshTokens(req, res) {
+		const { refreshToken } = req.body;
+		try {
+			await req.app.services.users.refreshTokens(req, res, refreshToken);
+		} catch (e) {
+			Error.serverError(res, `invalid Token!`);
+		}
+	};
+
+		async loginUser(req, res) {
+			try {
+				await req.app.services.users.loginUser(req, res);	
+			} catch (error) {
+				Error.serverError(res, error.message);
+			}
+		};
+
 	// ------------------------------------- done
 	async getUsers(req, res) {
 		try {
@@ -14,14 +31,16 @@ class UsersController {
 		}
 	};
 	// ------------------------------------- done
- async getMyInfo(req, res, next) {
- 	try {
- 		let user = await req.app.services.users.getUser(res, req.userData.userId);
- 		return res.status(201).send(user);
- 	} catch (err) {
- 		return Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
- 	}
- };
+
+	async getMyInfo(req, res, next) {
+	try {
+		let user = await req.app.services.users.getUser(res, req.userData.userId);
+		return res.status(201).send(user);
+	} catch (err) {
+		return Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
+	}
+	};
+
 	// ------------------------------------- done
 	async getUser(req, res) {
 		const id = req.params.userId
@@ -32,7 +51,6 @@ class UsersController {
 			res.status(500).send(error.message);
 		}
 	};
-
 
 	// ------------------------------------- done ?	/signup -ov
 	async addUser(req, res) {
@@ -54,7 +72,6 @@ class UsersController {
 				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 			});
 	};
-
 
 	// ------------------------------------- done!
 	async updateUser(req, res) {
@@ -83,6 +100,6 @@ class UsersController {
 			throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
 		}
 	};
-
 }
+
 module.exports = UsersController;

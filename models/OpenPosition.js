@@ -9,33 +9,35 @@ const openPositionSchema = mongoose.Schema({
 
 	title: {
 		type: String,
-		required: true,
+		required: [true, `required fields`],
 		maxlength: 100,
 		minlength: 2
 	},
 
 	description: {
 		type: String,
-		required: true,
+		required: [true, `required fields`],
 		maxlength: 1024,
 		minlength: 2
 	},
 
 	gender: {
 		type: String,
-		enum: ["male", "female"]
+		enum: ["male", "female"],
+		required: [true, `required fields, must by 'male' or 'female'`],
 	},
 
 	ageLimit: {
 		type: Number,
 		default: 18,
 		min: 18,
-		max: 63
+		max: 63,
+		required: [true, `required fields, should be in the range of 18-63`],
 	},
 	salary: {
 		type: Number,
 		default: 50000,
-		required: true,
+		required: [true, `required fields, should be more or equal '50000'`],
 		min: 50000
 	}
 });

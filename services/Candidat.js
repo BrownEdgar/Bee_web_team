@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const { ErrorMessage, Errors } = require('../helpers/error');
+const {
+	ErrorHandler
+} = require('../middleware/ErrorHendler');
+const {
+	ErrorMessage,
+	Errors
+} = require('../helpers/error');
 const Error = new Errors();
 
 class CandidatsController {
@@ -13,7 +18,7 @@ class CandidatsController {
 		let candidats = await this.models.candidat.find()
 			.select('openPosId name surname email age skills experience');
 		if (candidats.length < 1) {
-			 throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
+			throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: candidats.length,
@@ -22,15 +27,15 @@ class CandidatsController {
 	};
 
 	//get Candidat by spesial ID done
-	async getSpecialCandidat(_id) {
+	async getSpecialCandidat(res, _id) {
 		let candidats = await this.models.candidat.findOne({
 				_id
 			})
 			.select('openPosId name surname email age skills experience');
 		if (!candidats) {
-			throw new ErrorHandler(409, ErrorMessage.NOTFOUND_ERROR);
+			Error(res, ErrorMessage.NOTFOUND_ERROR);
 		}
-		return candidats;
+		res.status(201).json(candidats);
 	};
 
 	//add new candidats in Collection done!
@@ -55,65 +60,60 @@ class CandidatsController {
 						education,
 						experience
 					});
-				 	norCandidat.save(function(err){
+					norCandidat.save(function (err) {
 						if (err) {
 							return Error.saveError(res, `${err.message}`);
 						}
 						return Error.successful(res);
-					});	
+					});
 				}
 			}).catch(err => {
-				console.log("sebastian", err);
 				return Error.serverError(res)
 			});
-
-			return sumary
+		return sumary
 	};
 
 	//Update Candidat in Collection done!
-	async updateCandidat(_id, updateOps) {
+	async updateCandidat(res, _id, updateOps) {
 		console.log("updateOps", updateOps.email);
-		let sumary = this.models.candidat.find({
-				email: updateOps.email
-			})
-			.exec()
-			.then(async (result) => {
-				if (result.length >= 1) {
-					 return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
-				} else {
-					const updateCandidat = await this.models.candidat.findByIdAndUpdate({
-						_id
-					}, {
-						$set: updateOps
-					}, {
-						new: true
-					})
-					if (!updateCandidat) {
-						return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);
+		if (updateOps.email) {
+			const sumary = await this.models.candidat.findOne({
+					email: updateOps.email
+				})
+				.exec()
+				.then(result => {
+					if (result) {
+						return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
 					}
-					return updateCandidat;
-				}
-			})
-			.catch(err => {
-				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
-			});
+				})
+				.catch(err => {
+					return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				});
+		}
+		const updateCandidat = await this.models.candidat.findByIdAndUpdate({
+			_id
+		}, {
+			$set: updateOps
+		}, {
+			new: true
+		})
 
-		return sumary
-
+		if (!updateCandidat) {
+			return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);
+		}
+		res.status(201).json(updateCandidat);
 	};
 
 	//delete Candidat by Id
-	async deleteCandidat(_id) {
+	async deleteCandidat(res, _id) {
 		let candidats = await this.models.candidat.deleteOne({
 			_id
 		})
-		if (!candidats) {
-			throw new ErrorHandler(409, `Candidat ${ErrorMessage.NOTFOUND_ERROR}`);
+		if (candidats.n >= 1) {
+			Error.successful(res, `Candidat is deleted`);
+		} else {
+			Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
 		}
-		return {
-			count: candidats.length,
-			candidats
-		};
 	}
 }
 

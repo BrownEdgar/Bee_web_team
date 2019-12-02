@@ -6,19 +6,19 @@ const loginValidator = require('../Validate/loginValidator');
 const checkAuth = new loginValidator();
 
 //get all OpenPositions
-router.get('/', controller.getOpenPosition);
+router.get('/', controller.getOpenPositions);
 
 //add OpenPositions
-router.post('/', controller.addOpenPosition);
+router.post('/',  checkAuth.checkOpenPositionAdds, controller.addOpenPosition);
 
 //get OpenPositions by ID
-router.get('/:openPositionId', controller.getSpecialPosition);
+router.get('/:Id',checkAuth.isIdCorrect, controller.getSpecialPosition);
 
 //update OpenPositions
-router.patch('/:openPositionId', controller.updateOpenPosition);
+router.patch('/:Id', checkAuth.isIdCorrect, controller.updateOpenPosition);
 
 //OpenPositions Deleted
-router.delete('/:openPositionId', controller.deleteOpenPosition);
+router.delete('/:Id',checkAuth.isIdCorrect,  controller.deleteOpenPosition);
 
 
 

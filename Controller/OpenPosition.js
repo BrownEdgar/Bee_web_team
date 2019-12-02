@@ -1,10 +1,11 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const  {Errors, ErrorMessage } = require('../helpers/error');
+const Error = new Errors();
 
 class OpenPositionController {
 
 	// ------------------------------------- done
-	async getOpenPosition(req, res) {
+	async getOpenPositions(req, res) {
 		try {
 			let allPositions = await req.app.services.openPositions.getOpenPosition();
 			res.status(201).send(allPositions);
@@ -15,7 +16,7 @@ class OpenPositionController {
 
 	// ------------------------------------- done
 	async getSpecialPosition(req, res) {
-		const id = req.params.openPositionId
+		const id = req.params.Id
 		try {
 			let position = await req.app.services.openPositions.getSpecialPosition(id);
 			res.status(201).send(position);
@@ -30,16 +31,15 @@ class OpenPositionController {
 	async addOpenPosition(req, res) {
 		let { title, description, gender, ageLimit, salary} = req.body;
 		try {
-			let addPosition = await req.app.services.openPositions.addOpenPosition(title, description, gender, ageLimit, salary);
-			res.status(addPosition.status).send(addPosition);
+			await req.app.services.openPositions.addOpenPosition(res, title, description, gender, ageLimit, salary);
 		} catch (err) {
-			res.status(500).send(err.message);
+			Error.serverError(res, err.message);
 		}
 	};
 
 	// ------------------------------------- done!
 	async updateOpenPosition(req, res) {
-		const id = req.params.openPositionId;
+		const id = req.params.Id;
 		const updateOps = req.body;
 		let x = await req.app.services.openPositions.updateOpenPosition(id, updateOps)
 		x.save()
@@ -55,7 +55,7 @@ class OpenPositionController {
 
 	// ------------------------------------- done !
 	async deleteOpenPosition(req, res) {
-		const id = req.params.openPositionId;
+		const id = req.params.Id;
 		try {
 			let delbenefits = await req.app.services.openPositions.deleteOpenPosition(id);
 			

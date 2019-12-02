@@ -1,5 +1,11 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
+const {
+	ErrorHandler
+} = require('../middleware/ErrorHendler');
+const {
+	Errors,
+	ErrorMessage
+} = require('../helpers/error');
+const Error = new Errors();
 
 class TicketListsController {
 	constructor(models) {
@@ -8,9 +14,11 @@ class TicketListsController {
 
 	//get all Ticket List  done
 	async getTicketLists() {
-		let ticketList = await this.models.ticketList.find().sort({dateStart:1})
+		let ticketList = await this.models.ticketList.find().sort({
+			dateStart: 1
+		})
 		if (ticketList.length < 1) {
-			 throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
+			throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: ticketList.length,
@@ -20,39 +28,53 @@ class TicketListsController {
 
 	//get Ticket Lists by spesial ID
 	async getTicketListById(_id) {
-		let ticketListId = await this.models.ticketList.findOne({_id},{_id:0})
-		.select(`userId dateStart dateEnd`)
+		let ticketListId = await this.models.ticketList.findOne({
+				_id
+			}, {
+				_id: 0
+			})
+			.populate("userId", 'lastname')
+			.select(`userId dateStart dateEnd`)
+			.exec();
+		console.log(ticketListId);
+
+
 		if (!ticketListId) {
-			 throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
+			throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
 		}
 		return ticketListId;
 	};
 
 	//add new Ticket Lists in Collection
-	async addTicketList(userId, dateStart, dateEnd) {
-		let sumary =this.models.ticketList.find({
-				 userId
+	async addTicketList(res, userId, dateStart, dateEnd) {
+		if (dateStart >= dateEnd) {
+			return Error.ticketSaveError(res);
+		}
+		let sumary = await this.models.ticketList.findOne({
+				userId
 			})
 			.exec()
 			.then(result => {
-				if (result.length >= 1) {
-					return new ErrorHandler(409, ErrorMessage.VACATION_ERROR);
-				} else {
-					const norTicketList = new this.models.ticketList({
+				if (result) {
+					return Error.saveError(res, ErrorMessage.VACATION_ERROR);
+				}else{
+					const norTicketList =  new this.models.ticketList({
 						userId,
-						dateStart, 
+						dateStart,
 						dateEnd
 					});
-					norTicketList.save();
-					return ({
-						status: 201,
-						message: "Thanck you, Ticket List  is pending"
-					})
+					norTicketList.save(function (err) {
+						if (err) {
+							Error.serverError(res, `${err.message}`);
+						}
+					});
+					console.log('norTicketList', norTicketList);
+					
+					return Error.ticketSaveSuccessfuly(res, `${norTicketList}`)
 				}
 			}).catch(err => {
-				return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				 Error.serverError(res, `${err.message}`);
 			});
-			return sumary;
 	};
 
 	//Update Ticket Lists in Collection
@@ -61,8 +83,7 @@ class TicketListsController {
 				_id
 			}, {
 				$set: updateOps
-			}, 
-			{
+			}, {
 				new: true
 			})
 			.select(`userId dateStart dateEnd`)
@@ -79,7 +100,6 @@ class TicketListsController {
 		})
 		if (!ticketList) {
 			return new ErrorHandler(500, `Ticket List ${ErrorMessage.NOTFOUND_ERROR}`);
-			 
 		}
 		return {
 			count: ticketList.length,

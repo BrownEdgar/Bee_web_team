@@ -1,6 +1,7 @@
 const { ErrorHandler } = require('../middleware/ErrorHendler');
-const  ErrorMessage  = require('../helpers/error');
-
+const  { ErrorMessage, Errors } = require('../helpers/error');
+const Error = new Errors();
+const jwt = require("jsonwebtoken");
 class TicketListsController {
 
 // ------------------------------------- done
@@ -9,7 +10,7 @@ async getTicketLists(req, res) {
 		let allHistory = await req.app.services.ticketLists.getTicketLists();
 		res.status(201).send(allHistory);
 	} catch (error) {
-		res.status(500).send(error.message);
+		Error.serverError(res, `${error}`);
 	}
 };
 
@@ -28,8 +29,9 @@ async getTicketLists(req, res) {
 	async addTicketList(req, res) {
 		let { userId, dateStart, dateEnd } = req.body;
 		try {
-			let newTicketList = await req.app.services.ticketLists.addTicketList( userId, dateStart, dateEnd );
-			res.status(newTicketList.statusCode).send(newTicketList);
+			 let x = await req.app.services.ticketLists.addTicketList( res, userId, dateStart, dateEnd );
+			 console.log("x:", x);
+			 
 		} catch (err) {
 			res.status(500).send(err.message);
 		}
