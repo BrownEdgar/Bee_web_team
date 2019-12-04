@@ -1,6 +1,5 @@
 module.exports = {
 	jwt: {
-		secret: "ne vse mogut v IT",
 		tokens:{
 			access:{
 				type: 'access',

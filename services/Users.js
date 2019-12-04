@@ -45,18 +45,16 @@ class UsersController {
 				message:err.message
 			}))
 	};
-		async updateTokens(userId) {
-			const accessToken = authHelper.generateAccessToken(userId);
-			const refreshToken = authHelper.generateRefreshToken();
-			return authHelper.replaseRefreshToken(refreshToken.id, userId)
-				.then((x) => ({
+	async updateTokens(userId) {
+		const accessToken = authHelper.generateAccessToken(userId);
+		const refreshToken = authHelper.generateRefreshToken();
+		return authHelper.replaseRefreshToken(refreshToken.id, userId)
+			.then((x) => ({
 
-					accessToken,
-					refreshToken: refreshToken.token
-				}));
-		};
-
-
+				accessToken,
+				refreshToken: refreshToken.token
+			}));
+	};
 	async loginUser(req, res) {
 		const {email, password } = req.body;
 

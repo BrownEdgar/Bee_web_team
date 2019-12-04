@@ -43,7 +43,7 @@ class UsersController {
 
 	// ------------------------------------- done
 	async getUser(req, res) {
-		const id = req.params.userId
+		const id = req.params.Id
 		try {
 			let user = await req.app.services.users.getUser(res, id);
 			res.status(201).send(user);
@@ -75,7 +75,7 @@ class UsersController {
 
 	// ------------------------------------- done!
 	async updateUser(req, res) {
-		const id = req.params.userId;
+		const id = req.params.Id;
 		const updateOps = req.body;
 		let x = await req.app.services.users.updateUser(id, updateOps)
 		x.save()
@@ -89,7 +89,7 @@ class UsersController {
 
 	// -------------------------------------done!
 	async deleteUser(req, res) {
-		const id = req.params.userId;
+		const id = req.params.Id;
 		try {
 			let delUsers = await req.app.services.users.deleteUser(res, id);
 				return res.status(201).json({

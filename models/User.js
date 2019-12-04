@@ -50,6 +50,10 @@ const userSchema = mongoose.Schema({
 		enum: ["0", "1", "2"],
 		required: [true, 'Must by "0"-admin "1"-meneger, "2"-stuff']
 	},
+	vocationDay:{
+		type:Number,
+		default: 0
+	},
 	deletedAt:{
 		type:Date,
 		default:null
