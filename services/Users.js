@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const cron = require('node-cron');
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const {ErrorHandler} = require('../middleware/ErrorHendler');
@@ -91,7 +92,7 @@ class UsersController {
 				_id: _id,
 				deletedAt: null
 			})
-			.select('firstname lastname email birthday phoneNumber role salary _id')
+			// .select('firstname lastname email birthday phoneNumber role salary _id')
 		if (!user) {
 			return Error.conflictError(res, `User ${ErrorMessage.ID_ERROR}`);
 		}
@@ -100,10 +101,11 @@ class UsersController {
 
 	//get All users from User Collections 
 	async getUsers(res) {
+		
 		let users = await this.models.users.find({
 				deletedAt: null
 			})
-			.select('firstname lastname salary phoneNumber email birthday password role _id');
+			// .select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
 			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
 		}

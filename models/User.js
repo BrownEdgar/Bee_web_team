@@ -51,7 +51,7 @@ const userSchema = mongoose.Schema({
 		required: [true, 'Must by "0"-admin "1"-meneger, "2"-stuff']
 	},
 	vocationDay:{
-		type:Number,
+		type: Number,
 		default: 0
 	},
 	deletedAt:{

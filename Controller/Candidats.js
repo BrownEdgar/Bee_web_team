@@ -1,4 +1,3 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
 const  {ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
 
