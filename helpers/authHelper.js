@@ -15,7 +15,6 @@ const generateAccessToken = (userId) => {
 		expiresIn:tokens.access.expiresIn
 	};
 	return jwt.sign(payload, secret, options);
-
 }
 
 //refresh token generator
@@ -30,6 +29,7 @@ const generateRefreshToken = () => {
 		token: jwt.sign(payload, secret, options),
 	}
 }
+
 const replaseRefreshToken = (tokenId, userId) => {
 	let RefreshToken = Token.findOneAndRemove({userId})
 	.exec()

@@ -58,5 +58,4 @@ class CandidatsController {
 		}
 	};
 }
-
 module.exports = CandidatsController;
