@@ -4,13 +4,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const app = express();
-const cors = require('cors')
-const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
+const cors = require('cors');
 const session = require('express-session');
 const mongoose = require("mongoose");
 const models = require("./models");
 const sevices = require("./services");
 const cornCheck = require("./helpers/addVocationDeys");
+const { ErrorMessage, Errors } = require('./helpers/error');
+const Error = new Errors();
 
 
 
@@ -88,7 +89,7 @@ app.use(function (req, res, next) {
 
 
 app.use((req, res, next) => {
-	 throw new ErrorHandler(404, 'page is not found')
+	 throw Error.notFoundError(res, 'page is not found')
 })
 
 app.use((error, req, res, next) => {
@@ -99,8 +100,6 @@ app.use((error, req, res, next) => {
 		}
 	});
 })
-app.use((err, req, res, next) => {
-	handleError(err, res);
-});
+
 
 module.exports = app;

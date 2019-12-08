@@ -7,7 +7,7 @@ class OpenPositionController {
 	// ------------------------------------- done
 	async getOpenPositions(req, res) {
 		try {
-			let allPositions = await req.app.services.openPositions.getOpenPosition();
+			let allPositions = await req.app.services.openPositions.getOpenPosition(res);
 			res.status(201).send(allPositions);
 		} catch (error) {
 			res.status(500).send(error.message);
@@ -18,14 +18,12 @@ class OpenPositionController {
 	async getSpecialPosition(req, res) {
 		const id = req.params.Id
 		try {
-			let position = await req.app.services.openPositions.getSpecialPosition(id);
+			let position = await req.app.services.openPositions.getSpecialPosition(res, id);
 			res.status(201).send(position);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}
 	};
-
-
 
 	// ------------------------------------- done!	
 	async addOpenPosition(req, res) {
@@ -41,7 +39,7 @@ class OpenPositionController {
 	async updateOpenPosition(req, res) {
 		const id = req.params.Id;
 		const updateOps = req.body;
-		let x = await req.app.services.openPositions.updateOpenPosition(id, updateOps)
+		let x = await req.app.services.openPositions.updateOpenPosition(res, id, updateOps)
 		x.save()
 			.then(result => {
 				res.status(200).json(result);
@@ -57,7 +55,7 @@ class OpenPositionController {
 	async deleteOpenPosition(req, res) {
 		const id = req.params.Id;
 		try {
-			let delbenefits = await req.app.services.openPositions.deleteOpenPosition(id);
+			let delbenefits = await req.app.services.openPositions.deleteOpenPosition(res, id);
 			
 			let check = delbenefits.position.deletedCount;
 			if (check) {

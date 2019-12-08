@@ -37,6 +37,11 @@ class Errors {
 			message
 		})
 	}
+	updateError(res, message = ErrorMessage.UPDATE_ERROR) {
+		res.status(400).json({
+			message
+		})
+	}
 	notFoundError(res, message = ErrorMessage.NOTFOUND_ERROR) {
 		res.status(404).json({
 			message

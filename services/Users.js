@@ -171,7 +171,7 @@ class UsersController {
 			})
 			.select('firsname lastname salary phoneNumber email birthday role');
 		if (!updateUser) {
-			throw new ErrorHandler(409, `User ${ErrorMessage.NOTFOUND_ERROR}`);
+			throw Error.notFoundError(res, `User ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return updateUser;
 	};
@@ -202,7 +202,5 @@ class UsersController {
 		}
 	}
 }
-
-
 
 module.exports = UsersController;

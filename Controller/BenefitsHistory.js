@@ -17,7 +17,7 @@ async getBenefitsHistory(req, res) {
 // -------------------------------------
 	async getHistoryById(req, res) {
 		const id = req.params.historyId;
-			let benHistory = await req.app.services.benefitsHistorys.getHistoryById(id)
+			let benHistory = await req.app.services.benefitsHistorys.getHistoryById(res, id)
 			.then(result => {
 				if (result) {
 					res.status(200).send(result);
@@ -51,7 +51,7 @@ async getBenefitsHistory(req, res) {
 	async deleteBenefitHistory(req, res) {
 		const id = req.params.historyId;
 		try {
-			let delbenefits = await req.app.services.benefitsHistorys.deleteBenefitHistory(id);
+			let delbenefits = await req.app.services.benefitsHistorys.deleteBenefitHistory(res, id);
 			console.log("delbenefits:", delbenefits);
 			
 			let check = delbenefits.benHistory.deletedCount;

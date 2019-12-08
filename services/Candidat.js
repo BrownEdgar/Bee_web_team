@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const {
 	ErrorMessage,
 	Errors
 } = require('../helpers/error');
@@ -83,11 +80,11 @@ class CandidatsController {
 				.exec()
 				.then(result => {
 					if (result) {
-						return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
+						return Error.conflictError(res, ErrorMessage.EMAIL_EXIST);
 					}
 				})
 				.catch(err => {
-					return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+					return Error.serverError(res);
 				});
 		}
 		const updateCandidat = await this.models.candidat.findByIdAndUpdate({
@@ -99,7 +96,7 @@ class CandidatsController {
 		})
 
 		if (!updateCandidat) {
-			return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);
+			return Error.updateError(res);
 		}
 		res.status(201).json(updateCandidat);
 	};

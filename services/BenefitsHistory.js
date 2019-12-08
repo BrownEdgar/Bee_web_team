@@ -1,7 +1,5 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error')
 const Error = new Errors();
-
 
 class BenefitHistoryController {
 	constructor(models) {
@@ -23,12 +21,12 @@ class BenefitHistoryController {
 	};
 
 	//get Benefits History by spesial ID
-	async getHistoryById(_id) {
+	async getHistoryById(res, _id) {
 		let benHistoryId = await this.models.benefitsHistory.findOne({
 			_id
 		})
 		if (!benHistoryId) {
-			throw new ErrorHandler(409, ErrorMessage.ID_ERROR);
+			throw Error.conflictError(res, ErrorMessage.ID_ERROR);
 		}
 		return benHistoryId;
 	};
@@ -59,18 +57,18 @@ class BenefitHistoryController {
 					return  norBenefitHistory;
 				}
 			}).catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.GIFT_ERROR);
+				throw Error.serverError(res);
 			});
 			return sumary;
 	};
 
 	//delete Benefits History by Id
-	async deleteBenefitHistory(_id) {
+	async deleteBenefitHistory(res, _id) {
 		let benHistory = await this.models.benefitsHistory.deleteOne({
 			_id
 		})
 		if (!benHistory) {
-			throw new ErrorHandler(409, ErrorMessage.NOTFOUND_ERROR);
+			throw Error.notFoundError(res);
 		}
 		return {
 			count: benHistory.length,

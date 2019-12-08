@@ -1,10 +1,4 @@
-const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const {
-	Errors,
-	ErrorMessage
-} = require('../helpers/error');
+const { Errors, ErrorMessage } = require('../helpers/error');
 const Error = new Errors();
 
 class OpenPositionController {
@@ -13,11 +7,11 @@ class OpenPositionController {
 	}
 
 	//get all Benefit Lists done!
-	async getOpenPosition() {
+	async getOpenPosition(res) {
 		let positions = await this.models.openPosition.find()
 			.select('_id title description ageLimit salary');
 		if (positions.length < 1) {
-			throw new ErrorHandler(500, ErrorMessage.NO_DATA_ERROR);
+			throw Error.serverError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: positions.length,
@@ -32,7 +26,7 @@ class OpenPositionController {
 			})
 			.select('_id title description ageLimit salary');
 		if (!position) {
-			throw new ErrorHandler(500, `Position ${ErrorMessage.ID_ERROR}`);
+			throw Error.serverError(res, `Position ${ErrorMessage.ID_ERROR}`);
 		}
 		return position;
 	};
@@ -74,7 +68,7 @@ class OpenPositionController {
 	};
 
 	//Update OpenPosition in Collection done
-	async updateOpenPosition(_id, updateOps) {
+	async updateOpenPosition(res, _id, updateOps) {
 		const updatePosition = await this.models.openPosition.findByIdAndUpdate({
 				_id
 			}, {
@@ -84,18 +78,18 @@ class OpenPositionController {
 			})
 			.select('_id title description ageLimit salary');
 		if (!updatePosition) {
-			throw new ErrorHandler(500, `Open Position ${ErrorMessage.UPDATE_ERROR}`);
+			throw Error.serverError(res, `Open Position ${ErrorMessage.UPDATE_ERROR}`);
 		}
 		return updatePosition;
 	};
 
 	//delete OpenPosition by Id
-	async deleteOpenPosition(_id) {
+	async deleteOpenPosition(res, _id) {
 		let position = await this.models.openPosition.deleteOne({
 			_id
 		})
 		if (!position) {
-			throw new ErrorHandler(500, `Open Position ${ErrorMessage.NOTFOUND_ERROR}`);
+			throw Error.serverError(res, `Open Position ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return {
 			count: position.length,

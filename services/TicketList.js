@@ -1,7 +1,4 @@
 const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const {
 	Errors,
 	ErrorMessage
 } = require('../helpers/error');
@@ -18,7 +15,7 @@ class TicketListsController {
 			dateStart: 1
 		})
 		if (ticketList.length < 1) {
-			throw new ErrorHandler(409, ErrorMessage.NO_DATA_ERROR);
+			throw Error.conflictError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: ticketList.length,
@@ -37,10 +34,8 @@ class TicketListsController {
 			.select(`userId dateStart dateEnd`)
 			.exec();
 		console.log(ticketListId);
-
-
 		if (!ticketListId) {
-			throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
+			throw Error.conflictError(res, `Ticket List ${ErrorMessage.ID_ERROR}`);
 		}
 		return ticketListId;
 	};
@@ -88,9 +83,9 @@ class TicketListsController {
 			})
 			.select(`userId dateStart dateEnd`)
 		if (!updateTicketList) {
-			return new ErrorHandler(409, `Ticket ListError ${Message.UPDATE_ERROR}`);
+			return Error.conflictError(409, `Ticket ListError ${Message.UPDATE_ERROR}`);
 		}
-		return new ErrorHandler(200, updateTicketList);
+		return Error.successful(res, updateTicketList);
 	}
 
 	//delete Ticket Lists by Id
@@ -99,7 +94,7 @@ class TicketListsController {
 			_id
 		})
 		if (!ticketList) {
-			return new ErrorHandler(500, `Ticket List ${ErrorMessage.NOTFOUND_ERROR}`);
+			return Error.serverError(res, `Ticket List ${ErrorMessage.NOTFOUND_ERROR}`);
 		}
 		return {
 			count: ticketList.length,

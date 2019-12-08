@@ -1,4 +1,3 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
 const { Errors, ErrorMessage } = require('../helpers/error');
 const Error = new Errors();
 
@@ -12,7 +11,7 @@ class UsersController {
 			Error.serverError(res, `invalid Token!`);
 		}
 	};
-
+	// ------------------------------------- 
 		async loginUser(req, res) {
 			try {
 				await req.app.services.users.loginUser(req, res);	
@@ -21,7 +20,7 @@ class UsersController {
 			}
 		};
 
-	// ------------------------------------- done
+	// ------------------------------------- 
 	async getUsers(req, res) {
 		try {
 			let allusers = await req.app.services.users.getUsers(res);
@@ -69,7 +68,7 @@ class UsersController {
 				}
 			})
 			.catch(err => {
-				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				return Error.serverError(res);
 			});
 	};
 
@@ -77,13 +76,13 @@ class UsersController {
 	async updateUser(req, res) {
 		const id = req.params.Id;
 		const updateOps = req.body;
-		let x = await req.app.services.users.updateUser(id, updateOps)
+		let x = await req.app.services.users.updateUser(res, id, updateOps)
 		x.save()
 			.then(result => {
 				res.status(200).json(result);
 			})
 			.catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				throw Error.serverError(res);
 			});
 	};
 
@@ -97,7 +96,7 @@ class UsersController {
 					userId: id
 				})
 		} catch (error) {
-			throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+			throw Error.serverError(res);
 		}
 	};
 }
