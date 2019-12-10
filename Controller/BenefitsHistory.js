@@ -1,4 +1,3 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error')
 const Error = new Errors();
 
@@ -61,9 +60,9 @@ async getBenefitsHistory(req, res) {
 					benefitId: id
 				})
 			}
-			throw new ErrorHandler(409, ErrorMessage.ID_ERROR);
+			throw Error.conflictError(res, ErrorMessage.ID_ERROR);
 		} catch (error) {
-			throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+			throw Error.serverError(res);
 		}
 	};
 }

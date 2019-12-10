@@ -41,6 +41,10 @@ const condidatSchema = mongoose.Schema({
 	},
 	experience:{
 		type: String,
+	},
+	deletedAt:{
+		type:Date,
+		default:null
 	}
 });
 

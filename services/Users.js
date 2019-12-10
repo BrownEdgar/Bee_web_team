@@ -1,68 +1,50 @@
 const bcrypt = require("bcryptjs");
-const cron = require('node-cron');
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const {ErrorHandler} = require('../middleware/ErrorHendler');
 const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
 const authHelper = require('../helpers/authHelper');
-const secret = process.env.SESSION_SECRET || "secretWord";
-const models = require("../models");
-const Token = models.Token;
+const secret = process.env.SESSION_SECRET;
+const Token = require('../models/Token');
+const { tokens } = require('../config/auth').jwt;
+
 
 
 class UsersController {
 	constructor(models) {
 		this.models = models;
 	}
-	async refreshTokens(req, res, refreshToken) {
+	async refreshTokens(res, refreshToken) {
 		let payload;
 		try {
 			payload = jwt.verify(refreshToken, secret);
-			
 			if (payload.type !== "refresh") {
-				Error.serverError(res, `invalid Token!`);
+				Error.serverError(res, ErrorMessage.REFRESH_TOKEN_ERROR);
 				return;
 			}
 		} catch (e) {
 			if (e instanceof jwt.TokenExpiredError) {
-				Error.serverError(res, `Token expired!`);
-				returnn;
+				 Error.serverError(res, `Token expired!`);
+				 return;
 			} else if (e instanceof jwt.JsonWebTokenError) {
-				Error.serverError(res, `invalid token!`);
-				return;
+				console.log("222");
+				 Error.serverError(res, e.message);	
+				 return;
 			}
 		}
-			Token.findOne({ tokenId: peyload.id})
-			exec()
-			.then((token) => {
-				if (token === null) {
-				throw Error.serverError(res, `invalid token`);
-				}
-				this.updateTokens(token.userId);
-			})
-			.then(tokens => res.json(tokens))
-			.catch(err => res.status(400).json({
-				message:err.message
-			}))
-	};
-	async updateTokens(userId) {
-		const accessToken = authHelper.generateAccessToken(userId);
-		const refreshToken = authHelper.generateRefreshToken();
-		return authHelper.replaseRefreshToken(refreshToken.id, userId)
-			.then((x) => ({
 
-				accessToken,
-				refreshToken: refreshToken.token
-			}));
+		
+			 let result = await authHelper.replaseRefreshToken(res, payload.id)
+				res.status(201).json(result)
 	};
+
+
 	async loginUser(req, res) {
 		const {email, password } = req.body;
-
 		if (!email || !password) {
 			Error.loginError(res, `Invalid email or password field`);
 		}
-		this.models.users.findOne({
+	 this.models.users.findOne({
 				email,
 				deletedAt: null
 			})
@@ -72,21 +54,22 @@ class UsersController {
 					Error.loginError(res, `User does not exist`);
 				}
 				// new logic
-				 const isValid = bcrypt.compareSync(password, user.password);
-					if (isValid) {		
-						this.updateTokens(user._id).then(tokens => {
-					      Error.successfulToken(res, user, tokens);// uxarkum enq 2 token
-						})
-					}else{
-					  return Error.serverError(res, `Invalid credentials!`);
+			const isValid = bcrypt.compareSync(password, user.password);
+					if (!isValid) {		
+						Error.serverError(res, err.message);
 					}	
+					const Tokens = authHelper.updateTokens(user._id);
+					Error.successfulToken(res, user, Tokens)
+					
 			})
+			
+		
 			.catch(err => {
 				Error.serverError(res, err.message);
 			});
 	};
 
-	//get user by Id
+	//get user by Id /me info
 	async getUser(res, _id) {
 		let user = await this.models.users.findOne({
 				_id: _id,
@@ -107,7 +90,7 @@ class UsersController {
 			})
 			// .select('firstname lastname salary phoneNumber email birthday password role _id');
 		if (users.length < 1) {
-			throw new ErrorHandler(409, `${ErrorMessage.NO_DATA_ERROR}`);
+			throw Error.noDataError(res);
 		}
 		return {
 			count: users.length,
@@ -161,7 +144,7 @@ class UsersController {
 	};
 
 	//Update User in Collection done
-	async updateUser(_id, updateOps) {
+	async updateUser(res, _id, updateOps) {
 		const updateUser = await this.models.users.findByIdAndUpdate({
 				_id
 			}, {

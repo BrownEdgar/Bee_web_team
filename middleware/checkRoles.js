@@ -1,7 +1,7 @@
 const { Errors } = require('../helpers/error')
 const Error = new Errors();
 
-const adminRoles = ['0', '1'];
+const adminRoles = ['0', '1', '2'];
 class UserPermissions {
     isAdmin(req, res, next){
         if (!adminRoles.includes(req.user.role)) {

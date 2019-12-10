@@ -12,8 +12,8 @@ class CandidatsController {
 
 	//get all Candidat Lists done!
 	async getCandidats(res) {
-		let candidats = await this.models.candidat.find()
-			.select('openPosId name surname email age skills experience');
+		let candidats = await this.models.candidat.find({deletedAt:null})
+			.select('openPosId name surname email age skills experience deletedAt');
 		if (candidats.length < 1) {
 			throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
 		}
@@ -36,9 +36,10 @@ class CandidatsController {
 	};
 
 	//add new candidats in Collection done!
-	async addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience) {
+	async addCandidats(res, createdOps) {
 		let sumary = this.models.candidat.find({
-				email
+				email,
+				deletedAt: null
 			})
 			.exec()
 			.then(result => {
@@ -103,15 +104,27 @@ class CandidatsController {
 
 	//delete Candidat by Id
 	async deleteCandidat(res, _id) {
-		let candidats = await this.models.candidat.deleteOne({
+		let checkDeleted = await this.models.candidat.find({
+		_id,
+		deletedAt: {
+			$gt: 1
+		}
+	})	
+	if (checkDeleted) {
+		return Error.successful(res, `Candidat is alredy deleted`);
+	} else{
+		let candidat = await this.models.candidat.findByIdAndUpdate({
 			_id
+		}, {
+			deletedAt: Date.now()
 		})
-		if (candidats.n >= 1) {
-			Error.successful(res, `Candidat is deleted`);
-		} else {
-			Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
+		if (!candidat) {
+			return Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
+		}else{
+			return  Error.successful(res, `Candidat is deleted`);
 		}
 	}
+}
 }
 
 module.exports = CandidatsController;

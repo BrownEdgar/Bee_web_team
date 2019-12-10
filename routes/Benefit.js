@@ -12,7 +12,6 @@ router.get('/', authMiddleware, controller.getBenefits);
 //add Benefits
 router.post('/',  controller.addBenefits);
 
-
 //get benefits by ID
 router.get('/:id',    controller.getBenefit);
 

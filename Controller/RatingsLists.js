@@ -1,13 +1,13 @@
+const { ErrorHandler } = require('../middleware/ErrorHendler');
 const  { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
-const jwt = require("jsonwebtoken");
-class TicketListsController {
+
+class RatingsLists {
 
 // ------------------------------------- done
-async getTicketLists(req, res) {
+async getRatings(req, res) {
 	try {
-		let allHistory = await req.app.services.ticketLists.getTicketLists();
-		res.status(201).send(allHistory);
+		 await req.app.services.ratingsList.getRatings(res);
 	} catch (error) {
 		Error.serverError(res, `${error}`);
 	}
@@ -17,7 +17,7 @@ async getTicketLists(req, res) {
 	async getTicketListById(req, res) {
 		const id = req.params.ticketId;
 		try {
-			let ticketList = await req.app.services.ticketLists.getTicketListById(id);
+			let ticketList = await req.app.services.ratingsList.getTicketListById(id);
 			res.send(ticketList);
 		} catch (error) {
 			res.send(error.message);
@@ -25,12 +25,11 @@ async getTicketLists(req, res) {
 	};
 	
 // ------------------------------------- done!
-	async addTicketList(req, res) {
-		let { userId, dateStart, dateEnd } = req.body;
+	async addRating(req, res) {
+		let { userId, rating } = req.body;
+		let adminId =  req.userData.userId;
 		try {
-			 let x = await req.app.services.ticketLists.addTicketList( res, userId, dateStart, dateEnd );
-			 console.log("x:", x);
-			 
+			await req.app.services.ratingsList.addRating( res, userId, adminId, rating );
 		} catch (err) {
 			res.status(500).send(err.message);
 		}
@@ -40,7 +39,7 @@ async getTicketLists(req, res) {
 	async updateTicketList(req, res) {
 		const id = req.params.ticketId;
 		const updateOps = req.body;
-		let x = await req.app.services.ticketLists.updateTicketList(id, updateOps)
+		let x = await req.app.services.ratingsList.updateTicketList(id, updateOps)
 			.then(result => {
 				res.status(result.statusCode).send(result);
 			})
@@ -55,7 +54,7 @@ async getTicketLists(req, res) {
 	async deleteTicketList(req, res) {
 		const id = req.params.ticketId;
 		try {
-			let delbenefits = await req.app.services.ticketLists.deleteTicketList(id);
+			let delbenefits = await req.app.services.ratingsList.deleteTicketList(id);
 			let check = delbenefits.ticketList.deletedCount;
 			if (check) {
 				return res.status(201).json({
@@ -63,10 +62,10 @@ async getTicketLists(req, res) {
 					benefitId: id
 				})
 			}
-			throw Error.conflictError(res, `Ticket List ${ErrorMessage.ID_ERROR}`);
+			throw new ErrorHandler(409, `Ticket List ${ErrorMessage.ID_ERROR}`);
 		} catch (error) {
 			res.status(500).send(error.message);
 		}
 	};
 }
-module.exports = TicketListsController;
+module.exports = RatingsLists;

@@ -5,10 +5,13 @@ class UsersController {
 
 	async refreshTokens(req, res) {
 		const { refreshToken } = req.body;
+			 if (!refreshToken) {
+			 	Error.serverError(res, `refreshToken not exist`);
+			 }
 		try {
-			await req.app.services.users.refreshTokens(req, res, refreshToken);
-		} catch (e) {
-			Error.serverError(res, `invalid Token!`);
+		await req.app.services.users.refreshTokens( res, refreshToken);
+		} catch (e) {	
+			Error.serverError(res, e.message);
 		}
 	};
 	// ------------------------------------- 
@@ -32,6 +35,8 @@ class UsersController {
 	// ------------------------------------- done
 
 	async getMyInfo(req, res, next) {
+		console.log('req.userData.userId',req.userData.userId);
+		
 	try {
 		let user = await req.app.services.users.getUser(res, req.userData.userId);
 		return res.status(201).send(user);

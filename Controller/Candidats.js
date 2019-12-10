@@ -29,9 +29,9 @@ class CandidatsController {
 	async addCandidats(req, res) {
 		console.log("file:  ", req.file);
 		
-		let { openPosId, name, surname, email, age, gender, skills, education, experience } = req.body;
+		const createdOps =  {...req.body};
 		try {
-			 await req.app.services.candidats.addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience);
+			 await req.app.services.candidats.addCandidats(res, createdOps);
 		} catch (err) {
 			res.status(500).send(err.message);
 		}

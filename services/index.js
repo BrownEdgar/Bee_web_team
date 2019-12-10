@@ -4,5 +4,6 @@ module.exports = {
 	 User: require('./Users'),
 	 Candidat: require('./Candidat'),
 	 OpenPosition: require('./OpenPosition'),
-	 TicketList: require('./TicketList')
+	 TicketList: require('./TicketList'),
+	 RatingsList: require('./RatingsList')
 }
