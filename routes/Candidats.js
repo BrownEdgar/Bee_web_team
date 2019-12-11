@@ -27,7 +27,7 @@ const checkAuth = new loginValidator();
 router.get('/',  controller.getCandidats);
 
 //add Candidats
-router.post('/', [checkAuth.checkCandidatAdds, upload.single('cv')], controller.addCandidats);
+router.post('/', [checkAuth.isLogin, upload.single('cv')], controller.addCandidats);
 
 //get Candidats by ID
 router.get('/:Id', checkAuth.isIdCorrect, controller.getSpecialCandidat);

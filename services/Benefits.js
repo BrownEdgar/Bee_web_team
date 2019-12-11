@@ -1,4 +1,4 @@
-const { ErrorMessage, Errors } = require('../helpers/error')
+const { ErrorMessage, Errors } = require('../helpers/error');
 const mongoose = require("mongoose");
 const Error = new Errors();
 

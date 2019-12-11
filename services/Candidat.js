@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
-const {
-	ErrorMessage,
-	Errors
-} = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
-
+const OpenPositions = require('../models/OpenPosition') 
 class CandidatsController {
 	constructor(models) {
 		this.models = models;
@@ -15,7 +12,7 @@ class CandidatsController {
 		let candidats = await this.models.candidat.find({deletedAt:null})
 			.select('openPosId name surname email age skills experience deletedAt');
 		if (candidats.length < 1) {
-			throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
+			throw Error.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: candidats.length,
@@ -36,27 +33,33 @@ class CandidatsController {
 	};
 
 	//add new candidats in Collection done!
-	async addCandidats(res, createdOps) {
+	async addCandidats(res, openPosId, userId,cvName) {
+	
+			let position =  await OpenPositions.find({ _id: openPosId })
+				.then(result => {
+					return result
+				})
+				.catch(err => {
+					 return Error.serverError(res, err.message)
+				});
+
+				if (!position) {
+					return position
+				}
+
 		let sumary = this.models.candidat.find({
-				email,
+				openPosId,
 				deletedAt: null
 			})
 			.exec()
 			.then(result => {
+				console.log('result', position);
 				if (result.length >= 1) {
-					return Error.conflictError(res, ErrorMessage.EMAIL_EXIST);
+					return Error.conflictError(res, 'You have already applied for this position.');
 				} else {
 					const norCandidat = new this.models.candidat({
 						_id: new mongoose.Types.ObjectId(),
-						openPosId,
-						name,
-						surname,
-						email,
-						age,
-						gender,
-						skills,
-						education,
-						experience
+						createdOps
 					});
 					norCandidat.save(function (err) {
 						if (err) {

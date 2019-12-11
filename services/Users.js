@@ -31,14 +31,10 @@ class UsersController {
 				 Error.serverError(res, e.message);	
 				 return;
 			}
-		}
-
-		
-			 let result = await authHelper.replaseRefreshToken(res, payload.id)
+		}	 
+				let result = await authHelper.replaseRefreshToken(res, payload.id)
 				res.status(201).json(result)
 	};
-
-
 	async loginUser(req, res) {
 		const {email, password } = req.body;
 		if (!email || !password) {
