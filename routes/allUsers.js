@@ -10,9 +10,7 @@ const authHelper = require('../helpers/authHelper');
 
 /* GET Users page. */
 
-router.get("/", [ Pagination(User)], function (req, res) {
-	res.json(res.pagination)
-});
+router.get("/", [Pagination(User), controller.getUsers]);
 router.post('/refresh-tokens', controller.refreshTokens);
 
 router.get('/me', checkAuth.isLogin, controller.getMyInfo);

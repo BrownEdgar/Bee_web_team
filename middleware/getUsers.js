@@ -1,6 +1,6 @@
 const {Errors} = require('../helpers/error');
 const Error = new Errors();
-
+const model = require('../models/User');
 
 
 module.exports = function pagination(model) {
