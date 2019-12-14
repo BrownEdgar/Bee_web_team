@@ -1,13 +1,7 @@
 const mongoose = require("mongoose");
-const {
-	ErrorHandler
-} = require('../middleware/ErrorHendler');
-const {
-	ErrorMessage,
-	Errors
-} = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
-
+const OpenPositions = require('../models/OpenPosition') 
 class CandidatsController {
 	constructor(models) {
 		this.models = models;
@@ -15,10 +9,10 @@ class CandidatsController {
 
 	//get all Candidat Lists done!
 	async getCandidats(res) {
-		let candidats = await this.models.candidat.find()
-			.select('openPosId name surname email age skills experience');
+		let candidats = await this.models.candidat.find({deletedAt:null})
+			.select('openPosId name surname email age skills experience deletedAt');
 		if (candidats.length < 1) {
-			throw Errors.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
+			throw Error.notFoundError(res, ErrorMessage.NO_DATA_ERROR);
 		}
 		return {
 			count: candidats.length,
@@ -39,26 +33,31 @@ class CandidatsController {
 	};
 
 	//add new candidats in Collection done!
-	async addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience) {
+	async addCandidats(res, openPosId) {
+	
+			let position =  await OpenPositions.find({ _id: openPosId })
+				.then(result => {
+					return result
+				})
+				.catch(err => {
+					 return Error.serverError(res, err.message)
+				});
+				if (!position) {
+					return position
+				}
 		let sumary = this.models.candidat.find({
-				email
+				openPosId,
+				deletedAt: null
 			})
 			.exec()
 			.then(result => {
+				console.log('result', position);
 				if (result.length >= 1) {
-					return Error.conflictError(res, ErrorMessage.EMAIL_EXIST);
+					return Error.conflictError(res, 'You have already applied for this position.');
 				} else {
 					const norCandidat = new this.models.candidat({
 						_id: new mongoose.Types.ObjectId(),
-						openPosId,
-						name,
-						surname,
-						email,
-						age,
-						gender,
-						skills,
-						education,
-						experience
+						createdOps
 					});
 					norCandidat.save(function (err) {
 						if (err) {
@@ -68,6 +67,7 @@ class CandidatsController {
 					});
 				}
 			}).catch(err => {
+				console.log('5555');
 				return Error.serverError(res)
 			});
 		return sumary
@@ -83,11 +83,11 @@ class CandidatsController {
 				.exec()
 				.then(result => {
 					if (result) {
-						return new ErrorHandler(409, ErrorMessage.EMAIL_EXIST);
+						return Error.conflictError(res, ErrorMessage.EMAIL_EXIST);
 					}
 				})
 				.catch(err => {
-					return new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+					return Error.serverError(res);
 				});
 		}
 		const updateCandidat = await this.models.candidat.findByIdAndUpdate({
@@ -99,22 +99,34 @@ class CandidatsController {
 		})
 
 		if (!updateCandidat) {
-			return new ErrorHandler(400, ErrorMessage.UPDATE_ERROR);
+			return Error.updateError(res);
 		}
 		res.status(201).json(updateCandidat);
 	};
 
 	//delete Candidat by Id
 	async deleteCandidat(res, _id) {
-		let candidats = await this.models.candidat.deleteOne({
+		let checkDeleted = await this.models.candidat.find({
+		_id,
+		deletedAt: {
+			$gt: 1
+		}
+	})	
+	if (checkDeleted) {
+		return Error.successful(res, `Candidat is alredy deleted`);
+	} else{
+		let candidat = await this.models.candidat.findByIdAndUpdate({
 			_id
+		}, {
+			deletedAt: Date.now()
 		})
-		if (candidats.n >= 1) {
-			Error.successful(res, `Candidat is deleted`);
-		} else {
-			Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
+		if (!candidat) {
+			return Error.candidatDelError(res, `Candidat ${ErrorMessage.ID_ERROR} | ${ErrorMessage.CANDIDAT_DELETED}`);
+		}else{
+			return  Error.successful(res, `Candidat is deleted`);
 		}
 	}
+}
 }
 
 module.exports = CandidatsController;

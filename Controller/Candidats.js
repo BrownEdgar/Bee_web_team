@@ -27,11 +27,13 @@ class CandidatsController {
 
 	// ------------------------------------- done!	
 	async addCandidats(req, res) {
-		console.log("file:  ", req.file);
+		const openPosId = req.body.openPosId;
+		// const cvName = req.file.originalname;
+		// const userId = req.userData.userId;
+		console.log(openPosId);
 		
-		let { openPosId, name, surname, email, age, gender, skills, education, experience } = req.body;
 		try {
-			 await req.app.services.candidats.addCandidats(res, openPosId, name, surname, email, age, gender, skills, education, experience);
+			 await req.app.services.candidats.addCandidats(res, openPosId);
 		} catch (err) {
 			res.status(500).send(err.message);
 		}

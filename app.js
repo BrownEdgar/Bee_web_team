@@ -4,13 +4,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const app = express();
-const cors = require('cors')
-const { handleError, ErrorHandler } = require('./middleware/ErrorHendler')
+const cors = require('cors');
 const session = require('express-session');
 const mongoose = require("mongoose");
 const models = require("./models");
 const sevices = require("./services");
 const cornCheck = require("./helpers/addVocationDeys");
+const { Errors } = require('./helpers/error');
+const Error = new Errors();
 
 
 
@@ -24,6 +25,7 @@ mongoose.connect(process.env.DB_CONNECTION, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true,
 		useCreateIndex: true,
+		useFindAndModify:false
 	},
 	(err) => console.log(err));
 
@@ -52,6 +54,7 @@ const allUsersRouter = require('./routes/allUsers');
 const OpenPositionRouter = require('./routes/OpenPosition');
 const candidatRouter = require('./routes/Candidats');
 const TicketListRouter = require('./routes/TicketList');
+const RatingsRouter = require('./routes/Ratings');
 
 app.use('/', homeRouter);
 app.use('/signup', authRouter);
@@ -61,6 +64,7 @@ app.use('/users', allUsersRouter);
 app.use('/open-positions', OpenPositionRouter);
 app.use('/candidats', candidatRouter);
 app.use('/ticket-lists', TicketListRouter);
+app.use('/ratings', RatingsRouter);
 
 
 app.models = {
@@ -69,7 +73,8 @@ app.models = {
 	openPosition: models.OpenPosition, 
 	candidat: models.Candidats, 
 	benefitsHistory: models.BenefitsHistory, 
-	ticketList: models.TicketList
+	ticketList: models.TicketList,
+	ratingsList: models.RatingsList,
 }
 
 app.services = {	
@@ -78,7 +83,8 @@ app.services = {
 	openPositions: new(sevices.OpenPosition)(app.models), 
 	candidats: new(sevices.Candidat)(app.models), 
 	benefitsHistorys: new(sevices.BenefitsHistory)(app.models), 
-	ticketLists: new(sevices.TicketList)(app.models)
+	ticketLists: new(sevices.TicketList)(app.models),
+	ratingsList: new(sevices.RatingsList)(app.models),
 };
 
 app.use(function (req, res, next) {
@@ -88,7 +94,7 @@ app.use(function (req, res, next) {
 
 
 app.use((req, res, next) => {
-	 throw new ErrorHandler(404, 'page is not found')
+	 throw Error.notFoundError(res, 'page is not found')
 })
 
 app.use((error, req, res, next) => {
@@ -99,8 +105,6 @@ app.use((error, req, res, next) => {
 		}
 	});
 })
-app.use((err, req, res, next) => {
-	handleError(err, res);
-});
+
 
 module.exports = app;

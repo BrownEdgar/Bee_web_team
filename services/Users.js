@@ -1,17 +1,12 @@
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const {
-	ErrorMessage,
-	Errors
-} = require('../helpers/error');
+const { ErrorMessage, Errors } = require('../helpers/error');
 const Error = new Errors();
 const authHelper = require('../helpers/authHelper');
 const secret = process.env.SESSION_SECRET;
 const Token = require('../models/Token');
-const {
-	tokens
-} = require('../config/auth').jwt;
+const { tokens } = require('../config/auth').jwt;
 
 
 
@@ -29,27 +24,23 @@ class UsersController {
 			}
 		} catch (e) {
 			if (e instanceof jwt.TokenExpiredError) {
-				Error.serverError(res, `Token expired!`);
-				return;
+				 Error.serverError(res, `Token expired!`);
+				 return;
 			} else if (e instanceof jwt.JsonWebTokenError) {
 				console.log("222");
-				Error.serverError(res, e.message);
-				return;
+				 Error.serverError(res, e.message);	
+				 return;
 			}
-		}
-		let result = await authHelper.replaseRefreshToken(res, payload.id)
-		res.status(201).json(result)
+		}	 
+				let result = await authHelper.replaseRefreshToken(res, payload.id)
+				res.status(201).json(result)
 	};
-
 	async loginUser(req, res) {
-		const {
-			email,
-			password
-		} = req.body;
+		const {email, password } = req.body;
 		if (!email || !password) {
 			Error.loginError(res, `Invalid email or password field`);
 		}
-		this.models.users.findOne({
+	 this.models.users.findOne({
 				email,
 				deletedAt: null
 			})
@@ -59,14 +50,16 @@ class UsersController {
 					Error.loginError(res, `User does not exist`);
 				}
 				// new logic
-				const isValid = bcrypt.compareSync(password, user.password);
-				if (!isValid) {
-					Error.serverError(res, err.message);
-				}
-				const Tokens = authHelper.updateTokens(user._id);
-				Error.successfulToken(res, user, Tokens)
-
+			const isValid = bcrypt.compareSync(password, user.password);
+					if (!isValid) {		
+						Error.serverError(res, err.message);
+					}	
+					const Tokens = authHelper.updateTokens(user._id);
+					Error.successfulToken(res, user, Tokens)
+					
 			})
+			
+		
 			.catch(err => {
 				Error.serverError(res, err.message);
 			});

@@ -1,13 +1,14 @@
 const {Errors} = require('../helpers/error');
 const Error = new Errors();
-const model = require('../models/User');
-
 
 module.exports = function pagination(model) {
 	return async (req, res, next) => {
 		let checkUsers = await model.find({
 			deletedAt: null
 		});
+		console.log('req.query.page',req.query.page);
+		console.log('req.query.limit',req.query.limit);
+		
 		if (checkUsers.length < 1) {
 			Error.noDataError(res);
 		}
@@ -15,10 +16,10 @@ module.exports = function pagination(model) {
 			req.query.page = 1;
 		}
 		if (!req.query.limit) {
-			req.query.limit = 6;
+			req.query.limit = 4;
 		}
 		const page = parseInt(req.query.page);
-		const limit = parseInt(req.query.limit);
+		const limit = parseInt(req.query.limit+1);
 		const startIndex = (page - 1) * limit;
 		const endIndex = page * limit;
 		const results = {}

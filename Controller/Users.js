@@ -1,4 +1,3 @@
-const { ErrorHandler } = require('../middleware/ErrorHendler');
 const { Errors, ErrorMessage } = require('../helpers/error');
 const Error = new Errors();
 
@@ -6,13 +5,16 @@ class UsersController {
 
 	async refreshTokens(req, res) {
 		const { refreshToken } = req.body;
+			 if (!refreshToken) {
+			 	Error.serverError(res, `refreshToken not exist`);
+			 }
 		try {
-			await req.app.services.users.refreshTokens(req, res, refreshToken);
-		} catch (e) {
-			Error.serverError(res, `invalid Token!`);
+		await req.app.services.users.refreshTokens( res, refreshToken);
+		} catch (e) {	
+			Error.serverError(res, e.message);
 		}
 	};
-
+	// ------------------------------------- 
 		async loginUser(req, res) {
 			try {
 				await req.app.services.users.loginUser(req, res);	
@@ -21,7 +23,7 @@ class UsersController {
 			}
 		};
 
-	// ------------------------------------- done
+	// ------------------------------------- 
 	async getUsers(req, res) {
 		try {
 			let allusers = await req.app.services.users.getUsers(res);
@@ -33,6 +35,8 @@ class UsersController {
 	// ------------------------------------- done
 
 	async getMyInfo(req, res, next) {
+		console.log('req.userData.userId',req.userData.userId);
+		
 	try {
 		let user = await req.app.services.users.getUser(res, req.userData.userId);
 		return res.status(201).send(user);
@@ -69,7 +73,7 @@ class UsersController {
 				}
 			})
 			.catch(err => {
-				return  new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				return Error.serverError(res);
 			});
 	};
 
@@ -77,13 +81,13 @@ class UsersController {
 	async updateUser(req, res) {
 		const id = req.params.Id;
 		const updateOps = req.body;
-		let x = await req.app.services.users.updateUser(id, updateOps)
+		let x = await req.app.services.users.updateUser(res, id, updateOps)
 		x.save()
 			.then(result => {
 				res.status(200).json(result);
 			})
 			.catch(err => {
-				throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+				throw Error.serverError(res);
 			});
 	};
 
@@ -97,7 +101,7 @@ class UsersController {
 					userId: id
 				})
 		} catch (error) {
-			throw new ErrorHandler(500, ErrorMessage.SERVER_ERROR);
+			throw Error.serverError(res);
 		}
 	};
 }

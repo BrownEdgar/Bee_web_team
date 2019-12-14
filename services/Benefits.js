@@ -1,4 +1,4 @@
-const { ErrorMessage, Errors } = require('../helpers/error')
+const { ErrorMessage, Errors } = require('../helpers/error');
 const mongoose = require("mongoose");
 const Error = new Errors();
 
@@ -19,7 +19,6 @@ class BenefitsController {
 			benefits
 		};
 	};
-	
 	//get benefit by spesial ID
 	async getBenefit(res, _id) {
 		let benefit = await this.models.benefits.findOne({
