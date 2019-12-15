@@ -26,7 +26,7 @@ class UsersController {
 	// ------------------------------------- 
 	async getUsers(req, res) {
 		try {
-			let allusers = await req.app.services.users.getUsers(res);
+			let allusers = await req.app.services.users.getUsers(res,req);
 			res.status(201).send(allusers);
 		} catch (error) {
 			res.status(500).send(error.message);

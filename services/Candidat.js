@@ -33,8 +33,7 @@ class CandidatsController {
 	};
 
 	//add new candidats in Collection done!
-	async addCandidats(res, openPosId) {
-	
+	async addCandidats(res, openPosId, createdOps) {
 			let position =  await OpenPositions.find({ _id: openPosId })
 				.then(result => {
 					return result
@@ -57,6 +56,7 @@ class CandidatsController {
 				} else {
 					const norCandidat = new this.models.candidat({
 						_id: new mongoose.Types.ObjectId(),
+						openPosId,
 						createdOps
 					});
 					norCandidat.save(function (err) {

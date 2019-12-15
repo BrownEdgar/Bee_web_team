@@ -30,10 +30,11 @@ class CandidatsController {
 		const openPosId = req.body.openPosId;
 		// const cvName = req.file.originalname;
 		// const userId = req.userData.userId;
+		const createdOps ={...req.body}
 		console.log(openPosId);
 		
 		try {
-			 await req.app.services.candidats.addCandidats(res, openPosId);
+			 await req.app.services.candidats.addCandidats(res, openPosId, createdOps);
 		} catch (err) {
 			res.status(500).send(err.message);
 		}

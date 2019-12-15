@@ -42,9 +42,8 @@ const condidatSchema = mongoose.Schema({
 	experience:{
 		type: String,
 	},
-	cv:{
-		type:String,
-		required:true
+	file:{
+		type:String
 	},
 	deletedAt: {
 		type: Date,

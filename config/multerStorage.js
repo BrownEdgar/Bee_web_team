@@ -24,8 +24,7 @@ conn.once('open', (err) => {
 class UploadsControler {
 		async getAllFiles(req, res) {
 			gfs.files.find().toArray((err, files) => {
-				console.log('files: ', files);
-				
+			console.log('files: ', files); //bolor cv-ry	
 			// Check if files
 			if (!files || files.length === 0) {
 				return res.status(404).json({
@@ -36,10 +35,7 @@ class UploadsControler {
 			return Error.successful(res, files);
 			});
 		}
-
 		async storage(req, res) {
-				console.log('222');
-	
 		return storage;
 	}
 

@@ -6,9 +6,6 @@ module.exports = function pagination(model) {
 		let checkUsers = await model.find({
 			deletedAt: null
 		});
-		console.log('req.query.page',req.query.page);
-		console.log('req.query.limit',req.query.limit);
-		
 		if (checkUsers.length < 1) {
 			Error.noDataError(res);
 		}
@@ -18,8 +15,12 @@ module.exports = function pagination(model) {
 		if (!req.query.limit) {
 			req.query.limit = 4;
 		}
+			console.log('req.query.page', req.query.page);
+			console.log('req.query.limit', req.query.limit);
+			console.log('req.query.limit', req.query.by);
 		const page = parseInt(req.query.page);
-		const limit = parseInt(req.query.limit+1);
+		const limit = parseInt(req.query.limit);
+		const by = req.query.by;
 		const startIndex = (page - 1) * limit;
 		const endIndex = page * limit;
 		const results = {}
@@ -41,7 +42,8 @@ module.exports = function pagination(model) {
 			})
 			.limit(limit)
 			.skip(startIndex)
-			.select('firstname lastname salary phoneNumber email birthday password role _id');
+			.sort(by)
+			.select('firstname lastname salary phoneNumber email birthday role _id');
 			res.pagination = results
 			next();
 		} catch (error) {

@@ -79,7 +79,7 @@ class UsersController {
 	};
 
 	//get All users from User Collections 
-	async getUsers(res) {
+	async getUsers(res,req) {
 		let users = await this.models.users.find({
 			deletedAt: null
 		})
