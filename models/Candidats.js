@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
 
 const condidatSchema = mongoose.Schema({
-	_id: {
-		type: mongoose.Schema.Types.ObjectId
-	},
 	openPosId: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'OpenPosition',
-		required: [true, 'openPosId is required, please indicate it'],
 	},
 	name:{
 		type: String,

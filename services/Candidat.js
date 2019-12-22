@@ -34,6 +34,8 @@ class CandidatsController {
 
 	//add new candidats in Collection done!
 	async addCandidats(res, openPosId, createdOps) {
+		console.log("createdOps: ",createdOps);
+		
 			let position =  await OpenPositions.find({ _id: openPosId })
 				.then(result => {
 					return result
@@ -50,15 +52,10 @@ class CandidatsController {
 			})
 			.exec()
 			.then(result => {
-				console.log('result', position);
 				if (result.length >= 1) {
 					return Error.conflictError(res, 'You have already applied for this position.');
 				} else {
-					const norCandidat = new this.models.candidat({
-						_id: new mongoose.Types.ObjectId(),
-						openPosId,
-						createdOps
-					});
+					const norCandidat = new this.models.candidat(createdOps);
 					norCandidat.save(function (err) {
 						if (err) {
 							return Error.saveError(res, `${err.message}`);
