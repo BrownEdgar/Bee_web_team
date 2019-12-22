@@ -15,15 +15,18 @@ module.exports = function pagination(model) {
 		if (!req.query.limit) {
 			req.query.limit = 4;
 		}
-			console.log('req.query.page', req.query.page);
-			console.log('req.query.limit', req.query.limit);
-			console.log('req.query.limit', req.query.by);
+		if (!req.query.sortType) {
+			req.query.limit = -1;
+		}
+
 		const page = parseInt(req.query.page);
 		const limit = parseInt(req.query.limit);
+		const sortType = parseInt(req.query.sortType);
 		const by = req.query.by;
 		const startIndex = (page - 1) * limit;
 		const endIndex = page * limit;
-		const results = {}
+		const results = {};
+	
 		if (endIndex < await model.countDocuments().exec()) {
 			results.next = {
 				page: page + 1,
@@ -42,7 +45,7 @@ module.exports = function pagination(model) {
 			})
 			.limit(limit)
 			.skip(startIndex)
-			.sort(by)
+			.sort({[by]:sortType})
 			.select('firstname lastname salary phoneNumber email birthday role _id');
 			res.pagination = results
 			next();
