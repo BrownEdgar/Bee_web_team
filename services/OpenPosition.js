@@ -20,7 +20,7 @@ class OpenPositionController {
 	};
 
 	//get benefit by spesial ID done
-	async getSpecialPosition(_id) {
+	async getSpecialPosition(res,_id) {
 		let position = await this.models.openPosition.findOne({
 				_id
 			})

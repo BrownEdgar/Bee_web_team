@@ -40,10 +40,7 @@ async getBenefitsHistory(req, res) {
 			}
 		} catch (error) {
 			Error.serverError(res, error);
-		}
-		
-					
-			
+		}		
 	};
 
 // -------------------------------------
